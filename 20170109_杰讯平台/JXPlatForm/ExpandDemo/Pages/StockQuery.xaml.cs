@@ -30,7 +30,8 @@ namespace ExpandDemo.Pages
         {
             {"货单日期","STOCK_DATE"},
             {"货单金额","TOTAL_AMT"},
-            {"备注","REMARK"},
+            {"木门货单备注","REMARK1"},
+            {"合金货单备注","REMARK2"},
         };
 
         Dictionary<string, string> dicWoodenStockColumns = new Dictionary<string, string>()

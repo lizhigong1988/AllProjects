@@ -67,6 +67,9 @@
     <Compile Include="Pages\Prints\WoodenStockPrint.xaml.cs">
       <DependentUpon>WoodenStockPrint.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Prints\AlloyStockPrint.xaml.cs">
+      <DependentUpon>AlloyStockPrint.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\StockQuery.xaml.cs">
       <DependentUpon>StockQuery.xaml</DependentUpon>
     </Compile>
@@ -151,6 +154,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Prints\WoodenStockPrint.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Prints\AlloyStockPrint.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

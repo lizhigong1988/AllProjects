@@ -10,9 +10,10 @@
 10、回滚版本		git reset  --hard （版本号）
 11、删除文件		git rm 文件名1 文件名2 ...
 12、下载仓库            git clone https://github.com/lizhigong1988/AllProjects.git
-13、查看仓库		git remote -v
+13、查看远程仓库	git remote -v
 14、添加上传分支	git remote add upstream https://github.com/lizhigong1988/AllProjects.git
-15、上传到远程仓库	git push origin master:master
+15、上传到远程仓库	git push (origin master:master)
+16、更新远程仓库	git pull
 
 其他：
 Explore GitHub (https://github.com/explore)是一个大的平台，可以让你找到感兴趣的项目。

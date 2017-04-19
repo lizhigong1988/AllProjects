@@ -94,6 +94,7 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="木门货单备注" />
                         <TextBox Name="tbWoodenRemark" Width="480" />
+                        <TextBlock Text="(非打印项)" MinWidth="0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="合金货单备注" />

@@ -18,6 +18,7 @@ using ClientLibrary;
 using ClientControls;
 using ExpandDemo.DataBase;
 using ClientControls.Dialogs;
+using ExpandDemo.Pages.Prints;
 
 namespace ExpandDemo.Pages
 {
@@ -111,6 +112,8 @@ namespace ExpandDemo.Pages
             dbeUnFinishOrderDetail.InitDataBox(dicDetailColumns, null, false);
             return true;
         }
+
+        DataRow modDr;
 
         private void dbeUnfinishOrder_DoubleClick(DataRow dr)
         {
@@ -570,7 +573,7 @@ namespace ExpandDemo.Pages
             InitDataBox(dicWoodenStockColumns, dtWoodenStock, dgWoodenNote);
             InitDataBox(dicAlloyStockColumns, dtAlloyStock, dgAlloyNote);
             RefreshTotalAmt();
-
+            modDr = dr;
             spSelectOrder.Visibility = Visibility.Collapsed;
             spDefaultShow.Visibility = Visibility.Visible;
         }
@@ -691,6 +694,19 @@ namespace ExpandDemo.Pages
 
         private void PrintPreView()
         {
+            List<UserControl> prints;
+            if ((dgWoodenNote.DataContext as DataTable).Rows.Count > 0)
+            {
+                prints = WoodenStockPrint.SetPrintInfo(modDr, dgWoodenNote.DataContext as DataTable,
+                    tbStockDate.Text, tbWoodenRemark.Text);
+                ClientPrintDialog.ShowPrintPreView(prints, 21, 29.7);
+            }
+            if ((dgAlloyNote.DataContext as DataTable).Rows.Count > 0)
+            {
+                prints = AlloyStockPrint.SetPrintInfo(modDr, dgAlloyNote.DataContext as DataTable,
+                    tbStockDate.Text, tbAlloyRemark.Text);
+                ClientPrintDialog.ShowPrintPreView(prints, 21, 29.7);
+            }
         }
 
         private bool SaveStockInfo()

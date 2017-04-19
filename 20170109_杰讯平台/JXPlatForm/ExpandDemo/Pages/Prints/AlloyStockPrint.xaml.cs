@@ -18,11 +18,11 @@ namespace ExpandDemo.Pages.Prints
     /// <summary>
     /// OrderPrint.xaml 的交互逻辑
     /// </summary>
-    public partial class WoodenStockPrint : UserControl
+    public partial class AlloyStockPrint : UserControl
     {
         public int PageIndex = 1;
 
-        public WoodenStockPrint()
+        public AlloyStockPrint()
         {
             InitializeComponent();
             for (int i = 0; i < gridMain.ColumnDefinitions.Count; i++)
@@ -37,14 +37,14 @@ namespace ExpandDemo.Pages.Prints
                     gridMain.Children.Add(border);
                 }
             }
-            for (int i = 0; i < gridBank.ColumnDefinitions.Count; i++)
+            for (int i = 0; i < gridRemark.ColumnDefinitions.Count; i++)
             {
                 Border border = new Border();
                 border.BorderThickness = new Thickness(1, 1, 0, 0);
                 border.BorderBrush = Brushes.Black;
                 Grid.SetRow(border, 0);
                 Grid.SetColumn(border, i);
-                gridBank.Children.Add(border);
+                gridRemark.Children.Add(border);
             }
         }
 
@@ -76,16 +76,18 @@ namespace ExpandDemo.Pages.Prints
                 gridMain.Children.Add(newRow[i]);
             }
             newRow[0].Text = dr["COUNT_INDEX"].ToString();
-            newRow[1].Text = dr["MODEL"].ToString();
-            newRow[2].Text = dr["TEXTURE"].ToString();
-            newRow[3].Text = dr["LINE"].ToString();
-            newRow[4].Text = dr["PLATE"].ToString();
-            newRow[5].Text = dr["COLOR"].ToString();
-            newRow[6].Text = dr["SIZE"].ToString();
-            newRow[7].Text = dr["COUNT"].ToString();
-            newRow[8].Text = "";
-            newRow[9].Text = "";
-            newRow[10].Text = dr["REMARK"].ToString();
+            newRow[1].Text = dr["TEXTURE"].ToString();
+            newRow[2].Text = dr["COLOR"].ToString();
+            newRow[3].Text = dr["NAME"].ToString();
+            newRow[4].Text = dr["SIZE"].ToString();
+
+            newRow[5].Text = dr["COUNT"].ToString();
+            newRow[6].Text = dr["DOOR_COUNT"].ToString();
+            newRow[7].Text = dr["SHUTTER"].ToString();
+            newRow[8].Text = dr["SUSPEND"].ToString();
+            newRow[9].Text = dr["GLASS_MODEL"].ToString();
+
+            newRow[10].Text = dr["FORWORD"].ToString();
             return newRow;
         }
 
@@ -102,18 +104,17 @@ namespace ExpandDemo.Pages.Prints
             }
             while (true)
             {
-                WoodenStockPrint print = new WoodenStockPrint();
-                print.tbNoteDate.Text = orderDay.ToLongDateString();
-                print.tbOrderMan.Text = modDr["CLIENT_NAME"].ToString();
-                print.tbOrderAddr.Text = modDr["CLIENT_ADDR"].ToString();
-                print.tbOrderTel.Text = modDr["CLIENT_TEL"].ToString();
-               
+                AlloyStockPrint print = new AlloyStockPrint();
+                print.tbStockDate.Text = orderDay.ToLongDateString();
+                print.tbStockUnit.Text = modDr["CLIENT_NAME"].ToString();
+                print.tbTel.Text = modDr["CLIENT_TEL"].ToString();
+                print.tbRemark.Text = remark;
                 int woodDoorIndex = 1;
 
                 List<DataRow> listLoadRows = new List<DataRow>();
                 foreach (DataRow dr in printGoods.Rows)
                 {
-                    if (woodDoorIndex < 11)
+                    if (woodDoorIndex < 7)
                     {
                         print.AddNewTextBlockRow(woodDoorIndex, dr);
                         listLoadRows.Add(dr);
