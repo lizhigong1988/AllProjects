@@ -1,0 +1,18 @@
+1、设置名字 		git config --global user.name "Your Name"
+2、设置电子邮箱 	git config --global user.email "email@example.com"
+3、创建仓库 		git init
+4、添加文件		git add 文件名1 文件名2 ...
+5、提交			git commit -m "提交日志"
+6、查看状态		git status
+7、对比			git diff 文件名
+8、查看日志		git log （--pretty=oneline）
+9、查看历史指令		git reflog
+10、回滚版本		git reset  --hard （版本号）
+11、删除文件		git rm 文件名1 文件名2 ...
+12、下载仓库            git clone https://github.com/lizhigong1988/AllProjects.git
+13、查看仓库		git remote -v
+14、添加上传分支	git remote add upstream https://github.com/lizhigong1988/AllProjects.git
+15、上传到远程仓库	git push origin 本地分支:远程分支
+
+其他：
+Explore GitHub (https://github.com/explore)是一个大的平台，可以让你找到感兴趣的项目。

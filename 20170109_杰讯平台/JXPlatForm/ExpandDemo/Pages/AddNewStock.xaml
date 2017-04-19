@@ -1,0 +1,120 @@
+﻿<jxpt:PageBase x:Class="ExpandDemo.Pages.AddNewStock"
+               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+               xmlns:jxpt="clr-namespace:ClientControls;assembly=ClientControls"
+               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+               xmlns:my="clr-namespace:ClientControls.Controls;assembly=ClientControls"
+               d:DesignWidth="1000"
+               mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary Source="/ClientResources;component/CommonStyle.xaml" />
+    </UserControl.Resources>
+    <StackPanel>
+        <StackPanel Name="spSelectOrder">
+            <Grid Name="dgUnfinishGrid" MinHeight="600">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <GroupBox Margin="3" Header="订单列表">
+                    <my:DataBoxExt Name="dbeUnFinishOrder" />
+                </GroupBox>
+                <GroupBox Grid.Row="1" Header="操作">
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Button Name="btnRefresh"
+                                Click="btnRefresh_Click"
+                                Content="刷  新" />
+                        <Button Name="btnCreateStock"
+                                Click="btnCreateStock_Click"
+                                Content="生成货单" />
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Grid.Row="2"
+                          Margin="3"
+                          Header="订单商品信息">
+                    <my:DataBoxExt Name="dbeUnFinishOrderDetail" />
+                </GroupBox>
+            </Grid>
+        </StackPanel>
+        <StackPanel Name="spDefaultShow" Visibility="Collapsed">
+            <GroupBox Header="订货单信息">
+                <Grid Name="gridStockNote" MinHeight="300">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <GroupBox Header="木门货单">
+                        <DataGrid Name="dgWoodenNote"
+                                  AutoGenerateColumns="False"
+                                  CellEditEnding="dgWoodenNote_CellEditEnding"
+                                  ItemsSource="{Binding}" />
+                    </GroupBox>
+                    <StackPanel Grid.Row="1"
+                                HorizontalAlignment="Right"
+                                Orientation="Horizontal">
+                        <Button Name="btnAddWoodenStock"
+                                Click="btnAddWoodenStock_Click"
+                                Content="添 加" />
+                        <Button Name="btnDelWoodenStock"
+                                Click="btnDelWoodenStock_Click"
+                                Content="删 除" />
+                    </StackPanel>
+                    <GroupBox Grid.Row="2" Header="合金门货单">
+                        <DataGrid Name="dgAlloyNote"
+                                  AutoGenerateColumns="False"
+                                  CellEditEnding="dgAlloyNote_CellEditEnding"
+                                  ItemsSource="{Binding}" />
+                    </GroupBox>
+                    <StackPanel Grid.Row="3"
+                                HorizontalAlignment="Right"
+                                Orientation="Horizontal">
+                        <Button Name="btnAddAlloyStock"
+                                Click="btnAddAlloyStock_Click"
+                                Content="添 加" />
+                        <Button Name="btnDelAlloyStock"
+                                Click="btnDelAlloyStock_Click"
+                                Content="删 除" />
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="货单其他信息">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="订货日期" />
+                        <TextBox Name="tbStockDate"
+                                 jxpt:InputTypeControl.InputType="UNSINDIGITAL"
+                                 MaxLength="8" />
+                        <TextBlock Text="货单金额" />
+                        <TextBox Name="tbStockAmt" jxpt:InputTypeControl.InputType="AMT" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="木门货单备注" />
+                        <TextBox Name="tbWoodenRemark" Width="480" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="合金货单备注" />
+                        <TextBox Name="tbAlloyRemark" Width="480" />
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                <Button Name="btnPrintView"
+                        Margin="10"
+                        Click="btnPrintView_Click"
+                        Content="打印预览" />
+                <Button Name="btnSave"
+                        Margin="10"
+                        Click="btnSave_Click"
+                        Content="保存并打印" />
+                <Button Name="btnBack"
+                        Margin="10"
+                        Click="btnBack_Click"
+                        Content="返回选择" />
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</jxpt:PageBase>

@@ -1,0 +1,7 @@
+E:\VirtualBoxCommonFile\Svn\20170109_杰讯平台\bin\Config\ClientConfig.xml
+E:\VirtualBoxCommonFile\Svn\20170109_杰讯平台\bin\Config\ServerConfig.xml
+E:\VirtualBoxCommonFile\Svn\20170109_杰讯平台\bin\CommonLib.dll
+E:\VirtualBoxCommonFile\Svn\20170109_杰讯平台\bin\CommonLib.pdb
+E:\VirtualBoxCommonFile\Svn\20170109_杰讯平台\JXPlatForm\CommonLib\obj\Debug\ResolveAssemblyReference.cache
+E:\VirtualBoxCommonFile\Svn\20170109_杰讯平台\JXPlatForm\CommonLib\obj\Debug\CommonLib.dll
+E:\VirtualBoxCommonFile\Svn\20170109_杰讯平台\JXPlatForm\CommonLib\obj\Debug\CommonLib.pdb

@@ -1,0 +1,163 @@
+﻿<jxpt:PageBase x:Class="ExpandDemo.Pages.UnfinishOrder"
+               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+               xmlns:jxpt="clr-namespace:ClientControls;assembly=ClientControls"
+               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+               xmlns:my="clr-namespace:ClientControls.Controls;assembly=ClientControls"
+               d:DesignWidth="1000"
+               mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary Source="/ClientResources;component/CommonStyle.xaml" />
+    </UserControl.Resources>
+    <StackPanel>
+        <StackPanel Name="spSelectOrder">
+            <Grid Name="dgUnfinishGrid" MinHeight="600">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <GroupBox Header="未完成订单列表" Margin="3" >
+                    <my:DataBoxExt Name="dbeUnFinishOrder"/>
+                </GroupBox>
+                <GroupBox Grid.Row="1"  Header="操作">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Name="btnRefresh" Content="刷  新" Click="btnRefresh_Click" />
+                        <Button Name="btnCancelOrder" Content="撤销订单" Click="btnCancelOrder_Click" />
+                        <Button Name="btnModOrder" Content="修改订单" Click="btnModOrder_Click" />
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="订单商品信息" Margin="3" Grid.Row="2">
+                    <my:DataBoxExt Name="dbeUnFinishOrderDetail"/>
+                </GroupBox>
+            </Grid>
+        </StackPanel>
+        <StackPanel Name="spDefaultShow" Visibility="Collapsed">
+            <GroupBox Header="订单客户信息">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="客户姓名" />
+                        <TextBox Name="tbClientName" />
+                        <TextBlock Text="客户电话" />
+                        <TextBox Name="tbClientTel" jxpt:InputTypeControl.InputType="UNSINDIGITAL" />
+                        <Button Name="btnSelectClient"
+                                Margin="100, 3,3,3"
+                                Click="btnSelectClient_Click"
+                                Content="选择客户" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="客户地址" />
+                        <TextBox Name="tbClientAddr" Width="480" />
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="订单商品信息">
+                <StackPanel>
+                    <my:DataBoxExt Name="gdGoodsInfo" Height="300"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="商品种类" />
+                        <ComboBox Name="cbGoodsKind" SelectionChanged="cbGoodsKind_SelectionChanged">
+                            <ComboBoxItem Content="木门" IsSelected="True" />
+                            <ComboBoxItem Content="合金门" />
+                            <ComboBoxItem Content="垭口窗套" />
+                        </ComboBox>
+                        <TextBlock Text="品  名" />
+                        <TextBox Name="tbGoodsName" LostFocus="CheckPrices"/>
+                        <ComboBox Name="cbAlloyGoodsName" Visibility="Collapsed" LostFocus="CheckPrices">
+                            <ComboBoxItem Content="平开门" IsSelected="True" />
+                            <ComboBoxItem Content="子母门" />
+                            <ComboBoxItem Content="推拉门" />
+                        </ComboBox>
+                        <ComboBox Name="cbGoodsName" Visibility="Collapsed" LostFocus="CheckPrices">
+                            <ComboBoxItem Content="单包套" IsSelected="True" />
+                            <ComboBoxItem Content="双包套" />
+                        </ComboBox>
+                        <TextBlock Text="型号(规格)" />
+                        <TextBox Name="tbGoodsModel" LostFocus="CheckPrices"/>
+                        <ComboBox Name="cbGoodsModel" Visibility="Collapsed" LostFocus="CheckPrices" SelectionChanged="cbGoodsModel_SelectionChanged">
+                            <ComboBoxItem Content="两高一宽" IsSelected="True" />
+                            <ComboBoxItem Content="两宽一高" />
+                            <ComboBoxItem Content="一宽一高"/>
+                            <ComboBoxItem Content="两宽两高"/>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="尺寸(高*宽*厚)"/>
+                        <TextBox Name="tbSize" LostFocus="tbSize_LostFocus"/>
+                        <TextBlock Name="tbChangeForward" Text="套线类型" />
+                        <ComboBox Name="cbStyleKinds" />
+                        <TextBlock Text="颜  色" />
+                        <TextBox Name="tbColor" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="数量(套)" Name="tbkCountTag" />
+                        <TextBox Name="tbCount" jxpt:InputTypeControl.InputType="UNSINFLOAT" LostFocus="tbCount_LostFocus"/>
+                        <TextBlock Text="单  价" />
+                        <TextBox Name="tbPrice" jxpt:InputTypeControl.InputType="AMT" LostFocus="tbPrice_LostFocus"/>
+                        <TextBlock Text="小 计" />
+                        <TextBox Name="tbTotalPrice"
+                                 IsReadOnly="True"
+                                 jxpt:InputTypeControl.InputType="AMT" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="备 注" />
+                        <TextBox Name="tbDetialRemark" Width="480" />
+                        <Button Name="btnAddDetail" Content="添加" Click="btnAddDetail_Click" />
+                        <Button Name="btnModDetail" Content="修改" Click="btnModDetail_Click" />
+                        <Button Name="btnDelDetail" Content="删除" Click="btnDelDetail_Click" />
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="订单其他信息">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="订单日期" />
+                        <TextBox Name="tbOrderDate"
+                                 jxpt:InputTypeControl.InputType="UNSINDIGITAL"
+                                 MaxLength="8" LostFocus="tbOrderDate_LostFocus"/>
+                        <TextBlock Text="预计天数" />
+                        <TextBox Name="tbExpectDays" jxpt:InputTypeControl.InputType="UNSINDIGITAL_EXT" LostFocus="tbExpectDays_LostFocus"/>
+                        <TextBlock Text="预计日期" />
+                        <TextBox Name="tbEndDay" IsEnabled="False"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="订单金额" />
+                        <TextBox Name="tbOrderAmt" jxpt:InputTypeControl.InputType="AMT" />
+                        <TextBlock Text="已付金额" />
+                        <TextBox Name="tbDepositAmt" jxpt:InputTypeControl.InputType="AMT" LostFocus="tbDepositAmt_LostFocus"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="安装完成日期" />
+                        <TextBox Name="tbInstallDate" 
+                                 jxpt:InputTypeControl.InputType="UNSINDIGITAL"
+                                 LostFocus="tbInstallDate_LostFocus"
+                                 MaxLength="8"  />
+                        <TextBlock Text="安装工人" />
+                        <TextBox Name="tbInstallWorker"/>
+                        <TextBlock Text="完结日期" Name="tbxAllEnd" Visibility="Collapsed"/>
+                        <TextBox Name="tbAllEndDate" 
+                                 jxpt:InputTypeControl.InputType="UNSINDIGITAL"
+                                 MaxLength="8" Visibility="Collapsed" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="备    注" />
+                        <TextBox Name="tbRemark" Width="480" />
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                <Button Name="btnPrintView"
+                        Margin="10"
+                        Content="打印预览" Click="btnPrintView_Click" />
+                <Button Name="btnSave"
+                        Margin="10"
+                        Content="保存并打印" Click="btnSave_Click" />
+                <Button Name="btnBack"
+                        Margin="10"
+                        Content="返回选择" Click="btnBack_Click" />
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</jxpt:PageBase>

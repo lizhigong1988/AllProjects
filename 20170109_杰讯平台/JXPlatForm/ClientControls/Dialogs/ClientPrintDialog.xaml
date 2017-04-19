@@ -1,0 +1,12 @@
+﻿<Window x:Class="ClientControls.Dialogs.ClientPrintDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="PrintDialog"
+        Width="1200"
+        Height="600"
+        WindowStartupLocation="CenterScreen"
+        ContentRendered="Window_ContentRendered">
+    <Grid>
+        <DocumentViewer Name="docViewer" />
+    </Grid>
+</Window>
