@@ -7,60 +7,17 @@
              Height="28cm"
              mc:Ignorable="d">
 
-    <UserControl.Background>
+    <!--
+        <UserControl.Background>
         <ImageBrush ImageSource="/ExpandDemo;component/Images/木门订货单.jpg" Opacity="0.5" />
-    </UserControl.Background>
+        </UserControl.Background>
+    -->
 
     <Canvas>
         <TextBlock Canvas.Left="51"
                    Canvas.Top="48"
                    FontSize="14"
                    Text="氻氻木门  LeLe  Door" />
-        <TextBlock Canvas.Left="54"
-                   Canvas.Top="885"
-                   FontSize="14.5"
-                   Text="友情提示：" />
-        <TextBlock Canvas.Left="80"
-                   Canvas.Top="907"
-                   FontSize="14.5"
-                   Text="尊敬的客户，为了确保您订购的产品更加完美，同时让我们能更好为您服务，请您将以上订单内容仔细核" />
-        <TextBlock Canvas.Left="51"
-                   Canvas.Top="926"
-                   FontSize="14.5"
-                   Text="对，并确保装修过程中不改变洞口尺寸。" />
-        <TextBlock Canvas.Left="51"
-                   Canvas.Top="951"
-                   Text="订单总金额：_____________________预付定金：_____________________" />
-        <TextBlock Canvas.Left="463"
-                   Canvas.Top="958"
-                   FontSize="14.5"
-                   Text="客户确认:____________________" />
-        <TextBlock Name="tbTotalAmt"
-                   Canvas.Left="122"
-                   Canvas.Top="949"
-                   Text="订单金额" />
-        <TextBlock Name="tbDepositAmt"
-                   Canvas.Left="295"
-                   Canvas.Top="949"
-                   Text="订金金额" />
-        <TextBlock Canvas.Left="469"
-                   Canvas.Top="932"
-                   FontSize="14.5"
-                   Text="收 款 人:____________________" />
-        <TextBlock Canvas.Left="80"
-                   Canvas.Top="986"
-                   FontSize="14.5"
-                   Text="晨昊门业装饰材料商行感谢您的选购！" />
-        <TextBlock Canvas.Left="486"
-                   Canvas.Top="984"
-                   Text="电话：0391-2608005     13639626080" />
-        <TextBlock Canvas.Left="486"
-                   Canvas.Top="1006"
-                   Text="地址：焦作市建设中路物资城T211-T212号" />
-        <TextBlock Name="tbPageCounts"
-                   Canvas.Left="351"
-                   Canvas.Top="1022"
-                   Text="第(1)页 共(1)页" />
         <TextBlock Canvas.Left="264"
                    Canvas.Top="60"
                    FontSize="30"
@@ -74,5 +31,276 @@
                    Canvas.Top="116"
                    FontSize="14"
                    Text="2017年4月20日" />
+        <Border Canvas.Left="39"
+                Canvas.Top="137"
+                Width="723"
+                Height="780"
+                BorderBrush="Black"
+                BorderThickness="0,0,1,1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="496*" />
+                    <RowDefinition Height="44*" />
+                    <RowDefinition Height="179*" />
+                    <RowDefinition Height="61*" />
+                </Grid.RowDefinitions>
+                <Grid Name="gridMain" Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="41*" />
+                        <ColumnDefinition Width="96*" />
+                        <ColumnDefinition Width="37*" />
+                        <ColumnDefinition Width="62*" />
+                        <ColumnDefinition Width="50*" />
+                        <ColumnDefinition Width="52*" />
+                        <ColumnDefinition Width="141*" />
+                        <ColumnDefinition Width="30*" />
+                        <ColumnDefinition Width="56*" />
+                        <ColumnDefinition Width="77*" />
+                        <ColumnDefinition Width="80*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="14"
+                               Text="序&#10;号" />
+                    <TextBlock Grid.Column="1"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="14"
+                               Text="产品型号" />
+                    <TextBlock Grid.Column="2"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="14"
+                               Text="材&#10;质" />
+                    <TextBlock Grid.Column="3"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="14"
+                               Text="线条" />
+                    <TextBlock Grid.Column="4"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="14"
+                               Text="套板" />
+                    <TextBlock Grid.Column="5"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="14"
+                               Text="颜色" />
+                    <TextBlock Grid.Column="6"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="14"
+                               LineHeight="22"
+                               Text="门洞（扇）尺寸&#10;高    宽    厚"
+                               TextAlignment="Center" />
+                    <Line Grid.Column="6"
+                          Height="1"
+                          VerticalAlignment="Center"
+                          Stroke="Black"
+                          StrokeThickness="1"
+                          X1="0"
+                          X2="300"
+                          Y1="0"
+                          Y2="0" />
+                    <TextBlock Grid.Column="7"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="14"
+                               Text="数&#10;量" />
+                    <TextBlock Grid.Column="8"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="14"
+                               LineHeight="22"
+                               Text="单价&#10;（元）"
+                               TextAlignment="Center" />
+                    <Line Grid.Column="8"
+                          Height="1"
+                          VerticalAlignment="Center"
+                          Stroke="Black"
+                          StrokeThickness="1"
+                          X1="0"
+                          X2="300"
+                          Y1="0"
+                          Y2="0" />
+                    <TextBlock Grid.Column="9"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="14"
+                               LineHeight="22"
+                               Text="合计&#10;（元）"
+                               TextAlignment="Center" />
+                    <Line Grid.Column="9"
+                          Height="1"
+                          VerticalAlignment="Center"
+                          Stroke="Black"
+                          StrokeThickness="1"
+                          X1="0"
+                          X2="300"
+                          Y1="0"
+                          Y2="0" />
+                    <TextBlock Grid.Column="10"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="14"
+                               Text="合 计" />
+                </Grid>
+                <Border Grid.Row="1"
+                        BorderBrush="Black"
+                        BorderThickness="1,1,0,0">
+                    <Grid Name="gridAmt">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="145*" />
+                            <ColumnDefinition Width="360*" />
+                            <ColumnDefinition Width="51*" />
+                            <ColumnDefinition Width="166*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontSize="14"
+                                   Text="本单总金额大写：" />
+                        <TextBlock Grid.Column="2"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontSize="14"
+                                   Text="小写：" />
+                    </Grid>
+                </Border>
+                <Border Grid.Row="2"
+                        BorderBrush="Black"
+                        BorderThickness="1,1,0,0">
+                    <Canvas>
+                        <TextBlock Canvas.Left="19"
+                                   Canvas.Top="10"
+                                   FontSize="13.5"
+                                   Text="注： ★交货日期：自确定规格之日起          天。交货方式：" />
+                        <TextBlock Canvas.Left="51"
+                                   Canvas.Top="27"
+                                   FontSize="13.5"
+                                   Text="★结算方式及验收：本订单签订时即付（总金额的）      %，即         元，提货时间付清余款         元，所有产" />
+                        <TextBlock Canvas.Left="19"
+                                   Canvas.Top="44"
+                                   FontSize="13.5"
+                                   Text="品在付清余款后方可安装使用，否则厂方有权收回产品。" />
+                        <TextBlock Canvas.Left="51"
+                                   Canvas.Top="61"
+                                   Height="17"
+                                   FontSize="13.5"
+                                   Text="★转角墙、丁子墙、垭口边门洞在安装前应先在平面的那一侧做“假墙”，宽度不少于45mm，否则安装后套" />
+                        <TextBlock Canvas.Left="19"
+                                   Canvas.Top="77"
+                                   FontSize="13.5"
+                                   Text="线将会左右不均，并在备注栏注明。" />
+                        <TextBlock Canvas.Left="51"
+                                   Canvas.Top="94"
+                                   Height="17"
+                                   FontSize="13.5"
+                                   Text="★套板、线条凡长度在2700mm内的部件生产为整块，长度超过2700mm的配件只能在安装时对接，对接口" />
+                        <TextBlock Canvas.Left="19"
+                                   Canvas.Top="110"
+                                   FontSize="13.5"
+                                   Text="在2400mm处。" />
+                        <TextBlock Canvas.Left="51"
+                                   Canvas.Top="127"
+                                   Height="17"
+                                   FontSize="13.5"
+                                   Text="★本产品属木质类，对使用环境有一定要求，严禁暴晒、火烤及潮湿、雨淋、明水浸泡。" />
+                        <TextBlock Canvas.Left="51"
+                                   Canvas.Top="144"
+                                   Height="17"
+                                   FontSize="13.5"
+                                   Text="★其他约定；" />
+                    </Canvas>
+                </Border>
+                <Grid Name="gridBank" Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="45*" />
+                        <ColumnDefinition Width="95*" />
+                        <ColumnDefinition Width="267*" />
+                        <ColumnDefinition Width="315*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="14"
+                               LineHeight="22"
+                               Text="户&#10;名"
+                               TextAlignment="Center" />
+                    <TextBlock Grid.Column="1"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="14"
+                               LineHeight="22"
+                               Text="熊由波"
+                               TextAlignment="Center" />
+                    <TextBlock Grid.Column="2"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="14"
+                               LineHeight="24"
+                               Text="农行：6228450470004051810&#10;工行：6222083100000886699"
+                               TextAlignment="Center" />
+                    <TextBlock Grid.Column="3"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="14"
+                               LineHeight="24"
+                               Text="邮政：6221886530092842559&#10;信合：6228671117703356      "
+                               TextAlignment="Center" />
+                    <Line Grid.Column="2"
+                          Grid.ColumnSpan="2"
+                          Height="1"
+                          VerticalAlignment="Center"
+                          Stroke="Black"
+                          StrokeThickness="1"
+                          X1="0"
+                          X2="600"
+                          Y1="0"
+                          Y2="0" />
+                </Grid>
+            </Grid>
+        </Border>
+        <TextBlock Canvas.Left="59"
+                   Canvas.Top="923"
+                   FontSize="14"
+                   Text="订货人:" />
+        <TextBlock Canvas.Left="377"
+                   Canvas.Top="923"
+                   FontSize="14"
+                   Text="供货单位：氻氻木门" />
+        <TextBlock Canvas.Left="59"
+                   Canvas.Top="949"
+                   FontSize="14"
+                   Text="地  址:" />
+        <TextBlock Canvas.Left="377"
+                   Canvas.Top="949"
+                   FontSize="14"
+                   Text="电话：023-53317777（跟单查询）/53517888（订单查询）" />
+        <TextBlock Canvas.Left="59"
+                   Canvas.Top="988"
+                   FontSize="14"
+                   Text="电  话:" />
+        <TextBlock Canvas.Left="377"
+                   Canvas.Top="968"
+                   FontSize="14"
+                   Text="传真：023-53338833//53334333" />
+        <TextBlock Canvas.Left="244"
+                   Canvas.Top="988"
+                   FontSize="14"
+                   Text="QQ：1716139262（售后）/2635301197（跟单查询）/914551499（订单查询）" />
     </Canvas>
 </UserControl>
