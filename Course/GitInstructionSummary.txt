@@ -12,7 +12,7 @@
 12、下载仓库            git clone https://github.com/lizhigong1988/AllProjects.git
 13、查看仓库		git remote -v
 14、添加上传分支	git remote add upstream https://github.com/lizhigong1988/AllProjects.git
-15、上传到远程仓库	git push origin 本地分支:远程分支
+15、上传到远程仓库	git push origin master:master
 
 其他：
 Explore GitHub (https://github.com/explore)是一个大的平台，可以让你找到感兴趣的项目。
