@@ -18,6 +18,7 @@ using ClientLibrary;
 using ClientControls;
 using ExpandDemo.DataBase;
 using ClientControls.Dialogs;
+using ExpandDemo.Pages.Prints;
 
 namespace ExpandDemo.Pages
 {
@@ -647,6 +648,9 @@ namespace ExpandDemo.Pages
 
         private void PrintPreView()
         {
+            List<UserControl> prints = OrderPrint.SetPrintInfo(tbClientName.Text, tbClientTel.Text, tbOrderDate.Text,
+                tbClientAddr.Text, tbOrderAmt.Text, tbDepositAmt.Text, gdGoodsInfo.GetBindTable());
+            ClientPrintDialog.ShowPrintPreView(prints, 21, 29.7);
         }
 
         private bool CheckElments()
