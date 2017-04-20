@@ -55,6 +55,9 @@
                 <ListBoxItem Height="25"
                              HorizontalContentAlignment="Center"
                              Content="项目统计" />
+                <ListBoxItem Height="25"
+                             HorizontalContentAlignment="Center"
+                             Content="工作量统计" />
             </ListBox>
             <Border Grid.Column="1"
                     Margin="3"

@@ -126,7 +126,7 @@ namespace 项目管理.Pages
             if (!DataBaseManager.AddNewProject(tbDemandName.Text, cbDemandDepart.Text, tbDemandDate.Text,
                 tbExpectDate.Text, cbProKinds.Text, cbProStage.Text, cbProState.Text, tbEstimatedDays.Text,
                 tbProgressNote.Text, cbSystem.Text, tbRelationSystem.Text, tbFirstPerson.Text, tbSecondPerson.Text,
-                tbTestPerson.Text, tbBusinessPerson.Text, tbRemark.Text, dgDevelopmentInfo.DataContext as DataTable))
+                tbTestPerson.Text, tbBusinessPerson.Text, tbRemark.Text, tbFinishDate.Text, dgDevelopmentInfo.DataContext as DataTable))
             {
                 MessageBox.Show("保存项目失败！");
                 return;

@@ -45,7 +45,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite, Version=1.0.60.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\VirtualBoxCommonFile\Svn\CommonLib\System.Data.SQLite.DLL</HintPath>
+      <HintPath>..\..\CommonLib\System.Data.SQLite.DLL</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -69,12 +69,16 @@
     <Compile Include="DataBases\DataBaseTool_SQLite3.cs" />
     <Compile Include="DataBases\T_PRO_INFO.cs" />
     <Compile Include="DataBases\T_TRADE_INFO.cs" />
+    <Compile Include="DataBases\T_DAYS_INFO.cs" />
     <Compile Include="ExcelOperation2010.cs" />
     <Compile Include="Pages\ModProject.xaml.cs">
       <DependentUpon>ModProject.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\QueryProject.xaml.cs">
       <DependentUpon>QueryProject.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\QueryWorkDays.xaml.cs">
+      <DependentUpon>QueryWorkDays.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tools\InputCheck.cs" />
     <Compile Include="Tools\InputTypeControl.cs" />
@@ -100,6 +104,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\QueryProject.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\QueryWorkDays.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

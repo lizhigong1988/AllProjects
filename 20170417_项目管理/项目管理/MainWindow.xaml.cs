@@ -88,6 +88,9 @@ namespace 项目管理
                 case "项目统计":
                     scrl.Content = new QueryProject();
                     break;
+                case "工作量统计":
+                    scrl.Content = new QueryWorkDays();
+                    break;
                 default:
                     return;
             }

@@ -125,5 +125,17 @@ namespace 项目管理.Pages
             MessageBox.Show("导出完成！");
         }
 
+        private void btnExportMain_Click(object sender, RoutedEventArgs e)
+        {
+            DataTable dtTrades = dgProInfo.DataContext as DataTable;
+            System.Windows.Forms.SaveFileDialog saveDialog = new System.Windows.Forms.SaveFileDialog { FileName = "项目列表.xls" };
+            saveDialog.ShowDialog();
+            string outputFile = saveDialog.FileName;
+            if (outputFile.IndexOf(":", System.StringComparison.Ordinal) < 0)
+                return; //被点了取消   
+            ExcelOperation.ExportSimpleExcel(dtTrades, outputFile);
+            MessageBox.Show("导出完成！");
+        }
+
     }
 }

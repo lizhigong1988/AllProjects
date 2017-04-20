@@ -15,8 +15,11 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="需求名称" />
                     <ComboBox Name="cbDemandName"
-                              Width="414"
+                              Width="344"
                               SelectionChanged="cbDemandName_SelectionChanged" />
+                    <Button Name="btnShowAll"
+                            Click="btnShowAll_Click"
+                            Content="显示全部" />
                     <TextBlock Text="提出部门" />
                     <ComboBox Name="cbDemandDepart" IsEditable="True" />
                 </StackPanel>
@@ -39,6 +42,8 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="项目进展说明" />
                     <TextBox Name="tbProgressNote" Width="414" />
+                    <TextBlock Text="实际完成日期" />
+                    <TextBox Name="tbFinishDate" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="所属系统" />
@@ -66,7 +71,7 @@
         </GroupBox>
         <GroupBox Header="开发信息">
             <StackPanel>
-                <DataGrid Name="dgDevelopmentInfo" Height="150">
+                <DataGrid Name="dgDevelopmentInfo" Height="250">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding TRADE_CODE}" Header="交易代码" />
                         <DataGridTextColumn Binding="{Binding TRADE_NAME}" Header="交易名称" />
@@ -92,7 +97,7 @@
         </GroupBox>
         <GroupBox Header="相关文件">
             <StackPanel>
-                <ListBox Name="lbFiles" Height="150" />
+                <ListBox Name="lbFiles" Height="100" />
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                     <Button Name="btnAddFile"
                             Click="btnAddFile_Click"

@@ -25,18 +25,23 @@
                             Width="0"
                             Click="btnQuery_Click"
                             Content="查询" />
+                    <Button Name="btnExportMain"
+                            Width="0"
+                            Click="btnExportMain_Click"
+                            Content="导出" />
                 </StackPanel>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="项目信息">
             <DataGrid Name="dgProInfo"
-                      Height="150"
+                      Height="250"
                       SelectionChanged="dgProInfo_SelectionChanged">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding DEMAND_NAME}" Header="需求名称" />
                     <DataGridTextColumn Binding="{Binding DEMAND_DEPART}" Header="提出部门" />
                     <DataGridTextColumn Binding="{Binding DEMAND_DATE}" Header="提出日期" />
                     <DataGridTextColumn Binding="{Binding EXPECT_DATE}" Header="期望完成日期" />
+                    <DataGridTextColumn Binding="{Binding FINISH_DATE}" Header="实际完成日期" />
                     <DataGridTextColumn Binding="{Binding PRO_KIND}" Header="需求类型" />
                     <DataGridTextColumn Binding="{Binding PRO_STAGE}" Header="阶段" />
                     <DataGridTextColumn Binding="{Binding PRO_STATE}" Header="状态" />
@@ -54,7 +59,7 @@
         </GroupBox>
         <GroupBox Header="开发信息">
             <StackPanel>
-                <DataGrid Name="dgDevelopmentInfo" Height="150">
+                <DataGrid Name="dgDevelopmentInfo" Height="250">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding TRADE_CODE}" Header="交易代码" />
                         <DataGridTextColumn Binding="{Binding TRADE_NAME}" Header="交易名称" />
@@ -81,7 +86,7 @@
         </GroupBox>
         <GroupBox Header="相关文件">
             <StackPanel>
-                <ListBox Name="lbFiles" Height="150" />
+                <ListBox Name="lbFiles" Height="100" />
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                     <Button Name="btnOpenDir"
                             Click="btnOpenDir_Click"

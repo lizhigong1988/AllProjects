@@ -118,7 +118,8 @@ namespace 项目管理.Pages
             if (!DataBaseManager.ModProject(curProId, cbDemandName.Text, cbDemandDepart.Text, tbDemandDate.Text,
                 tbExpectDate.Text, cbProKinds.Text, cbProStage.Text, cbProState.Text, tbEstimatedDays.Text,
                 tbProgressNote.Text, cbSystem.Text, tbRelationSystem.Text, tbFirstPerson.Text, tbSecondPerson.Text,
-                tbTestPerson.Text, tbBusinessPerson.Text, tbRemark.Text, dgDevelopmentInfo.DataContext as DataTable))
+                tbTestPerson.Text, tbBusinessPerson.Text, tbRemark.Text,
+                tbFinishDate.Text, dgDevelopmentInfo.DataContext as DataTable))
             {
                 MessageBox.Show("保存项目失败！");
                 return;
@@ -155,6 +156,7 @@ namespace 项目管理.Pages
             tbTestPerson.Text = dr["TEST_PERSON"].ToString();
             tbBusinessPerson.Text = dr["BUSINESS_PERSON"].ToString();
             tbRemark.Text = dr["REMARK"].ToString();
+            tbFinishDate.Text = dr["FINISH_DATE"].ToString();
 
             DataTable dtTrades = DataBaseManager.GetTradesInfo(curProId);
             dgDevelopmentInfo.DataContext = dtTrades;
@@ -173,6 +175,18 @@ namespace 项目管理.Pages
             {
                 Directory.CreateDirectory(curFilePath);  
             }
+        }
+
+        private void btnShowAll_Click(object sender, RoutedEventArgs e)
+        {
+            List<string> proNames = DataBaseManager.GetCurProNames(true);
+            cbDemandName.ItemsSource = proNames;
+            if (proNames.Count == 0)
+            {
+                MessageBox.Show("当前无项目！");
+                return;
+            }
+            cbDemandName.SelectedIndex = 0;
         }
 
     }

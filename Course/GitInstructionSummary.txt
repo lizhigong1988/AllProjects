@@ -1,7 +1,8 @@
 1、设置名字 		git config --global user.name "Your Name"
 2、设置电子邮箱 	git config --global user.email "email@example.com"
 3、创建仓库 		git init
-4、添加文件		git add 文件名1 文件名2 ...
+4、添加文件		git add 文件名1 文件名2 ...   
+   git add -A(添加所有) git add -u(表示添加编辑或者删除的文件) git add . 表示添加新文件和编辑过的文件不包括删除的文件
 5、提交			git commit -m "提交日志"
 6、查看状态		git status
 7、对比			git diff 文件名
