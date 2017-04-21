@@ -95,16 +95,22 @@ namespace 项目管理.Pages
         {
             DataTable dtTrades = dgDevelopmentInfo.DataContext as DataTable;
             foreach (DataRow dr in dtTrades.Rows)
-            { 
-                bool res = false;
-                if (!DataBaseManager.DiffTrade(dr["DEMAND_ID"].ToString(), dr["TRADE_CODE"].ToString(), ref res))
+            {
+                List<string> difDemandNames = DataBaseManager.DiffTrade(dr["DEMAND_ID"].ToString(), dr["TRADE_CODE"].ToString());
+                if (difDemandNames == null)
                 {
                     MessageBox.Show("查询失败");
                     return;
                 }
-                if (res)
+                dr["DIFF"] = "";
+                if (difDemandNames.Count != 0)
                 {
-                    dr["DIFF"] = "冲突";
+                    //dr["DIFF"] = "冲突";
+                    foreach(string name in difDemandNames)
+                    {
+                        dr["DIFF"] += name + ",";
+                    }
+                    dr["DIFF"] = dr["DIFF"].ToString().TrimEnd(',');
                 }
                 else
                 {

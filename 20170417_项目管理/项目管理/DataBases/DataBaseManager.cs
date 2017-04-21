@@ -196,25 +196,23 @@ namespace 项目管理.DataBases
             return dataBaseTool.SelectFunc(sql);
         }
 
-        internal static bool DiffTrade(string proID, string tradeNo, ref bool res)
+        internal static List<string> DiffTrade(string proID, string tradeNo)
         {
-            string sql = "select COUNT(*) from T_TRADE_INFO where DEMAND_ID in ";
+            List<string> difDemandNames = new List<string>();
+            string sql = "select DISTINCT DEMAND_ID from T_TRADE_INFO where DEMAND_ID in ";
             sql += string.Format("(select DEMAND_ID from T_PRO_INFO where DEMAND_ID != '{0}' and PRO_STATE != '完成')", proID);
             sql += string.Format(" and TRADE_CODE = '{0}'", tradeNo);
+            sql = "select DEMAND_NAME from T_PRO_INFO where DEMAND_ID in (" + sql + ")";
             DataTable dt = dataBaseTool.SelectFunc(sql);
             if (dt == null)
             {
-                return false;
+                return null;
             }
-            if (dt.Rows[0][0].ToString() == "0")
+            foreach (DataRow dr in dt.Rows)
             {
-                res = false;
+                difDemandNames.Add(dr[0].ToString());
             }
-            else
-            {
-                res = true;
-            }
-            return true;
+            return difDemandNames;
         }
 
         internal static List<string> GetHisWokers()
