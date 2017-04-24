@@ -1,6 +1,6 @@
-/bin
+**/bin
 #忽略bin目录
-/obj
+**/obj
 #忽略obj目录
 *.suo
 #忽略.suo文件
