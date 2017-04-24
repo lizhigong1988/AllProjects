@@ -54,6 +54,7 @@
                     <DataGridTextColumn Binding="{Binding TEST_PERSON}" Header="测试经理" />
                     <DataGridTextColumn Binding="{Binding BUSINESS_PERSON}" Header="业务经理" />
                     <DataGridTextColumn Binding="{Binding REMARK}" Header="备注" />
+                    <DataGridTextColumn Binding="{Binding LAST_MOD_TIME}" Header="最后维护日期" />
                 </DataGrid.Columns>
             </DataGrid>
         </GroupBox>

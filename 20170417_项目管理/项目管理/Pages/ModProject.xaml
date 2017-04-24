@@ -66,6 +66,8 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="备  注" />
                     <TextBox Name="tbRemark" Width="414" />
+                    <TextBlock Text="上次维护时间" />
+                    <TextBox Name="tbLastTime" IsEnabled="False" />
                 </StackPanel>
             </StackPanel>
         </GroupBox>

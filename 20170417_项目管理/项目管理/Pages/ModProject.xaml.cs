@@ -157,6 +157,7 @@ namespace 项目管理.Pages
             tbBusinessPerson.Text = dr["BUSINESS_PERSON"].ToString();
             tbRemark.Text = dr["REMARK"].ToString();
             tbFinishDate.Text = dr["FINISH_DATE"].ToString();
+            tbLastTime.Text = dr["LAST_MOD_TIME"].ToString();
 
             DataTable dtTrades = DataBaseManager.GetTradesInfo(curProId);
             dgDevelopmentInfo.DataContext = dtTrades;

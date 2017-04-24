@@ -78,7 +78,8 @@ namespace 项目管理.DataBases
             List<string> values = new List<string>()
             {
                 proId, demandName, depart, date, expectDate, kinds, stage, state, days, note, 
-                sys, relationSys, firstPersion, secondPersion, testPersion, businessPersion, remark, finishDate
+                sys, relationSys, firstPersion, secondPersion, testPersion, businessPersion, remark, finishDate,
+                DateTime.Now.ToString("yyyyMMddHHmmss")
             };
             if (!dataBaseTool.AddInfo(T_PRO_INFO.TABLE_NAME, T_PRO_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
                 values, ref sql))
@@ -160,7 +161,7 @@ namespace 项目管理.DataBases
                     curProId, dr["TRADE_CODE"].ToString(), dr["TRADE_NAME"].ToString(),
                     dr["IS_NEW"].ToString(), dr["SERVER_NODE"].ToString(), dr["FILE_NAME"].ToString(),
                     dr["TRADE_MENU"].ToString(), dr["WORKER"].ToString(), dr["WORKLOAD"].ToString(),
-                    dr["REMARK"].ToString()
+                    dr["REMARK"].ToString(), DateTime.Now.ToString("yyyyMMddHHmmss")
                 };
                 if (!dataBaseTool.AddInfo(T_TRADE_INFO.TABLE_NAME, T_TRADE_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
                     values, ref sql))

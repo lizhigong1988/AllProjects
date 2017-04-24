@@ -36,6 +36,7 @@ namespace 项目管理.DataBases
             {"BUSINESS_PERSON", "VARCHAR(32)"},
             {"REMARK", "VARCHAR(64)"},
             {"FINISH_DATE", "VARCHAR(8)"},
+            {"LAST_MOD_TIME", "VARCHAR(14)"},
         };
 
         static DataBaseTool_SQLite3 dataBaseTool;
