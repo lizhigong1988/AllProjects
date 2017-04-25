@@ -101,6 +101,9 @@
             <StackPanel>
                 <ListBox Name="lbFiles" Height="100" />
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                    <Button Name="btnOpenDir"
+                            Click="btnOpenDir_Click"
+                            Content="打开目录" />
                     <Button Name="btnAddFile"
                             Click="btnAddFile_Click"
                             Content="新增" />

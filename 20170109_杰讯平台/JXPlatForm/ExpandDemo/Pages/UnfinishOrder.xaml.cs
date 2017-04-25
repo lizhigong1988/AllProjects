@@ -89,8 +89,13 @@ namespace ExpandDemo.Pages
             tbClientAddr.Text = dr["CLIENT_ADDR"].ToString();
             tbOrderDate.Text = dr["ORDER_DATE"].ToString();
             tbEndDay.Text = dr["EXPECT_DAYS"].ToString();
+            if (tbEndDay.Text == "")
+            {
+                tbEndDay.Text = DateTime.Now.ToString("yyyyMMdd");
+            }
             tbExpectDays.Text = (DateTime.ParseExact(tbEndDay.Text, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture)
-                - DateTime.ParseExact(tbOrderDate.Text, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture)).Days.ToString();
+                    - DateTime.ParseExact(tbOrderDate.Text, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture)).Days.ToString();
+
             tbOrderAmt.Text = dr["ORDER_AMT"].ToString();
             tbDepositAmt.Text = dr["DEPOSIT_AMT"].ToString();
             tbRemark.Text = dr["REMARK"].ToString();

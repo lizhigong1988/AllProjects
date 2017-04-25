@@ -64,6 +64,7 @@ namespace ExpandDemo.Pages
             gdGoodsInfo.InitDataBox(dicColumns, dtBind, false);
 
             tbOrderDate.Text = DateTime.Now.ToString("yyyyMMdd");
+            tbEndDay.Text = DateTime.Now.ToString("yyyyMMdd");
             if (Global.WorkAreaHeight - ADJUST_HEIGHT > 100)
             {
                 gdGoodsInfo.Height = Global.WorkAreaHeight - ADJUST_HEIGHT;

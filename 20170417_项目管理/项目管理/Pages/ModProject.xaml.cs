@@ -190,5 +190,13 @@ namespace 项目管理.Pages
             cbDemandName.SelectedIndex = 0;
         }
 
+        private void btnOpenDir_Click(object sender, RoutedEventArgs e)
+        {
+            if (curFilePath != "")
+            {
+                System.Diagnostics.Process.Start("Explorer.exe", AppDomain.CurrentDomain.BaseDirectory + curFilePath.Replace("/", "\\"));
+            }
+        }
+
     }
 }
