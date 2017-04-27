@@ -76,6 +76,10 @@ namespace 项目管理.Pages
             DataTable dtAjust = dtWorkDays.Clone();
             for (int i = startMonth; i < endMonth + 1; i++)
             {
+                if (i.ToString().EndsWith("13"))
+                {
+                    i += 88;
+                }
                 hasRow = false;
                 foreach (DataRow dr in dtWorkDays.Rows)
                 {
