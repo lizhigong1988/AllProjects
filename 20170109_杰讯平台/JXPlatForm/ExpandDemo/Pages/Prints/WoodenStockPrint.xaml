@@ -157,7 +157,7 @@
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                FontSize="14"
-                               Text="合 计" />
+                               Text="备 注" />
                 </Grid>
                 <Border Grid.Row="1"
                         BorderBrush="Black"
@@ -277,10 +277,10 @@
                    Canvas.Top="923"
                    FontSize="14"
                    Text="订货人:" />
-        <TextBlock Canvas.Left="111"
+        <TextBlock Name="tbOrderMan"
+                   Canvas.Left="111"
                    Canvas.Top="923"
                    FontSize="14"
-                   Name="tbOrderMan"
                    Text="打印订货人" />
         <TextBlock Canvas.Left="377"
                    Canvas.Top="923"
@@ -290,10 +290,10 @@
                    Canvas.Top="949"
                    FontSize="14"
                    Text="地  址:" />
-        <TextBlock Canvas.Left="111"
+        <TextBlock Name="tbOrderAddr"
+                   Canvas.Left="111"
                    Canvas.Top="949"
                    FontSize="14"
-                   Name="tbOrderAddr"
                    Text="打印地址" />
         <TextBlock Canvas.Left="377"
                    Canvas.Top="949"
@@ -303,10 +303,10 @@
                    Canvas.Top="988"
                    FontSize="14"
                    Text="电  话:" />
-        <TextBlock Canvas.Left="111"
+        <TextBlock Name="tbOrderTel"
+                   Canvas.Left="111"
                    Canvas.Top="988"
                    FontSize="14"
-                   Name="tbOrderTel"
                    Text="打印电话" />
         <TextBlock Canvas.Left="377"
                    Canvas.Top="968"

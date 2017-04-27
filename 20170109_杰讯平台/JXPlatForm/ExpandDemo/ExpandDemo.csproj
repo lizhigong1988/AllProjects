@@ -140,9 +140,6 @@
     <Content Include="Images\DemoLogo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Images\合金门订货单.jpg" />
-    <Resource Include="Images\木门订货单.jpg" />
-    <Resource Include="Images\销货单.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Pages\ClientInfoManage.xaml">
