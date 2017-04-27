@@ -71,25 +71,23 @@ namespace ClientControls.Dialogs
             {
                 File.Delete(tempPath);
             }
-            //一、生成需要打印的usercontrol
 
-            //二、将读取的文件转换成页
-            FixedPage fp = new FixedPage();
+            //FixedDocument设置页大小
+            FixedDocument fd = new FixedDocument();
+            fd.DocumentPaginator.PageSize = new Size(96 * width, 96 * height);
+
             foreach (UserControl print in Prints)
             {
+                //将读取的文件转换成页
+                FixedPage fp = new FixedPage();
                 fp.Children.Add(print);
-            }
 
-            //三、将页加载到PageContent中
-            PageContent pc = new PageContent();
-            
-            //四、FixedDocument加载所有页，设置页大小
-            FixedDocument fd = new FixedDocument();
-            //fd.DocumentPaginator.PageSize = new Size(96 * width, 96 * height);
-            fd.DocumentPaginator.PageSize = new Size(96 * width, 96 * height);
-            fd.Pages.Add(pc);
-            pc.Child = fp;
-            //五、将XAML保存成XPS文件
+                //将页加载到PageContent中
+                PageContent pc = new PageContent();
+                pc.Child = fp;
+                fd.Pages.Add(pc);
+            }
+            //将XAML保存成XPS文件
             XpsDocument doc = new XpsDocument(tempPath, FileAccess.Write);
             XpsDocumentWriter docWriter = XpsDocument.CreateXpsDocumentWriter(doc);
             docWriter.Write(fd);
