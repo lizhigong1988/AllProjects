@@ -217,162 +217,186 @@ namespace ExpandDemo.Pages
                         {
                             #region 两高一宽
                             case "两高一宽":
-                                newRow = new List<object>() 
+                                if (sizes[0] != "0")
                                 {
-                                    woodenIndex.ToString(),
-                                    "双包套",
-                                    "",
-                                    "",
-                                    "",
+                                    newRow = new List<object>() 
+                                    {
+                                        woodenIndex.ToString(),
+                                        "双包套",
+                                        "",
+                                        "",
+                                        "",
                         
-                                    drDetail["COLOR"].ToString(),
-                                    sizes[0] + "*200",//高
-                                    "1",
-                                    "0",
-                                    "0",
+                                        drDetail["COLOR"].ToString(),
+                                        sizes[0] + "*" + (int.Parse(sizes[2]) * 2).ToString(),//高
+                                        "1",
+                                        "0",
+                                        "0",
                                     
-                        drDetail["REMARK"].ToString(),
-                                };
-                                dtWoodenStock.Rows.Add(newRow.ToArray());
-                                woodenIndex++;
-                                newRow = new List<object>() 
+                                        drDetail["REMARK"].ToString(),
+                                    };
+                                    dtWoodenStock.Rows.Add(newRow.ToArray());
+                                    woodenIndex++;
+                                }
+                                if (sizes[1] != "0")
                                 {
-                                    woodenIndex.ToString(),
-                                    "单包套",
-                                    "",
-                                    "",
-                                    "",
+                                    newRow = new List<object>() 
+                                    {
+                                        woodenIndex.ToString(),
+                                        "单包套",
+                                        "",
+                                        "",
+                                        "",
                         
-                                    drDetail["COLOR"].ToString(),
-                                    sizes[1] + "*100",//宽
-                                    "1",
-                                    "0",
-                                    "0",
+                                        drDetail["COLOR"].ToString(),
+                                        sizes[1] + "*" + sizes[2],//宽
+                                        "1",
+                                        "0",
+                                        "0",
                                     
-                        drDetail["REMARK"].ToString(),
-                                };
-                                dtWoodenStock.Rows.Add(newRow.ToArray());
-                                woodenIndex++;
+                                        drDetail["REMARK"].ToString(),
+                                    };
+                                    dtWoodenStock.Rows.Add(newRow.ToArray());
+                                    woodenIndex++;
+                                }
                                 break;
                             #endregion
                             #region 两宽一高
                             case "两宽一高":
-                                newRow = new List<object>() 
+                                if (sizes[0] != "0")
                                 {
-                                    woodenIndex.ToString(),
-                                    "单包套",
-                                    "",
-                                    "",
-                                    "",
+                                    newRow = new List<object>() 
+                                    {
+                                        woodenIndex.ToString(),
+                                        "单包套",
+                                        "",
+                                        "",
+                                        "",
                         
-                                    drDetail["COLOR"].ToString(),
-                                    sizes[0] + "*100",//高
-                                    "1",
-                                    "0",
-                                    "0",
+                                        drDetail["COLOR"].ToString(),
+                                        sizes[0] + "*" + sizes[2],//高
+                                        "1",
+                                        "0",
+                                        "0",
                                     
-                        drDetail["REMARK"].ToString(),
-                                };
-                                dtWoodenStock.Rows.Add(newRow.ToArray());
-                                woodenIndex++;
-                                newRow = new List<object>() 
+                                        drDetail["REMARK"].ToString(),
+                                    };
+                                    dtWoodenStock.Rows.Add(newRow.ToArray());
+                                    woodenIndex++;
+                                }
+                                if (sizes[1] != "0")
                                 {
-                                    woodenIndex.ToString(),
-                                    "双包套",
-                                    "",
-                                    "",
-                                    "",
+                                    newRow = new List<object>() 
+                                    {
+                                        woodenIndex.ToString(),
+                                        "双包套",
+                                        "",
+                                        "",
+                                        "",
                         
-                                    drDetail["COLOR"].ToString(),
-                                    sizes[1] + "*200",//宽
-                                    "1",
-                                    "0",
-                                    "0",
+                                        drDetail["COLOR"].ToString(),
+                                        sizes[1] + "*" + (int.Parse(sizes[2]) * 2).ToString(),//宽
+                                        "1",
+                                        "0",
+                                        "0",
                                     
-                        drDetail["REMARK"].ToString(),
-                                };
-                                dtWoodenStock.Rows.Add(newRow.ToArray());
-                                woodenIndex++;
+                                        drDetail["REMARK"].ToString(),
+                                    };
+                                    dtWoodenStock.Rows.Add(newRow.ToArray());
+                                    woodenIndex++;
+                                }
                                 break;
                             #endregion
                             #region 一宽一高
                             case "一宽一高":
-                                newRow = new List<object>() 
+                                if (sizes[0] != "0")
                                 {
-                                    woodenIndex.ToString(),
-                                    "单包套",
-                                    "",
-                                    "",
-                                    "",
+                                    newRow = new List<object>() 
+                                    {
+                                        woodenIndex.ToString(),
+                                        "单包套",
+                                        "",
+                                        "",
+                                        "",
                         
-                                    drDetail["COLOR"].ToString(),
-                                    sizes[0] + "*100",//高
-                                    "1",
-                                    "0",
-                                    "0",
+                                        drDetail["COLOR"].ToString(),
+                                        sizes[0] + "*" + sizes[2],//高
+                                        "1",
+                                        "0",
+                                        "0",
                                     
-                        drDetail["REMARK"].ToString(),
-                                };
-                                dtWoodenStock.Rows.Add(newRow.ToArray());
-                                woodenIndex++;
-                                newRow = new List<object>() 
+                                        drDetail["REMARK"].ToString(),
+                                    };
+                                    dtWoodenStock.Rows.Add(newRow.ToArray());
+                                    woodenIndex++;
+                                }
+                                if (sizes[1] != "0")
                                 {
-                                    woodenIndex.ToString(),
-                                    "单包套",
-                                    "",
-                                    "",
-                                    "",
+                                    newRow = new List<object>() 
+                                    {
+                                        woodenIndex.ToString(),
+                                        "单包套",
+                                        "",
+                                        "",
+                                        "",
                         
-                                    drDetail["COLOR"].ToString(),
-                                    sizes[1] + "*100",//宽
-                                    "1",
-                                    "0",
-                                    "0",
+                                        drDetail["COLOR"].ToString(),
+                                        sizes[1] + "*" + sizes[2],//宽
+                                        "1",
+                                        "0",
+                                        "0",
                                     
-                        drDetail["REMARK"].ToString(),
-                                };
-                                dtWoodenStock.Rows.Add(newRow.ToArray());
-                                woodenIndex++;
+                                        drDetail["REMARK"].ToString(),
+                                    };
+                                    dtWoodenStock.Rows.Add(newRow.ToArray());
+                                    woodenIndex++;
+                                }
                                 break;
                             #endregion
                             #region 两宽两高
                             case "两宽两高":
-                                newRow = new List<object>() 
+                                if (sizes[0] != "0")
                                 {
-                                    woodenIndex.ToString(),
-                                    "双包套",
-                                    "",
-                                    "",
-                                    "",
+                                    newRow = new List<object>() 
+                                    {
+                                        woodenIndex.ToString(),
+                                        "双包套",
+                                        "",
+                                        "",
+                                        "",
                         
-                                    drDetail["COLOR"].ToString(),
-                                    sizes[0] + "*200",//高
-                                    "1",
-                                    "0",
-                                    "0",
+                                        drDetail["COLOR"].ToString(),
+                                        sizes[0] + "*" + (int.Parse(sizes[2]) * 2).ToString(),//高
+                                        "1",
+                                        "0",
+                                        "0",
                                     
-                        drDetail["REMARK"].ToString(),
-                                };
-                                dtWoodenStock.Rows.Add(newRow.ToArray());
-                                woodenIndex++;
-                                newRow = new List<object>() 
+                                        drDetail["REMARK"].ToString(),
+                                    };
+                                    dtWoodenStock.Rows.Add(newRow.ToArray());
+                                    woodenIndex++;
+                                }
+                                if (sizes[1] != "0")
                                 {
-                                    woodenIndex.ToString(),
-                                    "双包套",
-                                    "",
-                                    "",
-                                    "",
+                                    newRow = new List<object>() 
+                                    {
+                                        woodenIndex.ToString(),
+                                        "双包套",
+                                        "",
+                                        "",
+                                        "",
                         
-                                    drDetail["COLOR"].ToString(),
-                                    sizes[1] + "*200",//宽
-                                    "1",
-                                    "0",
-                                    "0",
+                                        drDetail["COLOR"].ToString(),
+                                        sizes[1] + "*" + (int.Parse(sizes[2]) * 2).ToString(),//宽
+                                        "1",
+                                        "0",
+                                        "0",
                                     
-                        drDetail["REMARK"].ToString(),
-                                };
-                                dtWoodenStock.Rows.Add(newRow.ToArray());
-                                woodenIndex++;
+                                        drDetail["REMARK"].ToString(),
+                                    };
+                                    dtWoodenStock.Rows.Add(newRow.ToArray());
+                                    woodenIndex++;
+                                }
                                 break;
                             #endregion
                         }
@@ -383,162 +407,186 @@ namespace ExpandDemo.Pages
                         {
                             #region 两高一宽
                             case "两高一宽":
-                                newRow = new List<object>() 
+                                if (sizes[0] != "0")
                                 {
-                                    woodenIndex.ToString(),
-                                    "双包套",
-                                    "",
-                                    "",
-                                    "",
+                                    newRow = new List<object>() 
+                                    {
+                                        woodenIndex.ToString(),
+                                        "双包套",
+                                        "",
+                                        "",
+                                        "",
                         
-                                    drDetail["COLOR"].ToString(),
-                                    sizes[0] + "*100",//高
-                                    "2",
-                                    "0",
-                                    "0",
+                                        drDetail["COLOR"].ToString(),
+                                        sizes[0] + "*" + sizes[2],//高
+                                        "2",
+                                        "0",
+                                        "0",
                                     
-                        drDetail["REMARK"].ToString(),
-                                };
-                                dtWoodenStock.Rows.Add(newRow.ToArray());
-                                woodenIndex++;
-                                newRow = new List<object>() 
+                                        drDetail["REMARK"].ToString(),
+                                    };
+                                    dtWoodenStock.Rows.Add(newRow.ToArray());
+                                    woodenIndex++;
+                                }
+                                if (sizes[1] != "0")
                                 {
-                                    woodenIndex.ToString(),
-                                    "双包套",
-                                    "",
-                                    "",
-                                    "",
+                                    newRow = new List<object>() 
+                                    {
+                                        woodenIndex.ToString(),
+                                        "双包套",
+                                        "",
+                                        "",
+                                        "",
                         
-                                    drDetail["COLOR"].ToString(),
-                                    sizes[1] + "*100",//宽
-                                    "1",
-                                    "0",
-                                    "0",
+                                        drDetail["COLOR"].ToString(),
+                                        sizes[1] + "*" + sizes[2],//宽
+                                        "1",
+                                        "0",
+                                        "0",
                                     
-                        drDetail["REMARK"].ToString(),
-                                };
-                                dtWoodenStock.Rows.Add(newRow.ToArray());
-                                woodenIndex++;
+                                        drDetail["REMARK"].ToString(),
+                                    };
+                                    dtWoodenStock.Rows.Add(newRow.ToArray());
+                                    woodenIndex++;
+                                }
                                 break;
                             #endregion
                             #region 两宽一高
                             case "两宽一高":
-                                newRow = new List<object>() 
+                                if (sizes[0] != "0")
                                 {
-                                    woodenIndex.ToString(),
-                                    "双包套",
-                                    "",
-                                    "",
-                                    "",
+                                    newRow = new List<object>() 
+                                    {
+                                        woodenIndex.ToString(),
+                                        "双包套",
+                                        "",
+                                        "",
+                                        "",
                         
-                                    drDetail["COLOR"].ToString(),
-                                    sizes[0] + "*100",//高
-                                    "1",
-                                    "0",
-                                    "0",
+                                        drDetail["COLOR"].ToString(),
+                                        sizes[0] + "*" + sizes[2],//高
+                                        "1",
+                                        "0",
+                                        "0",
                                     
-                        drDetail["REMARK"].ToString(),
-                                };
-                                dtWoodenStock.Rows.Add(newRow.ToArray());
-                                woodenIndex++;
-                                newRow = new List<object>() 
+                                        drDetail["REMARK"].ToString(),
+                                    };
+                                    dtWoodenStock.Rows.Add(newRow.ToArray());
+                                    woodenIndex++;
+                                }
+                                if (sizes[1] != "0")
                                 {
-                                    woodenIndex.ToString(),
-                                    "双包套",
-                                    "",
-                                    "",
-                                    "",
+                                    newRow = new List<object>() 
+                                    {
+                                        woodenIndex.ToString(),
+                                        "双包套",
+                                        "",
+                                        "",
+                                        "",
                         
-                                    drDetail["COLOR"].ToString(),
-                                    sizes[1] + "*100",//宽
-                                    "2",
-                                    "0",
-                                    "0",
+                                        drDetail["COLOR"].ToString(),
+                                        sizes[1] + "*" + sizes[2],//宽
+                                        "2",
+                                        "0",
+                                        "0",
 
-                        drDetail["REMARK"].ToString(),
-                                };
-                                dtWoodenStock.Rows.Add(newRow.ToArray());
-                                woodenIndex++;
+                                        drDetail["REMARK"].ToString(),
+                                    };
+                                    dtWoodenStock.Rows.Add(newRow.ToArray());
+                                    woodenIndex++;
+                                }
                                 break;
                             #endregion
                             #region 一宽一高
                             case "一宽一高":
-                                newRow = new List<object>() 
+                                if (sizes[0] != "0")
                                 {
-                                    woodenIndex.ToString(),
-                                    "双包套",
-                                    "",
-                                    "",
-                                    "",
+                                    newRow = new List<object>() 
+                                    {
+                                        woodenIndex.ToString(),
+                                        "双包套",
+                                        "",
+                                        "",
+                                        "",
                         
-                                    drDetail["COLOR"].ToString(),
-                                    sizes[0] + "*100",//高
-                                    "1",
-                                    "0",
-                                    "0",
+                                        drDetail["COLOR"].ToString(),
+                                        sizes[0] + "*" + sizes[2],//高
+                                        "1",
+                                        "0",
+                                        "0",
                                     
-                        drDetail["REMARK"].ToString(),
-                                };
-                                dtWoodenStock.Rows.Add(newRow.ToArray());
-                                woodenIndex++;
-                                newRow = new List<object>() 
+                                        drDetail["REMARK"].ToString(),
+                                    };
+                                    dtWoodenStock.Rows.Add(newRow.ToArray());
+                                    woodenIndex++;
+                                }
+                                if (sizes[1] != "0")
                                 {
-                                    woodenIndex.ToString(),
-                                    "双包套",
-                                    "",
-                                    "",
-                                    "",
+                                    newRow = new List<object>() 
+                                    {
+                                        woodenIndex.ToString(),
+                                        "双包套",
+                                        "",
+                                        "",
+                                        "",
                         
-                                    drDetail["COLOR"].ToString(),
-                                    sizes[1] + "*100",//宽
-                                    "1",
-                                    "0",
-                                    "0",
+                                        drDetail["COLOR"].ToString(),
+                                        sizes[1] + "*" + sizes[2],//宽
+                                        "1",
+                                        "0",
+                                        "0",
                                     
-                        drDetail["REMARK"].ToString(),
-                                };
-                                dtWoodenStock.Rows.Add(newRow.ToArray());
-                                woodenIndex++;
+                                        drDetail["REMARK"].ToString(),
+                                    };
+                                    dtWoodenStock.Rows.Add(newRow.ToArray());
+                                    woodenIndex++;
+                                }
                                 break;
                             #endregion
                             #region 两宽两高
                             case "两宽两高":
-                                newRow = new List<object>() 
+                                if (sizes[0] != "0")
                                 {
-                                    woodenIndex.ToString(),
-                                    "双包套",
-                                    "",
-                                    "",
-                                    "",
+                                    newRow = new List<object>() 
+                                    {
+                                        woodenIndex.ToString(),
+                                        "双包套",
+                                        "",
+                                        "",
+                                        "",
                         
-                                    drDetail["COLOR"].ToString(),
-                                    sizes[0] + "*100",//高
-                                    "2",
-                                    "0",
-                                    "0",
+                                        drDetail["COLOR"].ToString(),
+                                        sizes[0] + "*" + sizes[2],//高
+                                        "2",
+                                        "0",
+                                        "0",
                                     
-                        drDetail["REMARK"].ToString(),
-                                };
-                                dtWoodenStock.Rows.Add(newRow.ToArray());
-                                woodenIndex++;
-                                newRow = new List<object>() 
+                                        drDetail["REMARK"].ToString(),
+                                    };
+                                    dtWoodenStock.Rows.Add(newRow.ToArray());
+                                    woodenIndex++;
+                                }
+                                if (sizes[1] != "0")
                                 {
-                                    woodenIndex.ToString(),
-                                    "双包套",
-                                    "",
-                                    "",
-                                    "",
+                                    newRow = new List<object>() 
+                                    {
+                                        woodenIndex.ToString(),
+                                        "双包套",
+                                        "",
+                                        "",
+                                        "",
                         
-                                    drDetail["COLOR"].ToString(),
-                                    sizes[1] + "*100",//宽
-                                    "2",
-                                    "0",
-                                    "0",
+                                        drDetail["COLOR"].ToString(),
+                                        sizes[1] + "*" + sizes[2],//宽
+                                        "2",
+                                        "0",
+                                        "0",
                                     
-                        drDetail["REMARK"].ToString(),
-                                };
-                                dtWoodenStock.Rows.Add(newRow.ToArray());
-                                woodenIndex++;
+                                        drDetail["REMARK"].ToString(),
+                                    };
+                                    dtWoodenStock.Rows.Add(newRow.ToArray());
+                                    woodenIndex++;
+                                }
                                 break;
                             #endregion
                         }

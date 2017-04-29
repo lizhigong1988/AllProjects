@@ -33,10 +33,10 @@
                             <TextBox Name="tbWorkerName"/>
                             <TextBlock Text="订单进度"/>
                             <ComboBox Name="cbOrderRate">
-                                <ComboBoxItem Content="全部" IsSelected="True"/>
+                                <ComboBoxItem Content="全部"/>
                                 <ComboBoxItem Content="未安装" />
                                 <ComboBoxItem Content="已安装（未完成）" />
-                                <ComboBoxItem Content="全部未完成" />
+                                <ComboBoxItem Content="全部未完成" IsSelected="True" />
                                 <ComboBoxItem Content="已完成" />
                             </ComboBox>
                             <TextBlock Text="订单状态"/>

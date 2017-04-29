@@ -88,9 +88,9 @@ namespace DataBaseManager.DataTables
         /// </summary>
         /// <param name="dataHelper"></param>
         /// <returns></returns>
-        internal static CommonDef.COM_RET CountUserInfo(DataHelper dataHelper)
+        internal static CommonDef.COM_RET GetUserList(DataHelper dataHelper)
         {
-            string sql = SelectSql(T_USER_INFO.TABLE_NAME, "COUNT(*)");
+            string sql = SelectSql(T_USER_INFO.TABLE_NAME, "USER_NAME");
             DataTable dt = DataTableTool.SelectTableInfo(sql);
             if (dt == null)
             {

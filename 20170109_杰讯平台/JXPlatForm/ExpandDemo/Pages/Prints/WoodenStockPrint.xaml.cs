@@ -104,9 +104,7 @@ namespace ExpandDemo.Pages.Prints
             {
                 WoodenStockPrint print = new WoodenStockPrint();
                 print.tbNoteDate.Text = orderDay.ToLongDateString();
-                print.tbOrderMan.Text = modDr["CLIENT_NAME"].ToString();
-                print.tbOrderAddr.Text = modDr["CLIENT_ADDR"].ToString();
-                print.tbOrderTel.Text = modDr["CLIENT_TEL"].ToString();
+                print.tbClientName.Text = modDr["CLIENT_NAME"].ToString();
                
                 int woodDoorIndex = 1;
 

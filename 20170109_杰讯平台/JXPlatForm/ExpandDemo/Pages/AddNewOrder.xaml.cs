@@ -167,7 +167,7 @@ namespace ExpandDemo.Pages
                 tbChangeForward.Text = "开  向";
                 cbStyleKinds.ItemsSource = new List<string>() 
                 {
-                    "左开", "右开"
+                    "左开", "右开", "左前右后", "左后右前", "中开"
                 };
             }
             cbStyleKinds.SelectedIndex = 0;

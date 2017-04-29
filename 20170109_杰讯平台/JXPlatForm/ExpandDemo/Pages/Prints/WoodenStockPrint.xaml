@@ -31,6 +31,15 @@
                    Canvas.Top="116"
                    FontSize="14"
                    Text="2017年4月20日" />
+        <TextBlock Canvas.Left="590"
+                   Canvas.Top="116"
+                   FontSize="14"
+                   Text="客户名称:" />
+        <TextBlock Name="tbClientName"
+                   Canvas.Left="655"
+                   Canvas.Top="116"
+                   FontSize="14"
+                   Text="" />
         <Border Canvas.Left="39"
                 Canvas.Top="137"
                 Width="723"
@@ -281,7 +290,7 @@
                    Canvas.Left="111"
                    Canvas.Top="923"
                    FontSize="14"
-                   Text="打印订货人" />
+                   Text="甘启辰" />
         <TextBlock Canvas.Left="377"
                    Canvas.Top="923"
                    FontSize="14"
@@ -294,7 +303,7 @@
                    Canvas.Left="111"
                    Canvas.Top="949"
                    FontSize="14"
-                   Text="打印地址" />
+                   Text="河南焦作" />
         <TextBlock Canvas.Left="377"
                    Canvas.Top="949"
                    FontSize="14"
@@ -307,7 +316,7 @@
                    Canvas.Left="111"
                    Canvas.Top="988"
                    FontSize="14"
-                   Text="打印电话" />
+                   Text="18003911616" />
         <TextBlock Canvas.Left="377"
                    Canvas.Top="968"
                    FontSize="14"

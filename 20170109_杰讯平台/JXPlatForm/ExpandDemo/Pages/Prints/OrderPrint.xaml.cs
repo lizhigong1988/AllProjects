@@ -25,16 +25,66 @@ namespace ExpandDemo.Pages.Prints
         public OrderPrint()
         {
             InitializeComponent();
-            for (int i = 0; i < gridMain.ColumnDefinitions.Count; i++)
+        }
+
+        public void DrawGrid()
+        {
+            if (gridWoodDoor.ColumnDefinitions.Count == 0)
             {
-                for (int j = 0; j < gridMain.RowDefinitions.Count; j++)
+                gridWoodDoor.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                for (int i = 0; i < gridWoodDoor.ColumnDefinitions.Count; i++)
                 {
-                    Border border = new Border();
-                    border.BorderThickness = new Thickness(1, 1, 0, 0 );
-                    border.BorderBrush = Brushes.Black;
-                    Grid.SetRow(border, j);
-                    Grid.SetColumn(border, i);
-                    gridMain.Children.Add(border);
+                    for (int j = 0; j < gridWoodDoor.RowDefinitions.Count; j++)
+                    {
+                        Border border = new Border();
+                        border.BorderThickness = new Thickness(1, 1, 0, 0);
+                        border.BorderBrush = Brushes.Black;
+                        Grid.SetRow(border, j);
+                        Grid.SetColumn(border, i);
+                        gridWoodDoor.Children.Add(border);
+                    }
+                }
+            }
+
+            if (gridAlloyDoor.ColumnDefinitions.Count == 0)
+            {
+                gridAlloyDoor.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                for (int i = 0; i < gridAlloyDoor.ColumnDefinitions.Count; i++)
+                {
+                    for (int j = 0; j < gridAlloyDoor.RowDefinitions.Count; j++)
+                    {
+                        Border border = new Border();
+                        border.BorderThickness = new Thickness(1, 1, 0, 0);
+                        border.BorderBrush = Brushes.Black;
+                        Grid.SetRow(border, j);
+                        Grid.SetColumn(border, i);
+                        gridAlloyDoor.Children.Add(border);
+                    }
+                }
+            }
+            if (gridWoodenWind.ColumnDefinitions.Count == 0)
+            {
+                gridWoodenWind.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                for (int i = 0; i < gridWoodenWind.ColumnDefinitions.Count; i++)
+                {
+                    for (int j = 0; j < gridWoodenWind.RowDefinitions.Count; j++)
+                    {
+                        Border border = new Border();
+                        border.BorderThickness = new Thickness(1, 1, 0, 0);
+                        border.BorderBrush = Brushes.Black;
+                        Grid.SetRow(border, j);
+                        Grid.SetColumn(border, i);
+                        gridWoodenWind.Children.Add(border);
+                    }
                 }
             }
         }
@@ -55,8 +105,8 @@ namespace ExpandDemo.Pages.Prints
                 print.tbTotalAmt.Text = amt;
                 print.tbDepositAmt.Text = deposite;
                 int woodDoorIndex = 1;
-                int alloyDoorIndex = 9;
-                int woodWindIndex = 17;
+                int alloyDoorIndex = 1;
+                int woodWindIndex = 1;
 
                 List<DataRow> listLoadRows = new List<DataRow>();
                 foreach (DataRow dr in printGoods.Rows)
@@ -64,33 +114,29 @@ namespace ExpandDemo.Pages.Prints
                     switch (dr["KIND"].ToString())
                     {
                         case "木门":
-                            if (woodDoorIndex < 8)
-                            {
-                                print.AddNewTextBlockRow(woodDoorIndex, dr);
-                                listLoadRows.Add(dr);
-                            }
+                            print.AddNewTextBlockRow(woodDoorIndex, dr, dr["KIND"].ToString());
+                            listLoadRows.Add(dr);
                             woodDoorIndex++;
                             break;
                         case "合金门":
-                            if (alloyDoorIndex - 8 < 8)
-                            {
-                                print.AddNewTextBlockRow(alloyDoorIndex, dr);
-                                listLoadRows.Add(dr);
-                            }
+                            print.AddNewTextBlockRow(alloyDoorIndex, dr, dr["KIND"].ToString());
+                            listLoadRows.Add(dr);
                             alloyDoorIndex++;
                             break;
                         case "垭口窗套":
-                            if (woodWindIndex - 16 < 8)
-                            {
-                                print.AddNewTextBlockRow(woodWindIndex, dr);
-                                listLoadRows.Add(dr);
-                            }
+                            print.AddNewTextBlockRow(woodWindIndex, dr, dr["KIND"].ToString());
+                            listLoadRows.Add(dr);
                             woodWindIndex++;
                             break;
                         default:
                             break;
                     }
+                    if (woodDoorIndex + alloyDoorIndex + woodWindIndex - 3 == 20)
+                    {
+                        break;
+                    }
                 }
+                print.DrawGrid();
                 retList.Add(print);
                 foreach (DataRow dr in listLoadRows)
                 {
@@ -110,7 +156,7 @@ namespace ExpandDemo.Pages.Prints
             return retList;
         }
 
-        public List<TextBlock> AddNewTextBlockRow(int rowIndex, DataRow dr)
+        public List<TextBlock> AddNewTextBlockRow(int rowIndex, DataRow dr, string kind)
         {
             List<TextBlock> newRow = new List<TextBlock>() 
                     {
@@ -131,7 +177,23 @@ namespace ExpandDemo.Pages.Prints
                 newRow[i].TextWrapping = TextWrapping.Wrap;
                 Grid.SetColumn(newRow[i], i);
                 Grid.SetRow(newRow[i], rowIndex);
-                gridMain.Children.Add(newRow[i]);
+                switch (kind)
+                {
+                    case "木门":
+                        gridWoodDoor.RowDefinitions.Add(new RowDefinition() {Height = new GridLength(32) });
+                        gridWoodDoor.Children.Add(newRow[i]);
+                        break;
+                    case "合金门":
+                        gridAlloyDoor.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32) });
+                        gridAlloyDoor.Children.Add(newRow[i]);
+                        break;
+                    case "垭口窗套":
+                        gridWoodenWind.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32) });
+                        gridWoodenWind.Children.Add(newRow[i]);
+                        break;
+                    default:
+                        break;
+                }
             }
             newRow[0].Text = dr["NAME"].ToString();
             newRow[1].Text = dr["MODEL"].ToString();

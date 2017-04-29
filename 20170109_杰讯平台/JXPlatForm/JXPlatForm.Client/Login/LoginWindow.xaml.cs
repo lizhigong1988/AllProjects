@@ -88,6 +88,7 @@ namespace JXPlatForm.Client.Login
                 ShowMassageBox.JXMassageBox("密码不正确，请重试！");
                 return;
             }
+            ClientConfigHeper.SetConfig(ClientConfigHeper.CONFIG_KEYS.LAST_LOGIN_USER, tbUserName.Text);
             new MainWindow().Show();
             this.Close();
         }
@@ -101,14 +102,14 @@ namespace JXPlatForm.Client.Login
                 this.Close();
             }
 
-            int countUser = 0;
-            ret = CommunicationHelper.CountUserInfo(ref countUser);
+            List<string> userList = new List<string>();
+            ret = CommunicationHelper.GetUserList(ref userList);
             if (ret != CommonDef.COM_RET.RET_OK)
             {
                 ShowMassageBox.JXMassageBox(CommonDef.GetErrorInfo(ret));
                 return;
             }
-            if (0 == countUser)
+            if (userList.Count == 0)
             {
                 if (ShowMassageBox.JXMassageBox("当前系统无用户，点击确定直接登录！", 
                     ShowMassageBox.SHOW_TYPE.SHOW_QUEST)
@@ -120,6 +121,8 @@ namespace JXPlatForm.Client.Login
                 this.Close();
                 return;
             }
+            tbUserName.ItemsSource = userList;
+            tbUserName.Text = ClientConfigHeper.ReadConfig(ClientConfigHeper.CONFIG_KEYS.LAST_LOGIN_USER);
         }
     }
 }

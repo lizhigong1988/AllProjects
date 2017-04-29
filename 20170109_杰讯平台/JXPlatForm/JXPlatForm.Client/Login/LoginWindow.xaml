@@ -53,11 +53,11 @@
                             BorderBrush="Gray"
                             BorderThickness="1" />
                     <Border Width="160" BorderThickness="1">
-                        <TextBox Name="tbUserName"
-                                 Width="150"
-                                 BorderThickness="0"
-                                 FontSize="16"
-                                 MaxLength="16" />
+                        <ComboBox Name="tbUserName"
+                                     Width="148"
+                                     BorderThickness="0"
+                                     FontSize="16"
+                                  IsEditable="True"/>
                     </Border>
                 </StackPanel>
                 <StackPanel Margin="10"

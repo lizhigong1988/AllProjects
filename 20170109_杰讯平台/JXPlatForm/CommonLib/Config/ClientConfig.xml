@@ -5,4 +5,5 @@
   <element key ="LOGIN_LOGO" value="Images\logo1.png"/>
   <element key ="MAIN_BAK" value="Images\background6.png"/>
   <element key ="MAIN_LOGO" value="Images\logo1.png"/>
+  <element key ="LAST_LOGIN_USER" value=""/>
 </elements>

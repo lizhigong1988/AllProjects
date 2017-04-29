@@ -31,8 +31,8 @@ namespace DataBaseManager
                 CommonDef.COM_RET ret;
                 switch (func)
                 {
-                    case DataHelper.FUNC_NAME.COUNT_USER_INFO:
-                        ret = DataBaseSelectFunc.CountUserInfo(dataHelper);
+                    case DataHelper.FUNC_NAME.GET_USR_LIST:
+                        ret = DataBaseSelectFunc.GetUserList(dataHelper);
                         break;
                     case DataHelper.FUNC_NAME.GET_USER_INFO:
                         ret = DataBaseSelectFunc.GetUserInfo(dataHelper);

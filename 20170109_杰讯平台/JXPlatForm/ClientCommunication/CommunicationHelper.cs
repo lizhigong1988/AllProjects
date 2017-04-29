@@ -87,13 +87,13 @@ namespace ClientCommunication
         /// <param name="wind"></param>
         /// <param name="countUser"></param>
         /// <returns></returns>
-        public static CommonDef.COM_RET CountUserInfo(ref int countUser)
+        public static CommonDef.COM_RET GetUserList(ref List<string> userList)
         {
             string msgData = "";
             DataHelper dataHelper = new DataHelper();
             if (!dataHelper.ClearAndAddConfig(out msgData,
                 new Dictionary<DataHelper.CONFIG_KEYS, string>(){
-                    {DataHelper.CONFIG_KEYS.FUNC_NO, ((int)DataHelper.FUNC_NAME.COUNT_USER_INFO).ToString()},
+                    {DataHelper.CONFIG_KEYS.FUNC_NO, ((int)DataHelper.FUNC_NAME.GET_USR_LIST).ToString()},
                 }))
             {
                 return CommonDef.COM_RET.CREATE_FILE_ERROR;
@@ -108,11 +108,10 @@ namespace ClientCommunication
                 return CommonDef.COM_RET.READ_FILE_ERROR;
             }
             DataTable dt = GetDataTable(dataHelper);
-            if (dt.Rows.Count == 0)
+            foreach (DataRow dr in dt.Rows)
             {
-                return CommonDef.COM_RET.READ_FILE_ERROR;
+                userList.Add(dr[0].ToString());
             }
-            countUser = int.Parse(dt.Rows[0][0].ToString());
             return CommonDef.COM_RET.RET_OK;
         }
         /// <summary>

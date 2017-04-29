@@ -10,7 +10,7 @@ namespace CommonLib
     {
         public enum FUNC_NAME
         {
-            COUNT_USER_INFO,
+            GET_USR_LIST,
             GET_USER_INFO,
             GET_ALL_USER_INFO,
             ADD_USER_INFO,

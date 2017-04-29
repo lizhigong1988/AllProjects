@@ -40,185 +40,171 @@
                    Text="客户名称" />
         <Border Canvas.Left="35"
                 Canvas.Top="130"
-                Width="729"
-                Height="750"
                 BorderBrush="Black"
                 BorderThickness="0,0,1,1">
-            <Grid Name="gridMain">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="76*" />
-                    <ColumnDefinition Width="83*" />
-                    <ColumnDefinition Width="135*" />
-                    <ColumnDefinition Width="73*" />
-                    <ColumnDefinition Width="93*" />
-                    <ColumnDefinition Width="52*" />
-                    <ColumnDefinition Width="58*" />
-                    <ColumnDefinition Width="67*" />
-                    <ColumnDefinition Width="90*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Border Grid.ColumnSpan="9" Background="LightGray" />
-                <TextBlock HorizontalAlignment="Center"
+            <StackPanel Width="729">
+                <Grid Name="gridWoodDoor">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="76*" />
+                        <ColumnDefinition Width="83*" />
+                        <ColumnDefinition Width="135*" />
+                        <ColumnDefinition Width="73*" />
+                        <ColumnDefinition Width="93*" />
+                        <ColumnDefinition Width="52*" />
+                        <ColumnDefinition Width="58*" />
+                        <ColumnDefinition Width="67*" />
+                        <ColumnDefinition Width="90*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.ColumnSpan="9" Background="LightGray" />
+                    <TextBlock HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="品  名" />
-                <TextBlock Grid.Column="1"
+                    <TextBlock Grid.Column="1"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="型  号" />
-                <TextBlock Grid.Column="2"
+                    <TextBlock Grid.Column="2"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="门洞尺寸（mm）&#10;(宽*高*厚)"
                            TextAlignment="Center" />
-                <TextBlock Grid.Column="3"
+                    <TextBlock Grid.Column="3"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="颜  色" />
-                <TextBlock Grid.Column="4"
+                    <TextBlock Grid.Column="4"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="套线类型" />
-                <TextBlock Grid.Column="5"
+                    <TextBlock Grid.Column="5"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="数  量" />
-                <TextBlock Grid.Column="6"
+                    <TextBlock Grid.Column="6"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="单  价" />
-                <TextBlock Grid.Column="7"
+                    <TextBlock Grid.Column="7"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="小  计" />
-                <TextBlock Grid.Column="8"
+                    <TextBlock Grid.Column="8"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="备  注" />
-
-
-                <Border Grid.Row="8"
-                        Grid.ColumnSpan="9"
+                </Grid>
+                <Grid Name="gridAlloyDoor">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="76*" />
+                        <ColumnDefinition Width="83*" />
+                        <ColumnDefinition Width="135*" />
+                        <ColumnDefinition Width="73*" />
+                        <ColumnDefinition Width="93*" />
+                        <ColumnDefinition Width="52*" />
+                        <ColumnDefinition Width="58*" />
+                        <ColumnDefinition Width="67*" />
+                        <ColumnDefinition Width="90*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.ColumnSpan="9"
                         Background="LightGray" />
-                <TextBlock Grid.Row="8"
-                           HorizontalAlignment="Center"
+                    <TextBlock  HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="合金门" />
-                <TextBlock Grid.Row="8"
-                           Grid.Column="1"
+                    <TextBlock Grid.Column="1"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="型  号" />
-                <TextBlock Grid.Row="8"
-                           Grid.Column="2"
+                    <TextBlock   Grid.Column="2"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="门洞尺寸（mm）&#10;(宽*高*厚)"
                            TextAlignment="Center" />
-                <TextBlock Grid.Row="8"
-                           Grid.Column="3"
+                    <TextBlock Grid.Column="3"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="颜  色" />
-                <TextBlock Grid.Row="8"
-                           Grid.Column="4"
+                    <TextBlock  Grid.Column="4"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="开  向" />
-                <TextBlock Grid.Row="8"
-                           Grid.Column="5"
+                    <TextBlock  Grid.Column="5"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="数  量" />
-                <TextBlock Grid.Row="8"
-                           Grid.Column="6"
+                    <TextBlock Grid.Column="6"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="单  价" />
-                <TextBlock Grid.Row="8"
-                           Grid.Column="7"
+                    <TextBlock  Grid.Column="7"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="小  计" />
-                <TextBlock Grid.Row="8"
-                           Grid.Column="8"
+                    <TextBlock Grid.Column="8"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="备  注" />
-
-                <Border Grid.Row="16"
-                        Grid.ColumnSpan="9"
+                </Grid>
+                <Grid Name="gridWoodenWind">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="76*" />
+                        <ColumnDefinition Width="83*" />
+                        <ColumnDefinition Width="135*" />
+                        <ColumnDefinition Width="73*" />
+                        <ColumnDefinition Width="93*" />
+                        <ColumnDefinition Width="52*" />
+                        <ColumnDefinition Width="58*" />
+                        <ColumnDefinition Width="67*" />
+                        <ColumnDefinition Width="90*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.ColumnSpan="9"
                         Background="LightGray" />
-                <TextBlock Grid.Row="16"
-                           HorizontalAlignment="Center"
+                    <TextBlock HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           Text="合金门" />
-                <TextBlock Grid.Row="16"
-                           Grid.Column="1"
+                           Text="垭口窗套" />
+                    <TextBlock Grid.Column="1"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="型  号" />
-                <TextBlock Grid.Row="16"
-                           Grid.Column="2"
+                    <TextBlock Grid.Column="2"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="门洞尺寸（mm）&#10;(宽*高*厚)"
                            TextAlignment="Center" />
-                <TextBlock Grid.Row="16"
-                           Grid.Column="3"
+                    <TextBlock Grid.Column="3"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="颜  色" />
-                <TextBlock Grid.Row="16"
-                           Grid.Column="4"
+                    <TextBlock Grid.Column="4"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="套线类型" />
-                <TextBlock Grid.Row="16"
-                           Grid.Column="5"
+                    <TextBlock Grid.Column="5"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="数  量" />
-                <TextBlock Grid.Row="16"
-                           Grid.Column="6"
+                    <TextBlock Grid.Column="6"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="单  价" />
-                <TextBlock Grid.Row="16"
-                           Grid.Column="7"
+                    <TextBlock  Grid.Column="7"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="小  计" />
-                <TextBlock Grid.Row="16"
-                           Grid.Column="8"
+                    <TextBlock  Grid.Column="8"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Text="备  注" />
-            </Grid>
+                </Grid>
+            </StackPanel>
         </Border>
         <TextBlock Canvas.Left="54"
                    Canvas.Top="885"

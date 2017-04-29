@@ -18,6 +18,7 @@ namespace CommonLib
             SERVER_ADDR,
             MAIN_LOGO,
             MAIN_BAK,
+            LAST_LOGIN_USER,
         };
         
         /// <summary>

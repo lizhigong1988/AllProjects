@@ -64,8 +64,8 @@ namespace ExpandDemo.Pages
             dgUnfinishGrid.Height = Global.WorkAreaHeight - 70;
             dbeUnFinishOrderDetail.SetSelectBarInUse(false);
             dbeUnFinishOrder.DataBoxSelectionChangeds += dbeUnfinishOrder_SelectionChanged;
-            tbFinishDateStart.Text = DateTime.Now.AddMonths(-1).ToString("yyyyMMdd");
-            tbFinishDateEnd.Text = DateTime.Now.ToString("yyyyMMdd");
+            //tbFinishDateStart.Text = DateTime.Now.AddMonths(-1).ToString("yyyyMMdd");
+            //tbFinishDateEnd.Text = DateTime.Now.ToString("yyyyMMdd");
         }
 
         private void dbeUnfinishOrder_SelectionChanged(DataRow dr)
@@ -118,7 +118,7 @@ namespace ExpandDemo.Pages
                 }
                 else
                 {
-                    dr["ORDER_STAT"] = "已完成";
+                    dr["ORDER_STAT"] = "正常";
                 }
             }
             dbeUnFinishOrder.InitDataBox(dicOrderColumns, dtUnfinishOrder, false);
