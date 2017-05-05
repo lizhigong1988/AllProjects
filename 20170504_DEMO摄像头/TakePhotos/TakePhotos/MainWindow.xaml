@@ -1,0 +1,13 @@
+﻿<Window x:Class="TakePhotos.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wpfMedia="clr-namespace:WPFMediaKit.DirectShow.Controls;assembly=WPFMediaKit"
+        Title="MainWindow" WindowState="Normal" Height="600" Width="800" WindowStyle="None" WindowStartupLocation="CenterScreen" AllowsTransparency="True" Loaded="Window_Loaded">
+    <Grid x:Name="root">
+        <wpfMedia:VideoCaptureElement Name="vce" Stretch="Fill">
+
+        </wpfMedia:VideoCaptureElement>
+        <Image x:Name="img" Stretch="Fill" />
+        <Button x:Name="btnCap" Content="拍照" Height="35" Width="60" VerticalAlignment="Bottom" Click="btnCap_Click" ></Button>
+    </Grid>
+</Window>
