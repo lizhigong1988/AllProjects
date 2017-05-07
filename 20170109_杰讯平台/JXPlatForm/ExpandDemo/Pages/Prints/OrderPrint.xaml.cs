@@ -170,6 +170,21 @@ namespace ExpandDemo.Pages.Prints
                         new TextBlock(),
                         new TextBlock(),
                     };
+
+            switch (kind)
+            {
+                case "木门":
+                    gridWoodDoor.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32) });
+                    break;
+                case "合金门":
+                    gridAlloyDoor.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32) });
+                    break;
+                case "垭口窗套":
+                    gridWoodenWind.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32) });
+                    break;
+                default:
+                    break;
+            }
             for (int i = 0; i < newRow.Count; i++)
             {
                 newRow[i].HorizontalAlignment = HorizontalAlignment.Center;
@@ -180,15 +195,12 @@ namespace ExpandDemo.Pages.Prints
                 switch (kind)
                 {
                     case "木门":
-                        gridWoodDoor.RowDefinitions.Add(new RowDefinition() {Height = new GridLength(32) });
                         gridWoodDoor.Children.Add(newRow[i]);
                         break;
                     case "合金门":
-                        gridAlloyDoor.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32) });
                         gridAlloyDoor.Children.Add(newRow[i]);
                         break;
                     case "垭口窗套":
-                        gridWoodenWind.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32) });
                         gridWoodenWind.Children.Add(newRow[i]);
                         break;
                     default:
