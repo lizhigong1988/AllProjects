@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<elements>
-  <element key ="SERVER_ADDR" value="127.0.0.1:62321"/>
-  <element key ="LOGIN_BAK" value="Images\background1.jpg"/>
-  <element key ="LOGIN_LOGO" value="Images\logo1.png"/>
-  <element key ="MAIN_BAK" value="Images\background6.png"/>
-  <element key ="MAIN_LOGO" value="Images\logo1.png"/>
-  <element key ="LAST_LOGIN_USER" value=""/>
-</elements>

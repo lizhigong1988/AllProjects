@@ -1,5 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<elements>
-  <element key ="SERVER_PORT" value="62321"/>
-  <element key ="DATABASE_TYPE" value ="SQLITE3"/>
-</elements>
