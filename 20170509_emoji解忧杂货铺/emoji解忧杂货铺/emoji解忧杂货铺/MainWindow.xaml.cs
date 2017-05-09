@@ -23,5 +23,51 @@ namespace emoji解忧杂货铺
         {
             InitializeComponent();
         }
+
+        private void bd1_MouseEnter(object sender, MouseEventArgs e)
+        {
+            bd1.Background = new ImageBrush(new BitmapImage(new Uri("Images/FirstFloorButton1Cover.png", UriKind.Relative)));
+        }
+
+        private void bd1_MouseLeave(object sender, MouseEventArgs e)
+        {
+            bd1.Background = new ImageBrush(new BitmapImage(new Uri("Images/FirstFloorButton1Normal.png", UriKind.Relative)));
+        }
+
+        private void bd2_MouseEnter(object sender, MouseEventArgs e)
+        {
+            bd2.Background = new ImageBrush(new BitmapImage(new Uri("Images/FirstFloorButton2Cover.png", UriKind.Relative)));
+        }
+
+        private void bd2_MouseLeave(object sender, MouseEventArgs e)
+        {
+            bd2.Background = new ImageBrush(new BitmapImage(new Uri("Images/FirstFloorButton2Normal.png", UriKind.Relative)));
+        }
+
+        private void bd3_MouseEnter(object sender, MouseEventArgs e)
+        {
+            bd3.Background = new ImageBrush(new BitmapImage(new Uri("Images/FirstFloorButton3Cover.png", UriKind.Relative)));
+        }
+
+        private void bd3_MouseLeave(object sender, MouseEventArgs e)
+        {
+            bd3.Background = new ImageBrush(new BitmapImage(new Uri("Images/FirstFloorButton3Normal.png", UriKind.Relative)));
+        }
+
+        private void bd4_MouseEnter(object sender, MouseEventArgs e)
+        {
+            bd4.Background = new ImageBrush(new BitmapImage(new Uri("Images/FirstFloorButton4Cover.png", UriKind.Relative)));
+        }
+
+        private void bd4_MouseLeave(object sender, MouseEventArgs e)
+        {
+            bd4.Background = new ImageBrush(new BitmapImage(new Uri("Images/FirstFloorButton4Normal.png", UriKind.Relative)));
+        }
+
+        private void bd_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            new SecondFloor().Show();
+            this.Close();
+        }
     }
 }

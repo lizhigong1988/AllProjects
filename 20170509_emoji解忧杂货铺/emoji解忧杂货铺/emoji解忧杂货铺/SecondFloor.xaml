@@ -1,0 +1,149 @@
+﻿<Window x:Class="emoji解忧杂货铺.SecondFloor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="emoji解忧杂货铺"
+        WindowStartupLocation="CenterScreen">
+    <Viewbox Stretch="Fill">
+        <Canvas Width="800" Height="450">
+            <Canvas.Background>
+                <ImageBrush ImageSource="Images/SecondFloorBackground.png" />
+            </Canvas.Background>
+            <Border Name="bdBack"
+                    Canvas.Left="0"
+                    Canvas.Top="359"
+                    Width="100"
+                    Height="91"
+                    MouseDown="bdBack_MouseDown">
+                <Border.Background>
+                    <ImageBrush ImageSource="Images/SecondFloorButtonBack.png" />
+                </Border.Background>
+            </Border>
+            <Border Name="bdShadow1_1"
+                    Canvas.Left="190"
+                    Canvas.Top="161"
+                    Width="80"
+                    Height="21">
+                <Border.Background>
+                    <ImageBrush ImageSource="Images/SecondFloorButtonShadow.png" />
+                </Border.Background>
+            </Border>
+            <Border Name="bdShadow1_2"
+                    Canvas.Left="360"
+                    Canvas.Top="161"
+                    Width="80"
+                    Height="21">
+                <Border.Background>
+                    <ImageBrush ImageSource="Images/SecondFloorButtonShadow.png" />
+                </Border.Background>
+            </Border>
+            <Border Name="bdShadow1_3"
+                    Canvas.Left="530"
+                    Canvas.Top="161"
+                    Width="80"
+                    Height="21">
+                <Border.Background>
+                    <ImageBrush ImageSource="Images/SecondFloorButtonShadow.png" />
+                </Border.Background>
+            </Border>
+            <Border Name="bdShadow2_1"
+                    Canvas.Left="190"
+                    Canvas.Top="350"
+                    Width="80"
+                    Height="21">
+                <Border.Background>
+                    <ImageBrush ImageSource="Images/SecondFloorButtonShadow.png" />
+                </Border.Background>
+            </Border>
+            <Border Name="bdShadow2_2"
+                    Canvas.Left="360"
+                    Canvas.Top="350"
+                    Width="80"
+                    Height="21">
+                <Border.Background>
+                    <ImageBrush ImageSource="Images/SecondFloorButtonShadow.png" />
+                </Border.Background>
+            </Border>
+            <Border Name="bdShadow2_3"
+                    Canvas.Left="530"
+                    Canvas.Top="350"
+                    Width="80"
+                    Height="21">
+                <Border.Background>
+                    <ImageBrush ImageSource="Images/SecondFloorButtonShadow.png" />
+                </Border.Background>
+            </Border>
+            <Border Name="bd1_1"
+                    Canvas.Left="190"
+                    Canvas.Top="96"
+                    Width="80"
+                    Height="80"
+                    MouseDown="bd_MouseDown"
+                    MouseEnter="bd1_1_MouseEnter"
+                    MouseLeave="bd1_1_MouseLeave">
+                <Border.Background>
+                    <ImageBrush ImageSource="Images/SecondFloorButton1_1.png" />
+                </Border.Background>
+            </Border>
+            <Border Name="bd1_2"
+                    Canvas.Left="360"
+                    Canvas.Top="95"
+                    Width="80"
+                    Height="80"
+                    MouseDown="bd_MouseDown"
+                    MouseEnter="bd1_2_MouseEnter"
+                    MouseLeave="bd1_2_MouseLeave">
+                <Border.Background>
+                    <ImageBrush ImageSource="Images/SecondFloorButton1_2.png" />
+                </Border.Background>
+            </Border>
+            <Border Name="bd1_3"
+                    Canvas.Left="530"
+                    Canvas.Top="95"
+                    Width="80"
+                    Height="80"
+                    MouseDown="bd_MouseDown"
+                    MouseEnter="bd1_3_MouseEnter"
+                    MouseLeave="bd1_3_MouseLeave">
+                <Border.Background>
+                    <ImageBrush ImageSource="Images/SecondFloorButton1_3.png" />
+                </Border.Background>
+            </Border>
+            <Border Name="bd2_1"
+                    Canvas.Left="190"
+                    Canvas.Top="278"
+                    Width="80"
+                    Height="80"
+                    MouseDown="bd_MouseDown"
+                    MouseEnter="bd2_1_MouseEnter"
+                    MouseLeave="bd2_1_MouseLeave">
+                <Border.Background>
+                    <ImageBrush ImageSource="Images/SecondFloorButton2_1.png" />
+                </Border.Background>
+            </Border>
+            <Border Name="bd2_2"
+                    Canvas.Left="360"
+                    Canvas.Top="277"
+                    Width="80"
+                    Height="80"
+                    MouseDown="bd_MouseDown"
+                    MouseEnter="bd2_2_MouseEnter"
+                    MouseLeave="bd2_2_MouseLeave">
+                <Border.Background>
+                    <ImageBrush ImageSource="Images/SecondFloorButton2_2.png" />
+                </Border.Background>
+            </Border>
+            <Border Name="bd2_3"
+                    Canvas.Left="530"
+                    Canvas.Top="277"
+                    Width="80"
+                    Height="80"
+                    MouseDown="bd_MouseDown"
+                    MouseEnter="bd2_3_MouseEnter"
+                    MouseLeave="bd2_3_MouseLeave">
+                <Border.Background>
+                    <ImageBrush ImageSource="Images/SecondFloorButton2_3.png" />
+                </Border.Background>
+            </Border>
+        </Canvas>
+    </Viewbox>
+</Window>
