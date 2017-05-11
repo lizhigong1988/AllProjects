@@ -110,7 +110,7 @@
             </Border>
             <Border Name="bd2_1"
                     Canvas.Left="190"
-                    Canvas.Top="278"
+                    Canvas.Top="283"
                     Width="80"
                     Height="80"
                     MouseDown="bd_MouseDown"
@@ -122,7 +122,7 @@
             </Border>
             <Border Name="bd2_2"
                     Canvas.Left="360"
-                    Canvas.Top="277"
+                    Canvas.Top="282"
                     Width="80"
                     Height="80"
                     MouseDown="bd_MouseDown"
@@ -134,7 +134,7 @@
             </Border>
             <Border Name="bd2_3"
                     Canvas.Left="530"
-                    Canvas.Top="277"
+                    Canvas.Top="282"
                     Width="80"
                     Height="80"
                     MouseDown="bd_MouseDown"
