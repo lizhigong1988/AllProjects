@@ -5,24 +5,23 @@ using System.Text;
 
 namespace 项目管理.DataBases
 {
-    class T_DAYS_INFO
+    class T_SYS_INFO
     { 
         /// <summary>
         /// 定义表名
         /// </summary>
-        internal static string TABLE_NAME = "T_DAYS_INFO";
-
+        internal static string TABLE_NAME = "T_SYS_INFO";
 
         /// <summary>
         /// 定义列标题
         /// </summary>
         internal static Dictionary<string, string> DIC_TABLE_COLUMS = new Dictionary<string, string>()
         {
-            {"DEMAND_ID", "VARCHAR(36)"},
             {"SYS_ID", "VARCHAR(36)"},
-            {"WORKER", "VARCHAR(32)"},
-            {"MONTH", "INTEGER"},
-            {"WORKLOAD", "DECIMAL"},
+            {"SYS_NAME", "VARCHAR(32)"},
+            {"MANAGER1", "VARCHAR(32)"},
+            {"MANAGER2", "VARCHAR(32)"},
+            {"REMARK", "VARCHAR(128)"},
         };
 
         static DataBaseTool_SQLite3 dataBaseTool;

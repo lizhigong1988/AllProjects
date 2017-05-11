@@ -23,34 +23,18 @@
                     <TextBox Name="tbDemandDate" />
                     <TextBlock Text="期望上线时间" />
                     <TextBox Name="tbExpectDate" />
-                    <TextBlock Text="项目类型" />
-                    <ComboBox Name="cbProKinds" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="项目阶段" />
                     <ComboBox Name="cbProStage" />
                     <TextBlock Text="项目状态" />
                     <ComboBox Name="cbProState" />
-                    <TextBlock Text="预计工作量（天）" />
-                    <TextBox Name="tbEstimatedDays" />
+                    <TextBlock Text="项目类型" />
+                    <ComboBox Name="cbProKinds" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="项目进展说明" />
                     <TextBox Name="tbProgressNote" Width="414" />
-                    <TextBlock Text="实际完成日期" />
-                    <TextBox Name="tbFinishDate" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="所属系统" />
-                    <ComboBox Name="cbSystem" IsEditable="True" />
-                    <TextBlock Text="关联系统" />
-                    <TextBox Name="tbRelationSystem" Width="414" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="第一责任人" />
-                    <TextBox Name="tbFirstPerson" />
-                    <TextBlock Text="第二责任人" />
-                    <TextBox Name="tbSecondPerson" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="测试经理" />
@@ -64,28 +48,32 @@
                 </StackPanel>
             </StackPanel>
         </GroupBox>
-        <GroupBox Header="开发信息">
+        <GroupBox Header="关联系统信息">
             <StackPanel>
-                <DataGrid Name="dgDevelopmentInfo" Height="250">
+                <DataGrid Name="dgProSysInfo" Height="250">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding TRADE_CODE}" Header="交易代码" />
-                        <DataGridTextColumn Binding="{Binding TRADE_NAME}" Header="交易名称" />
-                        <DataGridTextColumn Binding="{Binding IS_NEW}" Header="新增修改" />
-                        <DataGridTextColumn Binding="{Binding SERVER_NODE}" Header="通信端口" />
-                        <DataGridTextColumn Binding="{Binding FILE_NAME}" Header="文件名称" />
-                        <DataGridTextColumn Binding="{Binding TRADE_MENU}" Header="菜单目录" />
-                        <DataGridTextColumn Binding="{Binding WORKER}" Header="开发人员" />
-                        <DataGridTextColumn Binding="{Binding WORKLOAD}" Header="已用工作量" />
-                        <DataGridTextColumn Binding="{Binding REMARK}" Header="备注（错误码、授权公式、相关附件名称）" />
+                        <DataGridTextColumn Binding="{Binding TRADE_CODE}" Header="系统名称" />
+                        <DataGridTextColumn Binding="{Binding MANAGER1}" Header="第一负责人" />
+                        <DataGridTextColumn Binding="{Binding MANAGER2}" Header="第二负责人" />
+                        <DataGridTextColumn Binding="{Binding IS_MAIM}" Header="是否主导" />
+                        <DataGridTextColumn Binding="{Binding ESTIMATE_DAYS}" Header="预计工作量" />
+                        <DataGridTextColumn Binding="{Binding REMARK}" Header="备注" />
                     </DataGrid.Columns>
                 </DataGrid>
-                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                    <Button Name="btnAddTrade"
-                            Click="btnAddTrade_Click"
-                            Content="新增" />
-                    <Button Name="btnDelTrade"
-                            Click="btnDelTrade_Click"
-                            Content="删除" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="选择系统" />
+                    <ComboBox Name="cbSystem" />
+                    <TextBlock Text="预计工作量（天）" />
+                    <TextBox Name="tbSysEstimatedDays" />
+                    <TextBlock Text="共计（天）" />
+                    <TextBox Name="tbEstimatedDays" IsReadOnly="True" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="备  注" />
+                    <TextBox Name="tbSysRemark" Width="414" />
+                    <Button Content="新增" />
+                    <Button Content="修改" />
+                    <Button Content="删除" />
                 </StackPanel>
             </StackPanel>
         </GroupBox>

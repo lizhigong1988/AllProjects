@@ -5,12 +5,12 @@ using System.Text;
 
 namespace 项目管理.DataBases
 {
-    class T_DAYS_INFO
+    class T_PRO_SYS_INFO
     { 
         /// <summary>
         /// 定义表名
         /// </summary>
-        internal static string TABLE_NAME = "T_DAYS_INFO";
+        internal static string TABLE_NAME = "T_PRO_SYS_INFO";
 
 
         /// <summary>
@@ -20,9 +20,9 @@ namespace 项目管理.DataBases
         {
             {"DEMAND_ID", "VARCHAR(36)"},
             {"SYS_ID", "VARCHAR(36)"},
-            {"WORKER", "VARCHAR(32)"},
-            {"MONTH", "INTEGER"},
-            {"WORKLOAD", "DECIMAL"},
+            {"IS_MAIM", "VARCHAR(1)"},
+            {"ESTIMATE_DAYS", "DECIMAL"},
+            {"REMARK", "VARCHAR(64)"},
         };
 
         static DataBaseTool_SQLite3 dataBaseTool;

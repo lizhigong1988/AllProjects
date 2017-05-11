@@ -70,6 +70,9 @@
     <Compile Include="DataBases\T_PRO_INFO.cs" />
     <Compile Include="DataBases\T_TRADE_INFO.cs" />
     <Compile Include="DataBases\T_DAYS_INFO.cs" />
+    <Compile Include="DataBases\T_ENGINEER_INFO.cs" />
+    <Compile Include="DataBases\T_PRO_SYS_INFO.cs" />
+    <Compile Include="DataBases\T_SYS_INFO.cs" />
     <Compile Include="ExcelOperation2010.cs" />
     <Compile Include="Pages\ModProject.xaml.cs">
       <DependentUpon>ModProject.xaml</DependentUpon>

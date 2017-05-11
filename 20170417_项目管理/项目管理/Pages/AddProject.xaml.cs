@@ -41,42 +41,16 @@ namespace 项目管理.Pages
             cbProKinds.SelectedIndex = 0;
 
             cbProStage.ItemsSource = new List<string>() { 
-                "软需编写及评审", "系统开发/单元测试" , "集成测试", "SIT测试", 
-                "UAT测试", "投产实施" , "已上线"
+                "软需编写及评审", "系统开发/单元测试" , "集成测试", "SIT测试", "UAT测试"
             };
             cbProStage.SelectedIndex = 1;
 
             cbProState.ItemsSource = new List<string>() { 
-                "正常", "延迟" , "关闭", "暂停", "完成"
+                "正常", "延迟" , "关闭", "暂停"
             };
             cbProState.SelectedIndex = 0;
-
-            cbSystem.ItemsSource = DataBaseManager.GetHisSystem();
-
-            DataTable dt = DataBaseManager.GetNewTradeTable();
-            dgDevelopmentInfo.DataContext = dt;
-
         }
 
-        private void btnAddTrade_Click(object sender, RoutedEventArgs e)
-        {
-            DataTable dt = dgDevelopmentInfo.DataContext as DataTable;
-            string[] newRow = new string[dt.Columns.Count];
-            dt.Rows.Add(newRow);
-        }
-
-        private void btnDelTrade_Click(object sender, RoutedEventArgs e)
-        {
-            DataRowView drv = dgDevelopmentInfo.SelectedItem as DataRowView;
-            if (drv == null)
-            {
-                MessageBox.Show("请选择要删除的行！");
-                return;
-            }
-            DataTable dt = dgDevelopmentInfo.DataContext as DataTable;
-            dt.Rows.Remove(drv.Row);
-        }
-        
         private void btnAddFile_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog imageFileDialog = new System.Windows.Forms.OpenFileDialog();
@@ -123,14 +97,14 @@ namespace 项目管理.Pages
                 MessageBox.Show("请输入项目名称！");
                 return;
             }
-            if (!DataBaseManager.AddNewProject(tbDemandName.Text, cbDemandDepart.Text, tbDemandDate.Text,
-                tbExpectDate.Text, cbProKinds.Text, cbProStage.Text, cbProState.Text, tbEstimatedDays.Text,
-                tbProgressNote.Text, cbSystem.Text, tbRelationSystem.Text, tbFirstPerson.Text, tbSecondPerson.Text,
-                tbTestPerson.Text, tbBusinessPerson.Text, tbRemark.Text, tbFinishDate.Text, dgDevelopmentInfo.DataContext as DataTable))
-            {
-                MessageBox.Show("保存项目失败！");
-                return;
-            }
+            //if (!DataBaseManager.AddNewProject(tbDemandName.Text, cbDemandDepart.Text, tbDemandDate.Text,
+            //    tbExpectDate.Text, cbProKinds.Text, cbProStage.Text, cbProState.Text, tbEstimatedDays.Text,
+            //    tbProgressNote.Text, cbSystem.Text, tbRelationSystem.Text, tbFirstPerson.Text, tbSecondPerson.Text,
+            //    tbTestPerson.Text, tbBusinessPerson.Text, tbRemark.Text, tbFinishDate.Text, dgDevelopmentInfo.DataContext as DataTable))
+            //{
+            //    MessageBox.Show("保存项目失败！");
+            //    return;
+            //}
             string filePath = "TEMP/" + CurDirectory;
             string mvFilePath = "projects/" + tbDemandDate.Text + "_" + tbDemandName.Text;
             try
@@ -150,6 +124,11 @@ namespace 项目管理.Pages
                 return;
             }
             MessageBox.Show("保存成功！");
+        }
+
+        private void btnSelect_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
     }

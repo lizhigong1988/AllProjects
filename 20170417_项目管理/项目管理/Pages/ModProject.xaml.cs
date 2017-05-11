@@ -115,15 +115,15 @@ namespace 项目管理.Pages
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (!DataBaseManager.ModProject(curProId, cbDemandName.Text, cbDemandDepart.Text, tbDemandDate.Text,
-                tbExpectDate.Text, cbProKinds.Text, cbProStage.Text, cbProState.Text, tbEstimatedDays.Text,
-                tbProgressNote.Text, cbSystem.Text, tbRelationSystem.Text, tbFirstPerson.Text, tbSecondPerson.Text,
-                tbTestPerson.Text, tbBusinessPerson.Text, tbRemark.Text,
-                tbFinishDate.Text, dgDevelopmentInfo.DataContext as DataTable))
-            {
-                MessageBox.Show("保存项目失败！");
-                return;
-            }
+            //if (!DataBaseManager.ModProject(curProId, cbDemandName.Text, cbDemandDepart.Text, tbDemandDate.Text,
+            //    tbExpectDate.Text, cbProKinds.Text, cbProStage.Text, cbProState.Text, tbEstimatedDays.Text,
+            //    tbProgressNote.Text, cbSystem.Text, tbRelationSystem.Text, tbFirstPerson.Text, tbSecondPerson.Text,
+            //    tbTestPerson.Text, tbBusinessPerson.Text, tbRemark.Text,
+            //    tbFinishDate.Text, dgDevelopmentInfo.DataContext as DataTable))
+            //{
+            //    MessageBox.Show("保存项目失败！");
+            //    return;
+            //}
             MessageBox.Show("保存成功！");
         }
 
@@ -150,9 +150,9 @@ namespace 项目管理.Pages
             tbEstimatedDays.Text = dr["ESTIMATE_DAYS"].ToString();
             tbProgressNote.Text = dr["PRO_NOTE"].ToString();
             cbSystem.Text = dr["SYSTEM"].ToString();
-            tbRelationSystem.Text = dr["RELA_SYSTEMS"].ToString();
-            tbFirstPerson.Text = dr["FIRST_PERSON"].ToString();
-            tbSecondPerson.Text = dr["SECOND_PERSON"].ToString();
+            //tbRelationSystem.Text = dr["RELA_SYSTEMS"].ToString();
+            //tbFirstPerson.Text = dr["FIRST_PERSON"].ToString();
+            //tbSecondPerson.Text = dr["SECOND_PERSON"].ToString();
             tbTestPerson.Text = dr["TEST_PERSON"].ToString();
             tbBusinessPerson.Text = dr["BUSINESS_PERSON"].ToString();
             tbRemark.Text = dr["REMARK"].ToString();
