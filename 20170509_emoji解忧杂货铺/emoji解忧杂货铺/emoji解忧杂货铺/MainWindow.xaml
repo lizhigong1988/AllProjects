@@ -2,6 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="emoji解忧杂货铺"
+        Width="820"
+        Height="510"
         WindowStartupLocation="CenterScreen">
     <Viewbox Stretch="Fill">
         <Canvas Width="800" Height="450">
@@ -28,7 +30,7 @@
                 </Border.Background>
             </Border>
             <Border Name="bd2"
-                    Canvas.Left="223"
+                    Canvas.Left="224"
                     Canvas.Top="137"
                     Width="169"
                     Height="245"

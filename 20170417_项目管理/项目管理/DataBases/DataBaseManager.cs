@@ -21,9 +21,12 @@ namespace 项目管理.DataBases
         internal static bool InitDataBases()
         {
             bool ret = dataBaseTool.InitDataBase();
-            if (ret) ret = T_PRO_INFO.InitTable(dataBaseTool);
-            if (ret) ret = T_TRADE_INFO.InitTable(dataBaseTool);
             if (ret) ret = T_DAYS_INFO.InitTable(dataBaseTool);
+            if (ret) ret = T_ENGINEER_INFO.InitTable(dataBaseTool);
+            if (ret) ret = T_PRO_INFO.InitTable(dataBaseTool);
+            if (ret) ret = T_PRO_SYS_INFO.InitTable(dataBaseTool);
+            if (ret) ret = T_SYS_INFO.InitTable(dataBaseTool);
+            if (ret) ret = T_TRADE_INFO.InitTable(dataBaseTool);
             return ret;
         }
 
@@ -278,6 +281,22 @@ namespace 项目管理.DataBases
                 return "0";
             }
             return dt.Rows[0][0].ToString();
+        }
+
+        internal static Dictionary<string, string> GetAllSysDic()
+        {
+            Dictionary<string, string> dicAllSys = new Dictionary<string, string>();
+            string sql = "select * from T_SYS_INFO";
+            DataTable dt = dataBaseTool.SelectFunc(sql);
+            if (dt == null)
+            {
+                return dicAllSys;
+            }
+            foreach (DataRow dr in dt.Rows)
+            {
+                dicAllSys.Add(dr["SYS_ID"].ToString(), dr["SYS_NAME"].ToString());
+            }
+            return dicAllSys;
         }
     }
 }

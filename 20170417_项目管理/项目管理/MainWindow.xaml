@@ -32,6 +32,10 @@
                        FontSize="20"
                        Foreground="White"
                        Text="欢迎使用项目管理系统" />
+            <TextBlock Name="tbAlert"
+                       Canvas.Left="40"
+                       Canvas.Top="40"
+                       Text="焦作中旅银行-&gt;信息技术部" />
         </Canvas>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>

@@ -49,6 +49,10 @@ namespace 项目管理.Pages
                 "正常", "延迟" , "关闭", "暂停"
             };
             cbProState.SelectedIndex = 0;
+
+            cbSystem.ItemsSource = DataBaseManager.GetAllSysDic();
+            cbSystem.SelectedValuePath = "Key";
+            cbSystem.DisplayMemberPath = "Value";
         }
 
         private void btnAddFile_Click(object sender, RoutedEventArgs e)

@@ -17,9 +17,11 @@ namespace 项目管理.DataBases
         /// </summary>
         internal static Dictionary<string, string> DIC_TABLE_COLUMS = new Dictionary<string, string>()
         {
-            {"SYS_ID", "VARCHAR(36) UNIQUE"},
-            {"ENGINEER_NAME", "VARCHAR(32)"},
+            {"USER_NAME", "VARCHAR(32)"},
+            {"USER_PSW", "VARCHAR(32)"},
+            {"SYS_ID", "VARCHAR(36)"},
             {"COMPANY", "VARCHAR(64)"},
+            {"USER_ROLE", "VARCHAR(1)"},
             {"REMARK", "VARCHAR(128)"},
         };
 
