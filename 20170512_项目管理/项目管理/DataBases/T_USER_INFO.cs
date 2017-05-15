@@ -5,23 +5,23 @@ using System.Text;
 
 namespace 项目管理.DataBases
 {
-    class T_ENGINEER_INFO
+    class T_USER_INFO
     { 
         /// <summary>
         /// 定义表名
         /// </summary>
-        internal static string TABLE_NAME = "T_ENGINEER_INFO";
+        internal static string TABLE_NAME = "T_USER_INFO";
 
         /// <summary>
         /// 定义列标题
         /// </summary>
         internal static Dictionary<string, string> DIC_TABLE_COLUMS = new Dictionary<string, string>()
         {
-            {"USER_NAME", "VARCHAR(32)"},
+            {"USER_NAME", "VARCHAR(32) UNIQUE"},
             {"USER_PSW", "VARCHAR(32)"},
             {"SYS_ID", "VARCHAR(36)"},
             {"COMPANY", "VARCHAR(64)"},
-            {"USER_ROLE", "VARCHAR(1)"},
+            {"USER_ROLE", "VARCHAR(16)"},
             {"REMARK", "VARCHAR(128)"},
         };
 

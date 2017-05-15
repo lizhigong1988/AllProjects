@@ -13,10 +13,14 @@
         <GroupBox Header="汇总选项">
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="汇总系统" />
+                    <ComboBox Name="cbSystem" />
                     <TextBlock Text="汇总人员" />
                     <ComboBox Name="cbPerson" />
                     <TextBlock Text="汇总年月" />
                     <TextBox Name="tbYearMonth" />
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                     <Button Name="btnQueryPro"
                             Click="btnQueryPro_Click"
                             Content="查询项目" />

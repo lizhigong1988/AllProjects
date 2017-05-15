@@ -54,7 +54,7 @@ namespace 项目管理.Pages
             {
                 return;
             }
-            DataTable dtTrades = DataBaseManager.GetTradesInfo(drv.Row["DEMAND_ID"].ToString());
+            DataTable dtTrades = DataBaseManager.GetTradesInfo(drv.Row["DEMAND_ID"].ToString(), GlobalFuns.LoginSysId);
             dtTrades.Columns.Add("DIFF");
             dgDevelopmentInfo.DataContext = dtTrades;
             lbFiles.Items.Clear();

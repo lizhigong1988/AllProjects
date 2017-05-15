@@ -58,6 +58,36 @@
                 </DataGrid.Columns>
             </DataGrid>
         </GroupBox>
+        <GroupBox Header="关联系统信息">
+            <StackPanel>
+                <DataGrid Name="dgProSysInfo" Height="250">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding TRADE_CODE}" Header="系统名称" />
+                        <DataGridTextColumn Binding="{Binding MANAGER1}" Header="第一负责人" />
+                        <DataGridTextColumn Binding="{Binding MANAGER2}" Header="第二负责人" />
+                        <DataGridTextColumn Binding="{Binding IS_MAIM}" Header="是否主导" />
+                        <DataGridTextColumn Binding="{Binding ESTIMATE_DAYS}" Header="预计工作量" />
+                        <DataGridTextColumn Binding="{Binding USED_DAYS}" Header="已用工作量" />
+                        <DataGridTextColumn Binding="{Binding REMARK}" Header="备注" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="选择系统" />
+                    <ComboBox Name="cbSystem" />
+                    <TextBlock Text="预计工作量（天）" />
+                    <TextBox Name="tbSysEstimatedDays" />
+                    <TextBlock Text="共计（天）" />
+                    <TextBox Name="tbEstimatedDays" IsReadOnly="True" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="备  注" />
+                    <TextBox Name="tbSysRemark" Width="414" />
+                    <Button Content="新增" />
+                    <Button Content="修改" />
+                    <Button Content="删除" />
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
         <GroupBox Header="开发信息">
             <StackPanel>
                 <DataGrid Name="dgDevelopmentInfo" Height="250">

@@ -20,7 +20,7 @@ namespace 项目管理.DataBases
         {
             {"DEMAND_ID", "VARCHAR(36)"},
             {"SYS_ID", "VARCHAR(36)"},
-            {"IS_MAIM", "VARCHAR(1)"},
+            {"IS_MAIM", "VARCHAR(2)"},
             {"ESTIMATE_DAYS", "DECIMAL"},
             {"REMARK", "VARCHAR(64)"},
         };

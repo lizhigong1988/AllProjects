@@ -46,7 +46,7 @@ namespace 项目管理.Pages
 
             cbSystem.ItemsSource = DataBaseManager.GetHisSystem();
 
-            List<string> proNames = DataBaseManager.GetCurProNames();
+            List<string> proNames = DataBaseManager.GetCurProNames(GlobalFuns.LoginSysId);
             cbDemandName.ItemsSource = proNames;
             if (proNames.Count == 0)
             {
@@ -147,19 +147,16 @@ namespace 项目管理.Pages
             cbProKinds.Text = dr["PRO_KIND"].ToString();
             cbProStage.Text = dr["PRO_STAGE"].ToString();
             cbProState.Text = dr["PRO_STATE"].ToString();
-            tbEstimatedDays.Text = dr["ESTIMATE_DAYS"].ToString();
             tbProgressNote.Text = dr["PRO_NOTE"].ToString();
-            cbSystem.Text = dr["SYSTEM"].ToString();
-            //tbRelationSystem.Text = dr["RELA_SYSTEMS"].ToString();
-            //tbFirstPerson.Text = dr["FIRST_PERSON"].ToString();
-            //tbSecondPerson.Text = dr["SECOND_PERSON"].ToString();
             tbTestPerson.Text = dr["TEST_PERSON"].ToString();
             tbBusinessPerson.Text = dr["BUSINESS_PERSON"].ToString();
             tbRemark.Text = dr["REMARK"].ToString();
             tbFinishDate.Text = dr["FINISH_DATE"].ToString();
             tbLastTime.Text = dr["LAST_MOD_TIME"].ToString();
 
-            DataTable dtTrades = DataBaseManager.GetTradesInfo(curProId);
+            DataTable dtSystems = DataBaseManager.GetProSystemInfo(curProId);
+            dgProSysInfo.DataContext = dtSystems;
+            DataTable dtTrades = DataBaseManager.GetTradesInfo(curProId, GlobalFuns.LoginSysId);
             dgDevelopmentInfo.DataContext = dtTrades;
             curFilePath = "projects/" + tbDemandDate.Text + "_" + select;
             lbFiles.Items.Clear();
@@ -180,7 +177,7 @@ namespace 项目管理.Pages
 
         private void btnShowAll_Click(object sender, RoutedEventArgs e)
         {
-            List<string> proNames = DataBaseManager.GetCurProNames(true);
+            List<string> proNames = DataBaseManager.GetCurProNames(GlobalFuns.LoginSysId, true);
             cbDemandName.ItemsSource = proNames;
             if (proNames.Count == 0)
             {

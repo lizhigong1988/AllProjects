@@ -21,7 +21,7 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="提出日期" />
                     <TextBox Name="tbDemandDate" />
-                    <TextBlock Text="期望上线时间" />
+                    <TextBlock Text="期望上线日期" />
                     <TextBox Name="tbExpectDate" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
@@ -50,12 +50,14 @@
         </GroupBox>
         <GroupBox Header="关联系统信息">
             <StackPanel>
-                <DataGrid Name="dgProSysInfo" Height="250">
+                <DataGrid Name="dgProSysInfo"
+                          Height="250"
+                          IsReadOnly="True">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding TRADE_CODE}" Header="系统名称" />
+                        <DataGridTextColumn Binding="{Binding SYS_NAME}" Header="系统名称" />
                         <DataGridTextColumn Binding="{Binding MANAGER1}" Header="第一负责人" />
                         <DataGridTextColumn Binding="{Binding MANAGER2}" Header="第二负责人" />
-                        <DataGridTextColumn Binding="{Binding IS_MAIM}" Header="是否主导" />
+                        <DataGridTextColumn Binding="{Binding IS_MAIN}" Header="是否主导" />
                         <DataGridTextColumn Binding="{Binding ESTIMATE_DAYS}" Header="预计工作量" />
                         <DataGridTextColumn Binding="{Binding REMARK}" Header="备注" />
                     </DataGrid.Columns>
@@ -71,21 +73,17 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="备  注" />
                     <TextBox Name="tbSysRemark" Width="414" />
-                    <Button Content="新增" />
-                    <Button Content="修改" />
-                    <Button Content="删除" />
-                </StackPanel>
-            </StackPanel>
-        </GroupBox>
-        <GroupBox Header="相关文件">
-            <StackPanel>
-                <ListBox Name="lbFiles" Height="100" />
-                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                    <Button Name="btnAddFile"
-                            Click="btnAddFile_Click"
+                    <CheckBox Name="cbIsMain"
+                              Margin="5"
+                              Content="主导系统" />
+                    <Button Name="btnAddNewSys"
+                            Click="btnAddNewSys_Click"
                             Content="新增" />
-                    <Button Name="btnDelFile"
-                            Click="btnDelFile_Click"
+                    <Button Name="btnModSys"
+                            Click="btnModSys_Click"
+                            Content="修改" />
+                    <Button Name="btnDelSys"
+                            Click="btnDelSys_Click"
                             Content="删除" />
                 </StackPanel>
             </StackPanel>

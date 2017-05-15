@@ -24,5 +24,16 @@ namespace 项目管理.Tools
             }
             wind.ShowDialog();
         }
+
+        public static string ADMIN_USER = "admin";
+
+        public static string ADMIN_PASSWORD = "_admin";
+
+        public static string LoginUser = "";
+
+        public static string LoginSysId = "";
+        public static string LoginSysName = "";
+
+        public static string LoginRole = "";
     }
 }

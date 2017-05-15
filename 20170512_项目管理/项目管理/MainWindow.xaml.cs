@@ -14,6 +14,8 @@ using System.Windows.Shapes;
 using 项目管理.DataBases;
 using 项目管理.Pages;
 using System.IO;
+using 项目管理.Tools;
+using System.Data;
 
 namespace 项目管理
 {
@@ -30,6 +32,45 @@ namespace 项目管理
             {
                 Directory.Delete("TEMP", true);
             }
+
+            if (GlobalFuns.LoginUser != "")
+            {
+                if (GlobalFuns.LoginSysName != "")
+                {
+                    tbAlert.Text += "->" + GlobalFuns.LoginSysName;
+                }
+                if (GlobalFuns.LoginRole != "")
+                {
+                    tbAlert.Text += "->" + GlobalFuns.LoginRole;
+                }
+                if (GlobalFuns.LoginUser != "")
+                {
+                    tbAlert.Text += "->" + GlobalFuns.LoginUser;
+                }
+            }
+            else
+            {
+                tbAlert.Text += "->系统管理员";
+            }
+
+            switch (GlobalFuns.LoginRole)
+            { 
+                case ""://系统管理员
+                    listMenu.Items.RemoveAt(6);//修改密码
+                    break;
+                case "部门领导":
+                    break;
+                case "项目经理":
+                    listMenu.Items.RemoveAt(4);//系统信息管理
+                    break;
+                default:
+                    listMenu.Items.RemoveAt(0);//新增项目
+                    listMenu.Items.RemoveAt(2);//项目统计
+                    listMenu.Items.RemoveAt(3);//工作量统计
+                    listMenu.Items.RemoveAt(4);//系统信息管理
+                    listMenu.Items.RemoveAt(5);//人员管理
+                    break;
+            }
         }
 
         private void Item_Close_Button_Click(object sender, RoutedEventArgs e)
@@ -43,15 +84,6 @@ namespace 项目管理
                     tabPageBox.Items.Remove(item);
                     break;
                 }
-            }
-        }
-
-        private void Window_ContentRendered(object sender, EventArgs e)
-        {
-            if (!DataBaseManager.InitDataBases())
-            {
-                MessageBox.Show("初始化数据库失败！");
-                this.Close();
             }
         }
         
@@ -90,6 +122,15 @@ namespace 项目管理
                     break;
                 case "工作量统计":
                     scrl.Content = new QueryWorkDays();
+                    break;
+                case "系统信息管理":
+                    scrl.Content = new SystemMange();
+                    break;
+                case "人员管理":
+                    scrl.Content = new UserMange();
+                    break;
+                case "修改密码":
+                    scrl.Content = new ModPassword();
                     break;
                 default:
                     return;

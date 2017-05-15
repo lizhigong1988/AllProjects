@@ -22,7 +22,7 @@ namespace 项目管理.DataBases
         {
             bool ret = dataBaseTool.InitDataBase();
             if (ret) ret = T_DAYS_INFO.InitTable(dataBaseTool);
-            if (ret) ret = T_ENGINEER_INFO.InitTable(dataBaseTool);
+            if (ret) ret = T_USER_INFO.InitTable(dataBaseTool);
             if (ret) ret = T_PRO_INFO.InitTable(dataBaseTool);
             if (ret) ret = T_PRO_SYS_INFO.InitTable(dataBaseTool);
             if (ret) ret = T_SYS_INFO.InitTable(dataBaseTool);
@@ -72,16 +72,15 @@ namespace 项目管理.DataBases
         }
 
         internal static bool AddNewProject(string demandName, string depart, string date, string expectDate,
-            string kinds, string stage, string state, string days, string note, string sys, string relationSys, 
-            string firstPersion, string secondPersion, string testPersion, string businessPersion, 
-            string remark, string finishDate, DataTable dtTrades)
+            string kinds, string stage, string state, string note, string testPersion, string businessPersion, 
+            string remark, DataTable dtSysInfo)
         {
             string sql = "";
             string proId = Guid.NewGuid().ToString();
             List<string> values = new List<string>()
             {
-                proId, demandName, depart, date, expectDate, kinds, stage, state, days, note, 
-                sys, relationSys, firstPersion, secondPersion, testPersion, businessPersion, remark, finishDate,
+                proId, demandName, depart, date, expectDate, "", kinds, stage, state, note, 
+                testPersion, businessPersion, remark,
                 DateTime.Now.ToString("yyyyMMddHHmmss")
             };
             if (!dataBaseTool.AddInfo(T_PRO_INFO.TABLE_NAME, T_PRO_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
@@ -89,16 +88,14 @@ namespace 项目管理.DataBases
             {
                 return false;
             }
-            foreach (DataRow dr in dtTrades.Rows)
+            foreach (DataRow dr in dtSysInfo.Rows)
             {
                 values = new List<string>() 
                 {
-                    proId, dr["TRADE_CODE"].ToString(), dr["TRADE_NAME"].ToString(),
-                    dr["IS_NEW"].ToString(), dr["SERVER_NODE"].ToString(), dr["FILE_NAME"].ToString(),
-                    dr["TRADE_MENU"].ToString(), dr["WORKER"].ToString(), dr["WORKLOAD"].ToString(),
-                    dr["REMARK"].ToString()
+                    proId, dr["SYS_ID"].ToString(), dr["IS_MAIN"].ToString(),
+                    dr["ESTIMATE_DAYS"].ToString(), dr["REMARK"].ToString()
                 };
-                if (!dataBaseTool.AddInfo(T_TRADE_INFO.TABLE_NAME, T_TRADE_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                if (!dataBaseTool.AddInfo(T_PRO_SYS_INFO.TABLE_NAME, T_PRO_SYS_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
                     values, ref sql))
                 {
                     return false;
@@ -107,14 +104,15 @@ namespace 项目管理.DataBases
             return dataBaseTool.ActionFunc(sql);
         }
 
-        internal static List<string> GetCurProNames(bool showAll = false)
+        internal static List<string> GetCurProNames(string sysId, bool showAll = false)
         {
             List<string> retList = new List<string>();
-            string sql = "select distinct DEMAND_NAME from T_PRO_INFO where PRO_STATE != '完成'";
-            if (showAll)
+            string sql = "select distinct DEMAND_NAME from T_PRO_INFO where 1=1";
+            if (!showAll)
             {
-                sql = "select distinct DEMAND_NAME from T_PRO_INFO";
+                sql += " and PRO_STATE != '完成'";
             }
+           
             DataTable dt = dataBaseTool.SelectFunc(sql);
             if (dt != null)
             {
@@ -133,10 +131,14 @@ namespace 项目管理.DataBases
             return dataBaseTool.SelectFunc(sql);
         }
 
-        internal static DataTable GetTradesInfo(string curProId)
+        internal static DataTable GetTradesInfo(string curProId, string sysId)
         {
             string sql = "select * from T_TRADE_INFO where DEMAND_ID = '{0}'";
             sql = string.Format(sql, curProId);
+            if (sysId != "")
+            {
+                sql += string.Format(" and SYS_ID = '{0}'", sysId);
+            }
             return dataBaseTool.SelectFunc(sql);
         }
 
@@ -297,6 +299,119 @@ namespace 项目管理.DataBases
                 dicAllSys.Add(dr["SYS_ID"].ToString(), dr["SYS_NAME"].ToString());
             }
             return dicAllSys;
+        }
+
+        internal static bool AddNewSystem(string sysName, string manage1,
+            string manage2, string remark)
+        {
+            string guid = Guid.NewGuid().ToString();
+            List<string> values = new List<string>() { guid, sysName, manage1, manage2, remark };
+            string sql = "";
+            if (!dataBaseTool.AddInfo(T_SYS_INFO.TABLE_NAME, T_SYS_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                values, ref sql))
+            {
+                return false;
+            }
+            return dataBaseTool.ActionFunc(sql);
+        }
+
+        internal static DataTable GetSystemInfo(string sysId = "")
+        {
+            string sql = "select * from T_SYS_INFO";
+            if (sysId != "")
+            {
+                sql += string.Format(" where SYS_ID = '{0}'", sysId);
+            }
+            return dataBaseTool.SelectFunc(sql);
+        }
+
+        internal static bool ModSystem(string sysId, string sysName, string uesr1, string user2, string remark)
+        {
+            List<string> values = new List<string>() { sysId, sysName, uesr1, user2, remark };
+            string sql = "";
+            if (!dataBaseTool.ModInfo(T_SYS_INFO.TABLE_NAME, T_SYS_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                values, ref sql))
+            {
+                return false;
+            }
+            return dataBaseTool.ActionFunc(sql);
+        }
+
+        internal static bool DelSystem(string sysId)
+        {
+            string countSql = string.Format("select count(*) from T_PRO_SYS_INFO where SYS_ID = '{0}'", sysId);
+            DataTable dt = dataBaseTool.SelectFunc(countSql);
+            if (dt == null)
+            {
+                return false;
+            }
+            if (dt.Rows[0][0].ToString() != "0")
+            {
+                return false;
+            }
+            countSql = string.Format("select count(*) from T_USER_INFO where SYS_ID = '{0}'", sysId);
+            dt = dataBaseTool.SelectFunc(countSql);
+            if (dt == null)
+            {
+                return false;
+            }
+            if (dt.Rows[0][0].ToString() != "0")
+            {
+                return false;
+            }
+            string sql = string.Format("delete from T_SYS_INFO where SYS_ID = '{0}'", sysId);
+            return dataBaseTool.ActionFunc(sql);
+        }
+
+        internal static DataTable GetUserInfo(string userName = "")
+        {
+            string sql = "select t1.*, t2.SYS_NAME from T_USER_INFO t1, T_SYS_INFO t2 where t1.SYS_ID = t2.SYS_ID";
+            if (userName != "")
+            {
+                sql += string.Format(" and t1.USER_NAME = '{0}'", userName);
+            }
+            return dataBaseTool.SelectFunc(sql);
+        }
+
+        internal static bool ModPassword(string userName, string password)
+        {
+            string sql = "update T_USER_INFO set USER_PSW = '{0}' where USER_NAME = '{1}'";
+            sql = string.Format(sql, password, userName);
+            return dataBaseTool.ActionFunc(sql);
+        }
+
+        internal static bool AddNewUser(string userName, string sysId, string role, string company, string remark)
+        {
+            List<string> values = new List<string>() { userName, "111111", sysId, company, role, remark };
+            string sql = "";
+            if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                values, ref sql))
+            {
+                return false;
+            }
+            return dataBaseTool.ActionFunc(sql);
+        }
+
+
+        internal static bool ModUserInfo(string userName, string psw, string sysId, string role,
+            string company, string remark)
+        {
+            List<string> values = new List<string>() { userName, psw, sysId, company, role, remark };
+            string sql = "";
+            if (!dataBaseTool.ModInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                values, ref sql))
+            {
+                return false;
+            }
+            return dataBaseTool.ActionFunc(sql);
+        }
+
+        internal static DataTable GetProSystemInfo(string curProId)
+        {
+            string sql = "select t1.*, t2.*, SUM(t3.WORKLOAD) from T_PRO_SYS_INFO t1, T_SYS_INFO t2, T_TRADE_INFO t3 ";
+            sql += "where t1.SYS_ID = t2.SYS_ID and t1.DEMAND_ID = t3.DEMAND_ID and t1.SYS_ID = t3.SYS_ID";
+            sql += string.Format("and t1.DEMAND_ID = '{0}' group by(t3.DEMAND_ID, t3.SYS_ID)", curProId);
+            return dataBaseTool.SelectFunc(sql);
         }
     }
 }

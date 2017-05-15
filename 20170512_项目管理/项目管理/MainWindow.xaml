@@ -4,8 +4,8 @@
         Title="项目管理"
         Width="1000"
         Height="600"
-        ContentRendered="Window_ContentRendered"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -67,7 +67,10 @@
                              Content="系统信息管理" />
                 <ListBoxItem Height="25"
                              HorizontalContentAlignment="Center"
-                             Content="开发人员管理" />
+                             Content="人员管理" />
+                <ListBoxItem Height="25"
+                             HorizontalContentAlignment="Center"
+                             Content="修改密码" />
             </ListBox>
             <Border Grid.Column="1"
                     Margin="3"

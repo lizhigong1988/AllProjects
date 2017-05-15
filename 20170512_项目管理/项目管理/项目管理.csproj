@@ -70,10 +70,13 @@
     <Compile Include="DataBases\T_PRO_INFO.cs" />
     <Compile Include="DataBases\T_TRADE_INFO.cs" />
     <Compile Include="DataBases\T_DAYS_INFO.cs" />
-    <Compile Include="DataBases\T_ENGINEER_INFO.cs" />
+    <Compile Include="DataBases\T_USER_INFO.cs" />
     <Compile Include="DataBases\T_PRO_SYS_INFO.cs" />
     <Compile Include="DataBases\T_SYS_INFO.cs" />
     <Compile Include="ExcelOperation2010.cs" />
+    <Compile Include="LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ModProject.xaml.cs">
       <DependentUpon>ModProject.xaml</DependentUpon>
     </Compile>
@@ -83,9 +86,22 @@
     <Compile Include="Pages\QueryWorkDays.xaml.cs">
       <DependentUpon>QueryWorkDays.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\SystemMange.xaml.cs">
+      <DependentUpon>SystemMange.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\UserMange.xaml.cs">
+      <DependentUpon>UserMange.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ModPassword.xaml.cs">
+      <DependentUpon>ModPassword.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tools\InputCheck.cs" />
     <Compile Include="Tools\InputTypeControl.cs" />
     <Compile Include="Tools\GlobalFuns.cs" />
+    <Page Include="LoginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -111,6 +127,18 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\QueryWorkDays.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\SystemMange.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\UserMange.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ModPassword.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

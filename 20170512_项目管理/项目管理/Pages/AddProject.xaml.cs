@@ -30,6 +30,10 @@ namespace 项目管理.Pages
             InitializeComponent();
             Refresh();
             CurDirectory = Guid.NewGuid().ToString().Replace("-","");
+            if (GlobalFuns.LoginSysId != "")
+            {
+                cbIsMain.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void Refresh()
@@ -53,45 +57,7 @@ namespace 项目管理.Pages
             cbSystem.ItemsSource = DataBaseManager.GetAllSysDic();
             cbSystem.SelectedValuePath = "Key";
             cbSystem.DisplayMemberPath = "Value";
-        }
-
-        private void btnAddFile_Click(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Forms.OpenFileDialog imageFileDialog = new System.Windows.Forms.OpenFileDialog();
-            imageFileDialog.Multiselect = true;
-            imageFileDialog.Title = "请选择文件";
-            imageFileDialog.Multiselect = false;
-            imageFileDialog.Filter = "文件(*.*)|*.*";
-            if (imageFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                string fileName = System.IO.Path.GetFileName(imageFileDialog.FileName);
-                foreach (string item in lbFiles.Items)
-                {
-                    if (item == fileName)
-                    {
-                        MessageBox.Show("文件名重复！");
-                        return;
-                    }
-                }
-                string filePath = "TEMP/" + CurDirectory;
-                if (!Directory.Exists(filePath))
-                {
-                    Directory.CreateDirectory(filePath);
-                }
-                File.Copy(imageFileDialog.FileName, filePath + "/" + fileName);
-                lbFiles.Items.Add(fileName);
-            }
-        }
-
-        private void btnDelFile_Click(object sender, RoutedEventArgs e)
-        {
-            string select = lbFiles.SelectedItem as string;
-            if (select != null)
-            {
-                lbFiles.Items.Remove(select);
-                string fileName = "TEMP/" + CurDirectory + "/" + select;
-                File.Delete(fileName);
-            }
+            cbSystem.SelectedIndex = 0;
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -101,38 +67,203 @@ namespace 项目管理.Pages
                 MessageBox.Show("请输入项目名称！");
                 return;
             }
-            //if (!DataBaseManager.AddNewProject(tbDemandName.Text, cbDemandDepart.Text, tbDemandDate.Text,
-            //    tbExpectDate.Text, cbProKinds.Text, cbProStage.Text, cbProState.Text, tbEstimatedDays.Text,
-            //    tbProgressNote.Text, cbSystem.Text, tbRelationSystem.Text, tbFirstPerson.Text, tbSecondPerson.Text,
-            //    tbTestPerson.Text, tbBusinessPerson.Text, tbRemark.Text, tbFinishDate.Text, dgDevelopmentInfo.DataContext as DataTable))
-            //{
-            //    MessageBox.Show("保存项目失败！");
-            //    return;
-            //}
-            string filePath = "TEMP/" + CurDirectory;
-            string mvFilePath = "projects/" + tbDemandDate.Text + "_" + tbDemandName.Text;
-            try
+            DataTable dt = dgProSysInfo.DataContext as DataTable;
+            bool hasMain = false;
+            foreach (DataRow dr in dt.Rows)
             {
-                if (Directory.Exists(filePath))
+                if (dr["IS_MAIN"].ToString() == "是")
                 {
-                    Directory.Move(filePath, mvFilePath);
-                }
-                else
-                {
-                    Directory.CreateDirectory(mvFilePath);
+                    hasMain = true;
+                    break;
                 }
             }
-            catch
+            if (!hasMain)
             {
-                MessageBox.Show("项目保存成功，文件保存失败，请手工保存！");
+                MessageBox.Show("请添加一个主系统！");
+                return;
+            }
+            if (!DataBaseManager.AddNewProject(tbDemandName.Text, cbDemandDepart.Text, tbDemandDate.Text,
+                tbExpectDate.Text, cbProKinds.Text, cbProStage.Text, cbProState.Text,
+                tbProgressNote.Text, tbTestPerson.Text, tbBusinessPerson.Text, tbRemark.Text, dt))
+            {
+                MessageBox.Show("保存项目失败！");
                 return;
             }
             MessageBox.Show("保存成功！");
         }
 
-        private void btnSelect_Click(object sender, RoutedEventArgs e)
+        private void btnAddNewSys_Click(object sender, RoutedEventArgs e)
         {
+            float days = 0;
+            if (!float.TryParse(tbSysEstimatedDays.Text, out days))
+            {
+                MessageBox.Show("请输入正确的预计工作量，单位天！");
+                tbSysEstimatedDays.Text = "0";
+                return;
+            }
+            DataTable dt = DataBaseManager.GetSystemInfo(cbSystem.SelectedValue.ToString());
+            if (dt == null)
+            {
+                MessageBox.Show("获取系统信息失败");
+                return;
+            }
+            DataTable dtSysInfo = dgProSysInfo.DataContext as DataTable;
+            if (dtSysInfo == null)
+            {
+                dtSysInfo = new DataTable();
+                dtSysInfo.Columns.Add("SYS_ID");
+                dtSysInfo.Columns.Add("SYS_NAME");
+                dtSysInfo.Columns.Add("MANAGER1");
+                dtSysInfo.Columns.Add("MANAGER2");
+                dtSysInfo.Columns.Add("IS_MAIN");
+                dtSysInfo.Columns.Add("ESTIMATE_DAYS");
+                dtSysInfo.Columns.Add("REMARK");
+                dgProSysInfo.DataContext = dtSysInfo;
+            }
+            bool isMain = false;
+            if (GlobalFuns.LoginSysId != "")
+            {
+                if (GlobalFuns.LoginSysId == cbSystem.SelectedValue.ToString())
+                {
+                    isMain = true;
+                }
+            }
+            else
+            {
+                isMain = (bool)cbIsMain.IsChecked;
+                if (isMain)
+                {
+                    foreach (DataRow dr in dtSysInfo.Rows)
+                    {
+                        if (dr["IS_MAIN"].ToString() == "是")
+                        {
+                            MessageBox.Show("已经存在主导系统！");
+                            return;
+                        }
+                    }
+                }
+            }
 
+            foreach (DataRow dr in dtSysInfo.Rows)
+            {
+                if (dr["SYS_ID"].ToString() == cbSystem.SelectedValue.ToString())
+                {
+                    MessageBox.Show("系统不能重复添加！");
+                    return;
+                }
+            }
+            List<string> newRow = new List<string>()
+            {
+                dt.Rows[0]["SYS_ID"].ToString(),
+                dt.Rows[0]["SYS_NAME"].ToString(),
+                dt.Rows[0]["USER_NAME1"].ToString(),
+                dt.Rows[0]["USER_NAME2"].ToString(),
+                (bool)isMain ? "是" : "否",
+                days.ToString(),
+                tbSysRemark.Text,
+            };
+            dtSysInfo.Rows.Add(newRow.ToArray());
+            cbIsMain.IsChecked = false;
+            UpdateDays();
+        }
+
+        private void UpdateDays()
+        {
+            DataTable dtSysInfo = dgProSysInfo.DataContext as DataTable;
+            float days = 0;
+            foreach (DataRow dr in dtSysInfo.Rows)
+            {
+                days += float.Parse(dr["ESTIMATE_DAYS"].ToString());
+            }
+            tbEstimatedDays.Text = days.ToString();
+        }
+
+        private void btnModSys_Click(object sender, RoutedEventArgs e)
+        {
+            DataRowView drv = dgProSysInfo.SelectedItem as DataRowView;
+            if (drv == null)
+            {
+                MessageBox.Show("请选择修改的系统！");
+                return;
+            }
+            if (cbSystem.SelectedValue.ToString() != drv.Row["SYS_ID"].ToString())
+            {
+                MessageBox.Show("系统不能修改！");
+                return;
+            }
+            float days = 0;
+            if (!float.TryParse(tbSysEstimatedDays.Text, out days))
+            {
+                MessageBox.Show("请输入正确的预计工作量，单位天！");
+                tbSysEstimatedDays.Text = "0";
+                return;
+            }
+            DataTable dt = DataBaseManager.GetSystemInfo(cbSystem.SelectedValue.ToString());
+            if (dt == null)
+            {
+                MessageBox.Show("获取系统信息失败");
+                return;
+            }
+            DataTable dtSysInfo = dgProSysInfo.DataContext as DataTable;
+            if (dtSysInfo == null)
+            {
+                MessageBox.Show("获取系统信息失败");
+                return;
+            }
+            bool isMain = false;
+            if (GlobalFuns.LoginSysId != "")
+            {
+                if (GlobalFuns.LoginSysId == cbSystem.SelectedValue.ToString())
+                {
+                    isMain = true;
+                }
+            }
+            else
+            {
+                isMain = (bool)cbIsMain.IsChecked;
+                if (isMain)
+                {
+                    foreach (DataRow dr in dtSysInfo.Rows)
+                    {
+                        if (dr["IS_MAIN"].ToString() == "是" && 
+                            dr["SYS_ID"].ToString() != drv.Row["SYS_ID"].ToString())
+                        {
+                            MessageBox.Show("已经存在主导系统！");
+                            return;
+                        }
+                    }
+                }
+            }
+
+            foreach (DataRow dr in dtSysInfo.Rows)
+            {
+                if (dr["SYS_ID"].ToString() == cbSystem.SelectedValue.ToString() &&
+                    dr["SYS_ID"].ToString() != drv.Row["SYS_ID"].ToString())
+                {
+                    MessageBox.Show("系统不能重复添加！");
+                    return;
+                }
+            }
+            drv.Row["SYS_ID"] = dt.Rows[0]["SYS_ID"].ToString();
+            drv.Row["SYS_NAME"] = dt.Rows[0]["SYS_NAME"].ToString();
+            drv.Row["USER_NAME1"] = dt.Rows[0]["USER_NAME1"].ToString();
+            drv.Row["USER_NAME2"] = dt.Rows[0]["USER_NAME2"].ToString();
+            drv.Row["IS_MAIN"] = (bool)isMain ? "是" : "否";
+            drv.Row["ESTIMATE_DAYS"] = days.ToString();
+            drv.Row["REMARK"] = tbSysRemark.Text;
+            cbIsMain.IsChecked = false;
+            UpdateDays();
+        }
+
+        private void btnDelSys_Click(object sender, RoutedEventArgs e)
+        {
+            DataRowView drv = dgProSysInfo.SelectedItem as DataRowView;
+            if (drv == null)
+            {
+                MessageBox.Show("请选择删除的系统！");
+                return;
+            }
+            drv.Row.Table.Rows.Remove(drv.Row);
         }
 
     }
