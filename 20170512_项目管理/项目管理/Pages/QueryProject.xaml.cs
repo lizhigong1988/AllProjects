@@ -54,33 +54,31 @@ namespace 项目管理.Pages
             {
                 return;
             }
+            DataTable dtSystems = DataBaseManager.GetProSystemInfo(drv.Row["DEMAND_ID"].ToString());
+            dgProSysInfo.DataContext = dtSystems;
             DataTable dtTrades = DataBaseManager.GetTradesInfo(drv.Row["DEMAND_ID"].ToString(), GlobalFuns.LoginSysId);
             dtTrades.Columns.Add("DIFF");
             dgDevelopmentInfo.DataContext = dtTrades;
-            lbFiles.Items.Clear();
             curFilePath = "projects/" + drv.Row["DEMAND_DATE"].ToString() + "_" + drv.Row["DEMAND_NAME"].ToString();
-            if (!Directory.Exists(curFilePath))
-            {
-                Directory.CreateDirectory(curFilePath);
-            }
-            else
+
+            DataTable dtFile = new DataTable();
+            dtFile.Columns.Add("FILE_NAME");
+            dtFile.Columns.Add("IS_DOWNLOAD");
+            dtFile.Columns.Add("IS_RENEW");
+            if (Directory.Exists(curFilePath))
             {
                 string[] files = Directory.GetFiles(curFilePath);
                 foreach (string file in files)
                 {
                     string fileName = System.IO.Path.GetFileName(file);
-                    lbFiles.Items.Add(fileName);
+                    dtFile.Rows.Add(new string[] { fileName, "是", "是" });
                 }
             }
-            decimal work = 0;
-            foreach (DataRow dr in dtTrades.Rows)
-            { 
-                if(dr["WORKLOAD"].ToString() != "")
-                {
-                    work += decimal.Parse(dr["WORKLOAD"].ToString());
-                }
+            else
+            {
+                Directory.CreateDirectory(curFilePath);
             }
-            tbUsedWork.Text = string.Format("已用工作量{0}人日", work.ToString());
+            dgFiles.DataContext = dtFile;
         }
 
         private void btnOpenDir_Click(object sender, RoutedEventArgs e)
@@ -96,7 +94,7 @@ namespace 项目管理.Pages
             DataTable dtTrades = dgDevelopmentInfo.DataContext as DataTable;
             foreach (DataRow dr in dtTrades.Rows)
             {
-                List<string> difDemandNames = DataBaseManager.DiffTrade(dr["DEMAND_ID"].ToString(), dr["TRADE_CODE"].ToString());
+                List<string> difDemandNames = DataBaseManager.DiffTrade(dr["DEMAND_ID"].ToString(), dr["SYS_ID"].ToString(), dr["TRADE_CODE"].ToString());
                 if (difDemandNames == null)
                 {
                     MessageBox.Show("查询失败");
@@ -141,6 +139,11 @@ namespace 项目管理.Pages
                 return; //被点了取消   
             ExcelOperation.ExportSimpleExcel(dtTrades, outputFile);
             MessageBox.Show("导出完成！");
+        }
+
+        private void btnDownLoad_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
     }

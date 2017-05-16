@@ -27,10 +27,20 @@ namespace 项目管理.Pages
         {
             InitializeComponent();
 
-            List<string> listWorkers = DataBaseManager.GetHisWokers();
-            cbPerson.ItemsSource = listWorkers;
-
             tbYearMonth.Text = DateTime.Now.ToString("yyyyMM");
+
+            cbSystem.ItemsSource = DataBaseManager.GetAllSysDic();
+            cbSystem.SelectedValuePath = "Key";
+            cbSystem.DisplayMemberPath = "Value";
+            if (GlobalFuns.LoginSysId != "")
+            {
+                cbSystem.SelectedValue = GlobalFuns.LoginSysId;
+                cbSystem.IsEnabled = false;
+            }
+            else
+            {
+                cbSystem.SelectedIndex = 0;
+            }
         }
 
         private string curQueryWorker = "";
@@ -145,7 +155,7 @@ namespace 项目管理.Pages
                 MessageBox.Show("保存失败！");
                 return;
             }
-            if (!DataBaseManager.SaveAjustWorkDays(drv.Row["DEMAND_ID"].ToString(), curQueryWorker,dgWorkDaysInfo.DataContext as DataTable))
+            if (!DataBaseManager.SaveAdjustWorkDays(drv.Row["DEMAND_ID"].ToString(), curQueryWorker,dgWorkDaysInfo.DataContext as DataTable))
             {
                 MessageBox.Show("保存失败！");
                 return;
@@ -157,6 +167,17 @@ namespace 项目管理.Pages
         private void RefreshMonthDays()
         {
             tbTotalDays.Text = DataBaseManager.GetWorkerMonthDays(curQueryWorker, curQueryDate);
+        }
+
+        private void cbSystem_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string selectSys = cbSystem.SelectedValue.ToString();
+            List<string> listWorkers = DataBaseManager.GetHisWorkers(selectSys);
+            cbPerson.ItemsSource = listWorkers;
+            if (listWorkers.Count != 0)
+            {
+                cbPerson.SelectedIndex = 0;
+            }
         }
 
     }

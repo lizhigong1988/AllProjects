@@ -46,31 +46,6 @@ namespace 项目管理.DataBases
             return retList;
         }
 
-        internal static System.Collections.IEnumerable GetHisSystem()
-        {
-            List<string> retList = new List<string>();
-            string sql = "select distinct SYSTEM from T_PRO_INFO where SYSTEM != ''";
-            DataTable dt = dataBaseTool.SelectFunc(sql);
-            if (dt != null)
-            {
-                foreach (DataRow dr in dt.Rows)
-                {
-                    retList.Add(dr[0].ToString());
-                }
-            }
-            return retList;
-        }
-
-        internal static DataTable GetNewTradeTable()
-        {
-            DataTable dt = new DataTable();
-            foreach (var dic in T_TRADE_INFO.DIC_TABLE_COLUMS)
-            {
-                dt.Columns.Add(dic.Key);
-            }
-            return dt;
-        }
-
         internal static bool AddNewProject(string demandName, string depart, string date, string expectDate,
             string kinds, string stage, string state, string note, string testPersion, string businessPersion, 
             string remark, DataTable dtSysInfo)
@@ -104,7 +79,7 @@ namespace 项目管理.DataBases
             return dataBaseTool.ActionFunc(sql);
         }
 
-        internal static List<string> GetCurProNames(string sysId, bool showAll = false)
+        internal static List<string> GetCurProNames(string sysId, bool showAll)
         {
             List<string> retList = new List<string>();
             string sql = "select distinct DEMAND_NAME from T_PRO_INFO where 1=1";
@@ -142,37 +117,52 @@ namespace 项目管理.DataBases
             return dataBaseTool.SelectFunc(sql);
         }
 
-        internal static bool ModProject(string curProId, string demandName, string depart, string date, string expectDate,
-            string kinds, string stage, string state, string days, string note, string sys, string relationSys,
-            string firstPersion, string secondPersion, string testPersion, string businessPersion,
-            string remark, string finishDate, DataTable dtTrades)
+        internal static bool ModProject(string curProId, string sysId, string demandName, string depart, string date, string expectDate,
+            string kinds, string stage, string state, string finish, string note, string testPersion, string businessPersion,
+            string remark, DataTable dtSysInfo, DataTable dtTrades)
         {
             string sql = "";
             List<string> values = new List<string>()
             {
-                curProId, demandName, depart, date, expectDate, kinds, stage, state, days, note, 
-                sys, relationSys, firstPersion, secondPersion, testPersion, businessPersion, remark, 
-                finishDate, DateTime.Now.ToString("yyyyMMddHHmmss")
+                curProId, demandName, depart, date, expectDate, finish, kinds, stage, state, note, 
+                testPersion, businessPersion, remark, DateTime.Now.ToString("yyyyMMddHHmmss")
             };
             if (!dataBaseTool.ModInfo(T_PRO_INFO.TABLE_NAME, T_PRO_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
                 values, ref sql))
             {
                 return false;
             }
-            sql += string.Format("delete from T_TRADE_INFO where DEMAND_ID = '{0}';", curProId);
-            foreach (DataRow dr in dtTrades.Rows)
+            sql += string.Format("delete from T_PRO_SYS_INFO where DEMAND_ID = '{0}';", curProId);
+            foreach (DataRow dr in dtSysInfo.Rows)
             {
                 values = new List<string>() 
-                {
-                    curProId, dr["TRADE_CODE"].ToString(), dr["TRADE_NAME"].ToString(),
-                    dr["IS_NEW"].ToString(), dr["SERVER_NODE"].ToString(), dr["FILE_NAME"].ToString(),
-                    dr["TRADE_MENU"].ToString(), dr["WORKER"].ToString(), dr["WORKLOAD"].ToString(),
-                    dr["REMARK"].ToString()
-                };
-                if (!dataBaseTool.AddInfo(T_TRADE_INFO.TABLE_NAME, T_TRADE_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                    {
+                        curProId, dr["SYS_ID"].ToString(), dr["IS_MAIN"].ToString(), dr["ESTIMATE_DAYS"].ToString(),
+                        dr["REMARK"].ToString()
+                    };
+                if (!dataBaseTool.AddInfo(T_PRO_SYS_INFO.TABLE_NAME, T_PRO_SYS_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
                     values, ref sql))
                 {
                     return false;
+                }
+            }
+            if (sysId != "")
+            {
+                sql += string.Format("delete from T_TRADE_INFO where DEMAND_ID = '{0}' and SYS_ID = '{1}';", curProId, sysId);
+                foreach (DataRow dr in dtTrades.Rows)
+                {
+                    values = new List<string>() 
+                    {
+                        curProId, sysId, dr["TRADE_CODE"].ToString(), dr["TRADE_NAME"].ToString(),
+                        dr["IS_NEW"].ToString(), dr["FILE_NAME"].ToString(),
+                        dr["WORKER"].ToString(), dr["WORKLOAD"].ToString(),
+                        dr["REMARK"].ToString()
+                    };
+                    if (!dataBaseTool.AddInfo(T_TRADE_INFO.TABLE_NAME, T_TRADE_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                        values, ref sql))
+                    {
+                        return false;
+                    }
                 }
             }
             return dataBaseTool.ActionFunc(sql);
@@ -203,12 +193,12 @@ namespace 项目管理.DataBases
             return dataBaseTool.SelectFunc(sql);
         }
 
-        internal static List<string> DiffTrade(string proID, string tradeNo)
+        internal static List<string> DiffTrade(string proID, string sysId, string tradeNo)
         {
             List<string> difDemandNames = new List<string>();
             string sql = "select DISTINCT DEMAND_ID from T_TRADE_INFO where DEMAND_ID in ";
             sql += string.Format("(select DEMAND_ID from T_PRO_INFO where DEMAND_ID != '{0}' and PRO_STATE != '完成')", proID);
-            sql += string.Format(" and TRADE_CODE = '{0}'", tradeNo);
+            sql += string.Format(" and TRADE_CODE = '{0}' and SYS_ID = '{1}'", tradeNo, sysId);
             sql = "select DEMAND_NAME from T_PRO_INFO where DEMAND_ID in (" + sql + ")";
             DataTable dt = dataBaseTool.SelectFunc(sql);
             if (dt == null)
@@ -222,10 +212,11 @@ namespace 项目管理.DataBases
             return difDemandNames;
         }
 
-        internal static List<string> GetHisWokers()
+        internal static List<string> GetHisWorkers(string sysId)
         {
             List<string> retList = new List<string>();
-            string sql = "select distinct WORKER from T_TRADE_INFO where WORKER != ''";
+            string sql = "select distinct WORKER from T_TRADE_INFO where WORKER != '' and SYS_ID = '{0}'";
+            sql = string.Format(sql, sysId);
             DataTable dt = dataBaseTool.SelectFunc(sql);
             if (dt != null)
             {
@@ -255,7 +246,7 @@ namespace 项目管理.DataBases
             return dataBaseTool.SelectFunc(sql);
         }
 
-        internal static bool SaveAjustWorkDays(string demandId, string worker, DataTable dataTable)
+        internal static bool SaveAdjustWorkDays(string demandId, string worker, DataTable dataTable)
         {
             string sql = string.Format("delete from T_DAYS_INFO where DEMAND_ID = '{0}' and WORKER = '{1}';", demandId, worker);
             foreach (DataRow dr in dataTable.Rows)
@@ -311,6 +302,36 @@ namespace 项目管理.DataBases
                 values, ref sql))
             {
                 return false;
+            }
+            string selectSql = string.Format("select count(*) from T_USER_INFO where USER_NAME = '{0}'", manage1);
+            DataTable dt = dataBaseTool.SelectFunc(selectSql);
+            if (dt == null)
+            {
+                return false;
+            }
+            if (dt.Rows[0][0].ToString() == "0")
+            {
+                values = new List<string>() { manage1, "111111", guid, "焦作中旅银行股份有限公司", "项目经理", "" };
+                if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                    values, ref sql))
+                {
+                    return false;
+                }
+            }
+            selectSql = string.Format("select count(*) from T_USER_INFO where USER_NAME = '{0}'", manage2);
+            dt = dataBaseTool.SelectFunc(selectSql);
+            if (dt == null)
+            {
+                return false;
+            }
+            if (dt.Rows[0][0].ToString() == "0")
+            {
+                values = new List<string>() { manage1, "111111", guid, "焦作中旅银行股份有限公司", "项目经理", "" };
+                if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                    values, ref sql))
+                {
+                    return false;
+                }
             }
             return dataBaseTool.ActionFunc(sql);
         }
@@ -408,9 +429,10 @@ namespace 项目管理.DataBases
 
         internal static DataTable GetProSystemInfo(string curProId)
         {
-            string sql = "select t1.*, t2.*, SUM(t3.WORKLOAD) from T_PRO_SYS_INFO t1, T_SYS_INFO t2, T_TRADE_INFO t3 ";
-            sql += "where t1.SYS_ID = t2.SYS_ID and t1.DEMAND_ID = t3.DEMAND_ID and t1.SYS_ID = t3.SYS_ID";
-            sql += string.Format("and t1.DEMAND_ID = '{0}' group by(t3.DEMAND_ID, t3.SYS_ID)", curProId);
+            string sql = "select t1.*, t2.*, case when sum(t3.WORKLOAD) is null then 0 else sum(t3.WORKLOAD) end as USED_DAYS from T_PRO_SYS_INFO t1, T_SYS_INFO t2 ";
+            sql += "LEFT JOIN T_TRADE_INFO t3 on t1.DEMAND_ID = t3.DEMAND_ID and t1.SYS_ID = t3.SYS_ID ";
+            sql += "where t1.SYS_ID = t2.SYS_ID ";
+            sql += string.Format("and t1.DEMAND_ID = '{0}' group by t1.DEMAND_ID, t1.SYS_ID", curProId);
             return dataBaseTool.SelectFunc(sql);
         }
     }

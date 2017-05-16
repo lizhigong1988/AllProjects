@@ -25,7 +25,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="提出日期" />
-                    <TextBox Name="tbDemandDate" />
+                    <TextBox Name="tbDemandDate" IsEnabled="False" />
                     <TextBlock Text="期望上线时间" />
                     <TextBox Name="tbExpectDate" />
                     <TextBlock Text="项目类型" />
@@ -59,12 +59,14 @@
         </GroupBox>
         <GroupBox Header="关联系统信息">
             <StackPanel>
-                <DataGrid Name="dgProSysInfo" Height="250">
+                <DataGrid Name="dgProSysInfo"
+                          Height="250"
+                          IsReadOnly="True">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding TRADE_CODE}" Header="系统名称" />
-                        <DataGridTextColumn Binding="{Binding MANAGER1}" Header="第一负责人" />
-                        <DataGridTextColumn Binding="{Binding MANAGER2}" Header="第二负责人" />
-                        <DataGridTextColumn Binding="{Binding IS_MAIM}" Header="是否主导" />
+                        <DataGridTextColumn Binding="{Binding SYS_NAME}" Header="系统名称" />
+                        <DataGridTextColumn Binding="{Binding USER_NAME1}" Header="第一负责人" />
+                        <DataGridTextColumn Binding="{Binding USER_NAME2}" Header="第二负责人" />
+                        <DataGridTextColumn Binding="{Binding IS_MAIN}" Header="是否主导" />
                         <DataGridTextColumn Binding="{Binding ESTIMATE_DAYS}" Header="预计工作量" />
                         <DataGridTextColumn Binding="{Binding USED_DAYS}" Header="已用工作量" />
                         <DataGridTextColumn Binding="{Binding REMARK}" Header="备注" />
@@ -81,9 +83,18 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="备  注" />
                     <TextBox Name="tbSysRemark" Width="414" />
-                    <Button Content="新增" />
-                    <Button Content="修改" />
-                    <Button Content="删除" />
+                    <CheckBox Name="cbIsMain"
+                              Margin="5"
+                              Content="主导系统" />
+                    <Button Name="btnAddNewSys"
+                            Click="btnAddNewSys_Click"
+                            Content="新增" />
+                    <Button Name="btnModSys"
+                            Click="btnModSys_Click"
+                            Content="修改" />
+                    <Button Name="btnDelSys"
+                            Click="btnDelSys_Click"
+                            Content="删除" />
                 </StackPanel>
             </StackPanel>
         </GroupBox>
@@ -101,11 +112,7 @@
 
                     </DataGrid.Columns>
                 </DataGrid>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="预计工作量（天）" />
-                    <TextBox Name="tbCurEstimatedDays" IsReadOnly="True" />
-                    <TextBlock Text="已用工作量（天）" />
-                    <TextBox Name="tbUsedDays" IsReadOnly="True" />
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                     <Button Name="btnAddTrade"
                             Click="btnAddTrade_Click"
                             Content="新增" />
@@ -117,11 +124,20 @@
         </GroupBox>
         <GroupBox Header="相关文件">
             <StackPanel>
-                <ListBox Name="lbFiles" Height="100" />
+                <DataGrid Name="dgFiles" Height="150">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding FILE_NAME}" Header="文件名" />
+                        <DataGridTextColumn Binding="{Binding IS_DOWNLOAD}" Header="是否已下载" />
+                        <DataGridTextColumn Binding="{Binding IS_RENEW}" Header="是否更新" />
+                    </DataGrid.Columns>
+                </DataGrid>
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                     <Button Name="btnOpenDir"
                             Click="btnOpenDir_Click"
                             Content="打开目录" />
+                    <Button Name="btnDownLoad"
+                            Click="btnDownLoad_Click"
+                            Content="下载/更新" />
                     <Button Name="btnAddFile"
                             Click="btnAddFile_Click"
                             Content="新增" />

@@ -14,7 +14,7 @@
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="汇总系统" />
-                    <ComboBox Name="cbSystem" />
+                    <ComboBox Name="cbSystem" SelectionChanged="cbSystem_SelectionChanged" />
                     <TextBlock Text="汇总人员" />
                     <ComboBox Name="cbPerson" />
                     <TextBlock Text="汇总年月" />

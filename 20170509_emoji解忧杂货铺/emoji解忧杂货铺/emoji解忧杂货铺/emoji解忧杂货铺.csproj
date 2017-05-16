@@ -57,6 +57,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CommonVars.cs" />
     <Compile Include="SecondFloor.xaml.cs">
       <DependentUpon>SecondFloor.xaml</DependentUpon>
     </Compile>
