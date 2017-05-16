@@ -2,17 +2,15 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="emoji解忧杂货铺"
-        Width="820"
-        Height="510"
-        WindowStartupLocation="CenterScreen">
-    <Viewbox Stretch="Fill">
-        <Canvas Width="800" Height="450">
+        WindowStartupLocation="CenterScreen" Width="800" Height="510">
+    <Viewbox Stretch="Uniform" >
+        <Canvas Width="800" Height="480">
             <Canvas.Background>
                 <ImageBrush ImageSource="Images/SecondFloorBackground.png" />
             </Canvas.Background>
             <Border Name="bdBack"
                     Canvas.Left="0"
-                    Canvas.Top="359"
+                    Canvas.Top="377"
                     Width="100"
                     Height="91"
                     MouseDown="bdBack_MouseDown">
@@ -22,7 +20,7 @@
             </Border>
             <Border Name="bd1_1"
                     Canvas.Left="190"
-                    Canvas.Top="30"
+                    Canvas.Top="45"
                     Width="80"
                     Height="146"
                     MouseDown="bd_MouseDown"
@@ -34,7 +32,7 @@
             </Border>
             <Border Name="bd1_2"
                     Canvas.Left="360"
-                    Canvas.Top="30"
+                    Canvas.Top="45"
                     Width="80"
                     Height="146"
                     MouseDown="bd_MouseDown"
@@ -46,7 +44,7 @@
             </Border>
             <Border Name="bd1_3"
                     Canvas.Left="530"
-                    Canvas.Top="30"
+                    Canvas.Top="45"
                     Width="80"
                     Height="146"
                     MouseDown="bd_MouseDown"
@@ -58,7 +56,7 @@
             </Border>
             <Border Name="bd2_1"
                     Canvas.Left="190"
-                    Canvas.Top="220"
+                    Canvas.Top="244"
                     Width="80"
                     Height="146"
                     MouseDown="bd_MouseDown"
@@ -70,7 +68,7 @@
             </Border>
             <Border Name="bd2_2"
                     Canvas.Left="360"
-                    Canvas.Top="220"
+                    Canvas.Top="244"
                     Width="80"
                     Height="146"
                     MouseDown="bd_MouseDown"
@@ -82,7 +80,7 @@
             </Border>
             <Border Name="bd2_3"
                     Canvas.Left="530"
-                    Canvas.Top="220"
+                    Canvas.Top="244"
                     Width="80"
                     Height="146"
                     MouseDown="bd_MouseDown"
