@@ -65,8 +65,19 @@ namespace emoji解忧杂货铺
         }
 
 
+        public static RoutedEvent ImageClickEvent =
+            EventManager.RegisterRoutedEvent("ImageClick",
+            RoutingStrategy.Direct, typeof(RoutedEventHandler), typeof(FirstFloor));
+
+        public event RoutedEventHandler ImageClick
+        {
+            add { this.AddHandler(ImageClickEvent, value); }
+            remove { this.RemoveHandler(ImageClickEvent, value); }
+        }
+
         private void bd_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            this.RaiseEvent(new RoutedEventArgs { RoutedEvent = ImageClickEvent, Source = (sender as Border).Tag });
         }
     }
 }

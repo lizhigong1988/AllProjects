@@ -5,22 +5,23 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" >
     <Viewbox Stretch="Uniform" >
-        <Canvas Width="800" Height="480">
+        <Canvas Width="800" Height="460">
             <Canvas.Background>
                 <ImageBrush ImageSource="Images/FirstFloorBackground.png" />
             </Canvas.Background>
             <Border Canvas.Top="19"
                     Width="800"
-                    Height="187">
+                    Height="161">
                 <Border.Background>
                     <ImageBrush ImageSource="Images/FirstFloorCoverage1.png" />
                 </Border.Background>
             </Border>
             <Border Name="bd1"
                     Canvas.Left="34"
-                    Canvas.Top="143"
+                    Canvas.Top="140"
+                    Tag="感情"
                     Width="169"
-                    Height="263"
+                    Height="250"
                     MouseDown="bd_MouseDown"
                     MouseEnter="bd1_MouseEnter"
                     MouseLeave="bd1_MouseLeave">
@@ -30,9 +31,10 @@
             </Border>
             <Border Name="bd2"
                     Canvas.Left="224"
-                    Canvas.Top="143"
+                    Canvas.Top="140"
+                    Tag="工作"
                     Width="169"
-                    Height="263"
+                    Height="250"
                     MouseDown="bd_MouseDown"
                     MouseEnter="bd2_MouseEnter"
                     MouseLeave="bd2_MouseLeave">
@@ -42,9 +44,10 @@
             </Border>
             <Border Name="bd3"
                     Canvas.Left="413"
-                    Canvas.Top="143"
+                    Canvas.Top="140"
+                    Tag="学习"
                     Width="169"
-                    Height="263"
+                    Height="250"
                     MouseDown="bd_MouseDown"
                     MouseEnter="bd3_MouseEnter"
                     MouseLeave="bd3_MouseLeave">
@@ -54,9 +57,10 @@
             </Border>
             <Border Name="bd4"
                     Canvas.Left="602"
-                    Canvas.Top="143"
+                    Canvas.Top="140"
                     Width="169"
-                    Height="263"
+                    Tag="生活"
+                    Height="250"
                     MouseDown="bd_MouseDown"
                     MouseEnter="bd4_MouseEnter"
                     MouseLeave="bd4_MouseLeave">
@@ -65,7 +69,7 @@
                 </Border.Background>
             </Border>
             <Border Canvas.Left="0"
-                    Canvas.Top="373"
+                    Canvas.Top="368"
                     Width="800"
                     Height="45">
                 <Border.Background>

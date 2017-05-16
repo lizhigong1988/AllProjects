@@ -2,7 +2,16 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="emoji解忧杂货铺"
+        ContentRendered="Window_ContentRendered"
         xmlns:my="clr-namespace:emoji解忧杂货铺"
-        WindowStartupLocation="CenterScreen" Width="800" Height="508">
-    <my:FirstFloor/>
+        WindowStartupLocation="CenterScreen" Width="800" Height="488">
+    <Grid>  
+        <my:FirstFloor x:Name="firstFloor" ImageClick="firstFloor_ImageClick" Visibility="Collapsed"/>
+        <my:SecondFloor x:Name="secondFloor" Visibility="Collapsed" ImageClick="secondFloor_ImageClick"/>
+        <MediaElement Name="mediaElement"
+                      LoadedBehavior="Manual"
+                      MediaEnded="mediaElement_MediaEnded"
+                      Volume="0.5" MouseLeftButtonDown="mediaElement_MouseLeftButtonDown"/>
+    </Grid>
+
 </Window>
