@@ -13,8 +13,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data;
 using 项目管理.Tools;
-using 项目管理.DataBases;
 using System.IO;
+using 项目管理.Connect;
 
 namespace 项目管理.Pages
 {
@@ -41,7 +41,7 @@ namespace 项目管理.Pages
 
         private void Refresh()
         {
-            cbDemandDepart.ItemsSource = DataBaseManager.GetHisDeparts();
+            cbDemandDepart.ItemsSource = CommunicationHelper.GetHisDeparts();
 
             cbProKinds.ItemsSource = new List<string>() { "新项目", "功能优化" };
 
@@ -54,12 +54,12 @@ namespace 项目管理.Pages
                 "正常", "延迟" , "关闭", "暂停", "完成"
             };
 
-            cbSystem.ItemsSource = DataBaseManager.GetAllSysDic();
+            cbSystem.ItemsSource = CommunicationHelper.GetAllSysDic();
             cbSystem.SelectedValuePath = "Key";
             cbSystem.DisplayMemberPath = "Value";
             cbSystem.SelectedIndex = 0;
 
-            List<string> proNames = DataBaseManager.GetCurProNames(GlobalFuns.LoginSysId, false);
+            List<string> proNames = CommunicationHelper.GetCurProNames(GlobalFuns.LoginSysId, false);
             cbDemandName.ItemsSource = proNames;
             if (proNames.Count == 0)
             {
@@ -135,7 +135,7 @@ namespace 项目管理.Pages
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (!DataBaseManager.ModProject(curProId, GlobalFuns.LoginSysId, cbDemandName.Text, cbDemandDepart.Text, tbDemandDate.Text,
+            if (!CommunicationHelper.ModProject(curProId, GlobalFuns.LoginSysId, cbDemandName.Text, cbDemandDepart.Text, tbDemandDate.Text,
                 tbExpectDate.Text, cbProKinds.Text, cbProStage.Text, cbProState.Text, tbFinishDate.Text,
                 tbProgressNote.Text, tbTestPerson.Text, tbBusinessPerson.Text, tbRemark.Text,
                 dgProSysInfo.DataContext as DataTable, dgDevelopmentInfo.DataContext as DataTable))
@@ -152,7 +152,7 @@ namespace 项目管理.Pages
         private void cbDemandName_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string select = cbDemandName.SelectedItem as string;
-            DataTable dt = DataBaseManager.GetProInfoFromName(select);
+            DataTable dt = CommunicationHelper.GetProInfoFromName(select);
             if (dt == null)
             {
                 MessageBox.Show("查找项目信息失败！");
@@ -173,9 +173,9 @@ namespace 项目管理.Pages
             tbFinishDate.Text = dr["FINISH_DATE"].ToString();
             tbLastTime.Text = dr["LAST_MOD_TIME"].ToString();
 
-            DataTable dtSystems = DataBaseManager.GetProSystemInfo(curProId);
+            DataTable dtSystems = CommunicationHelper.GetProSystemInfo(curProId);
             dgProSysInfo.DataContext = dtSystems;
-            DataTable dtTrades = DataBaseManager.GetTradesInfo(curProId, GlobalFuns.LoginSysId);
+            DataTable dtTrades = CommunicationHelper.GetTradesInfo(curProId, GlobalFuns.LoginSysId);
             dgDevelopmentInfo.DataContext = dtTrades;
             curFilePath = "projects/" + tbDemandDate.Text + "_" + select;
             DataTable dtFile = new DataTable();
@@ -200,7 +200,7 @@ namespace 项目管理.Pages
 
         private void btnShowAll_Click(object sender, RoutedEventArgs e)
         {
-            List<string> proNames = DataBaseManager.GetCurProNames(GlobalFuns.LoginSysId, true);
+            List<string> proNames = CommunicationHelper.GetCurProNames(GlobalFuns.LoginSysId, true);
             cbDemandName.ItemsSource = proNames;
             if (proNames.Count == 0)
             {
@@ -227,7 +227,7 @@ namespace 项目管理.Pages
                 tbSysEstimatedDays.Text = "0";
                 return;
             }
-            DataTable dt = DataBaseManager.GetSystemInfo(cbSystem.SelectedValue.ToString());
+            DataTable dt = CommunicationHelper.GetSystemInfo(cbSystem.SelectedValue.ToString());
             if (dt == null)
             {
                 MessageBox.Show("获取系统信息失败");
@@ -317,7 +317,7 @@ namespace 项目管理.Pages
                 tbSysEstimatedDays.Text = "0";
                 return;
             }
-            DataTable dt = DataBaseManager.GetSystemInfo(cbSystem.SelectedValue.ToString());
+            DataTable dt = CommunicationHelper.GetSystemInfo(cbSystem.SelectedValue.ToString());
             if (dt == null)
             {
                 MessageBox.Show("获取系统信息失败");

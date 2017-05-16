@@ -11,9 +11,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using 项目管理.DataBases;
 using System.Data;
 using 项目管理.Tools;
+using 项目管理.Connect;
 
 namespace 项目管理.Pages
 {
@@ -26,7 +26,7 @@ namespace 项目管理.Pages
         {
             InitializeComponent();
 
-            Dictionary<string,string> dicSysInfo = DataBaseManager.GetAllSysDic();
+            Dictionary<string,string> dicSysInfo = CommunicationHelper.GetAllSysDic();
             dicSysInfo.Add("", "无");
             cbSystem.ItemsSource = dicSysInfo;
             cbSystem.SelectedValuePath = "Key";
@@ -61,7 +61,7 @@ namespace 项目管理.Pages
                 MessageBox.Show("请输入人员名称");
                 return;
             }
-            if (!DataBaseManager.AddNewUser(tbUserName.Text.Trim(), cbSystem.SelectedValue.ToString(),
+            if (!CommunicationHelper.AddNewUser(tbUserName.Text.Trim(), cbSystem.SelectedValue.ToString(),
                 cbRole.Text.Trim(), tbUserCompany.Text.Trim(), tbRemark.Text.Trim()))
             {
                 MessageBox.Show("添加系统失败！");
@@ -72,7 +72,7 @@ namespace 项目管理.Pages
 
         private void RefreshTable()
         {
-            DataTable dt = DataBaseManager.GetUserInfo();
+            DataTable dt = CommunicationHelper.GetUserInfo();
             if (dt == null)
             {
                 MessageBox.Show("查询人员信息失败");
@@ -140,7 +140,7 @@ namespace 项目管理.Pages
                 MessageBox.Show("用户名不能修改");
                 return;
             }
-            if (!DataBaseManager.ModUserInfo(tbUserName.Text.Trim(), drv.Row["USER_PSW"].ToString(), cbSystem.SelectedValue.ToString(),
+            if (!CommunicationHelper.ModUserInfo(tbUserName.Text.Trim(), drv.Row["USER_PSW"].ToString(), cbSystem.SelectedValue.ToString(),
                 cbRole.Text.Trim(), tbUserCompany.Text.Trim(), tbRemark.Text.Trim()))
             {
                 MessageBox.Show("修改人员信息失败！");

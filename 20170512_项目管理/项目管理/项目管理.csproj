@@ -65,14 +65,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DataBases\DataBaseManager.cs" />
-    <Compile Include="DataBases\DataBaseTool_SQLite3.cs" />
-    <Compile Include="DataBases\T_PRO_INFO.cs" />
-    <Compile Include="DataBases\T_TRADE_INFO.cs" />
-    <Compile Include="DataBases\T_DAYS_INFO.cs" />
-    <Compile Include="DataBases\T_USER_INFO.cs" />
-    <Compile Include="DataBases\T_PRO_SYS_INFO.cs" />
-    <Compile Include="DataBases\T_SYS_INFO.cs" />
+    <Compile Include="Connects\CommunicationHelper.cs" />
+    <Compile Include="Connects\Connection.cs" />
     <Compile Include="ExcelOperation2010.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
@@ -175,8 +169,12 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Connects\" />
+    <ProjectReference Include="..\CommonLib\CommonLib.csproj">
+      <Project>{1E55588C-86A0-4AB8-B14A-6E95855C86EF}</Project>
+      <Name>CommonLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

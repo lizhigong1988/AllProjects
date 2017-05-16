@@ -13,8 +13,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data;
 using 项目管理.Tools;
-using 项目管理.DataBases;
 using System.IO;
+using 项目管理.Connect;
 
 namespace 项目管理.Pages
 {
@@ -38,7 +38,7 @@ namespace 项目管理.Pages
 
         private void Refresh()
         {
-            cbDemandDepart.ItemsSource = DataBaseManager.GetHisDeparts();
+            cbDemandDepart.ItemsSource = CommunicationHelper.GetHisDeparts();
             tbDemandDate.Text = DateTime.Now.ToString("yyyyMMdd");
 
             cbProKinds.ItemsSource = new List<string>() { "新项目", "功能优化" };
@@ -54,7 +54,7 @@ namespace 项目管理.Pages
             };
             cbProState.SelectedIndex = 0;
 
-            cbSystem.ItemsSource = DataBaseManager.GetAllSysDic();
+            cbSystem.ItemsSource = CommunicationHelper.GetAllSysDic();
             cbSystem.SelectedValuePath = "Key";
             cbSystem.DisplayMemberPath = "Value";
             cbSystem.SelectedIndex = 0;
@@ -82,7 +82,7 @@ namespace 项目管理.Pages
                 MessageBox.Show("请添加一个主系统！");
                 return;
             }
-            if (!DataBaseManager.AddNewProject(tbDemandName.Text, cbDemandDepart.Text, tbDemandDate.Text,
+            if (!CommunicationHelper.AddNewProject(tbDemandName.Text, cbDemandDepart.Text, tbDemandDate.Text,
                 tbExpectDate.Text, cbProKinds.Text, cbProStage.Text, cbProState.Text,
                 tbProgressNote.Text, tbTestPerson.Text, tbBusinessPerson.Text, tbRemark.Text, dt))
             {
@@ -101,7 +101,7 @@ namespace 项目管理.Pages
                 tbSysEstimatedDays.Text = "0";
                 return;
             }
-            DataTable dt = DataBaseManager.GetSystemInfo(cbSystem.SelectedValue.ToString());
+            DataTable dt = CommunicationHelper.GetSystemInfo(cbSystem.SelectedValue.ToString());
             if (dt == null)
             {
                 MessageBox.Show("获取系统信息失败");
@@ -198,7 +198,7 @@ namespace 项目管理.Pages
                 tbSysEstimatedDays.Text = "0";
                 return;
             }
-            DataTable dt = DataBaseManager.GetSystemInfo(cbSystem.SelectedValue.ToString());
+            DataTable dt = CommunicationHelper.GetSystemInfo(cbSystem.SelectedValue.ToString());
             if (dt == null)
             {
                 MessageBox.Show("获取系统信息失败");

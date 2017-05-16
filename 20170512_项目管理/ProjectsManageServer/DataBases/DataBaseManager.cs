@@ -326,7 +326,7 @@ namespace ProjectsManageServer.DataBases
             }
             if (dt.Rows[0][0].ToString() == "0")
             {
-                values = new List<string>() { manage1, "111111", guid, "焦作中旅银行股份有限公司", "项目经理", "" };
+                values = new List<string>() { manage2, "111111", guid, "焦作中旅银行股份有限公司", "项目经理", "" };
                 if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
                     values, ref sql))
                 {

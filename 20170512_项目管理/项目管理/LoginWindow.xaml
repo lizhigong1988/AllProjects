@@ -9,7 +9,11 @@
         <ResourceDictionary Source="/项目管理;component/StyleSource/CommonSource.xaml" />
     </Window.Resources>
     <Canvas>
-        <StackPanel Canvas.Left="82" Canvas.Top="144">
+        <StackPanel Canvas.Left="82" Canvas.Top="103">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="连接地址" />
+                <TextBox Name="tbIPAddr" />
+            </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="用户姓名" />
                 <TextBox Name="tbUserName" />

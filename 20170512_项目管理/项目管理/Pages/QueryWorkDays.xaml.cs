@@ -13,8 +13,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data;
 using 项目管理.Tools;
-using 项目管理.DataBases;
 using System.IO;
+using 项目管理.Connect;
 
 namespace 项目管理.Pages
 {
@@ -29,7 +29,7 @@ namespace 项目管理.Pages
 
             tbYearMonth.Text = DateTime.Now.ToString("yyyyMM");
 
-            cbSystem.ItemsSource = DataBaseManager.GetAllSysDic();
+            cbSystem.ItemsSource = CommunicationHelper.GetAllSysDic();
             cbSystem.SelectedValuePath = "Key";
             cbSystem.DisplayMemberPath = "Value";
             if (GlobalFuns.LoginSysId != "")
@@ -57,7 +57,7 @@ namespace 项目管理.Pages
             }
             curQueryWorker = cbPerson.Text;
             curQueryDate = tbYearMonth.Text;
-            DataTable dt = DataBaseManager.QueryProDaysInfo(cbPerson.Text, tbYearMonth.Text);
+            DataTable dt = CommunicationHelper.QueryProDaysInfo(cbPerson.Text, tbYearMonth.Text);
             dgProInfo.DataContext = dt;
             RefreshMonthDays();
         }
@@ -69,7 +69,7 @@ namespace 项目管理.Pages
             {
                 return;
             }
-            DataTable dtWorkDays = DataBaseManager.GetWorkDays(curQueryWorker, drv.Row["DEMAND_ID"].ToString());
+            DataTable dtWorkDays = CommunicationHelper.GetWorkDays(curQueryWorker, drv.Row["DEMAND_ID"].ToString());
             if (dtWorkDays == null)
             {
                 return;
@@ -155,7 +155,7 @@ namespace 项目管理.Pages
                 MessageBox.Show("保存失败！");
                 return;
             }
-            if (!DataBaseManager.SaveAdjustWorkDays(drv.Row["DEMAND_ID"].ToString(), curQueryWorker,dgWorkDaysInfo.DataContext as DataTable))
+            if (!CommunicationHelper.SaveAdjustWorkDays(drv.Row["DEMAND_ID"].ToString(), curQueryWorker,dgWorkDaysInfo.DataContext as DataTable))
             {
                 MessageBox.Show("保存失败！");
                 return;
@@ -166,13 +166,13 @@ namespace 项目管理.Pages
 
         private void RefreshMonthDays()
         {
-            tbTotalDays.Text = DataBaseManager.GetWorkerMonthDays(curQueryWorker, curQueryDate);
+            tbTotalDays.Text = CommunicationHelper.GetWorkerMonthDays(curQueryWorker, curQueryDate);
         }
 
         private void cbSystem_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string selectSys = cbSystem.SelectedValue.ToString();
-            List<string> listWorkers = DataBaseManager.GetHisWorkers(selectSys);
+            List<string> listWorkers = CommunicationHelper.GetHisWorkers(selectSys);
             cbPerson.ItemsSource = listWorkers;
             if (listWorkers.Count != 0)
             {

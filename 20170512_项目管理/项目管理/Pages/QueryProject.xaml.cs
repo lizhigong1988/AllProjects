@@ -13,8 +13,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data;
 using 项目管理.Tools;
-using 项目管理.DataBases;
 using System.IO;
+using 项目管理.Connect;
 
 namespace 项目管理.Pages
 {
@@ -42,7 +42,7 @@ namespace 项目管理.Pages
 
         private void btnQuery_Click(object sender, RoutedEventArgs e)
         {
-            DataTable dt = DataBaseManager.QueryProInfo(cbProStage.Text, cbProState.Text, tbProDate.Text);
+            DataTable dt = CommunicationHelper.QueryProInfo(cbProStage.Text, cbProState.Text, tbProDate.Text);
             dgProInfo.DataContext = dt;
         }
 
@@ -54,9 +54,9 @@ namespace 项目管理.Pages
             {
                 return;
             }
-            DataTable dtSystems = DataBaseManager.GetProSystemInfo(drv.Row["DEMAND_ID"].ToString());
+            DataTable dtSystems = CommunicationHelper.GetProSystemInfo(drv.Row["DEMAND_ID"].ToString());
             dgProSysInfo.DataContext = dtSystems;
-            DataTable dtTrades = DataBaseManager.GetTradesInfo(drv.Row["DEMAND_ID"].ToString(), GlobalFuns.LoginSysId);
+            DataTable dtTrades = CommunicationHelper.GetTradesInfo(drv.Row["DEMAND_ID"].ToString(), GlobalFuns.LoginSysId);
             dtTrades.Columns.Add("DIFF");
             dgDevelopmentInfo.DataContext = dtTrades;
             curFilePath = "projects/" + drv.Row["DEMAND_DATE"].ToString() + "_" + drv.Row["DEMAND_NAME"].ToString();
@@ -94,7 +94,7 @@ namespace 项目管理.Pages
             DataTable dtTrades = dgDevelopmentInfo.DataContext as DataTable;
             foreach (DataRow dr in dtTrades.Rows)
             {
-                List<string> difDemandNames = DataBaseManager.DiffTrade(dr["DEMAND_ID"].ToString(), dr["SYS_ID"].ToString(), dr["TRADE_CODE"].ToString());
+                List<string> difDemandNames = CommunicationHelper.DiffTrade(dr["DEMAND_ID"].ToString(), dr["SYS_ID"].ToString(), dr["TRADE_CODE"].ToString());
                 if (difDemandNames == null)
                 {
                     MessageBox.Show("查询失败");

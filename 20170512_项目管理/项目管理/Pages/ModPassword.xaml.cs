@@ -11,9 +11,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using 项目管理.DataBases;
 using 项目管理.Tools;
 using System.Data;
+using 项目管理.Connect;
 
 namespace 项目管理.Pages
 {
@@ -35,7 +35,7 @@ namespace 项目管理.Pages
                 MessageBox.Show("两次密码输入不一致！");
                 return;
             }
-            DataTable dt = DataBaseManager.GetUserInfo(GlobalFuns.LoginUser);
+            DataTable dt = CommunicationHelper.GetUserInfo(GlobalFuns.LoginUser);
             if (dt == null)
             {
                 MessageBox.Show("数据查询错误");
@@ -52,7 +52,7 @@ namespace 项目管理.Pages
                 MessageBox.Show("密码不正确");
                 return;
             }
-            if (!DataBaseManager.ModPassword(GlobalFuns.LoginUser, pbNewPsw.Password))
+            if (!CommunicationHelper.ModPassword(GlobalFuns.LoginUser, pbNewPsw.Password))
             {
                 MessageBox.Show("修改密码失败！");
                 return;

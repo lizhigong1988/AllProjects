@@ -11,8 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using 项目管理.DataBases;
 using System.Data;
+using 项目管理.Connect;
 
 namespace 项目管理.Pages
 {
@@ -29,7 +29,7 @@ namespace 项目管理.Pages
 
         private void RefreshTable()
         {
-            DataTable dt = DataBaseManager.GetSystemInfo();
+            DataTable dt = CommunicationHelper.GetSystemInfo();
             if (dt == null)
             {
                 MessageBox.Show("查询系统信息失败");
@@ -57,7 +57,7 @@ namespace 项目管理.Pages
                 MessageBox.Show("请输入系统名称");
                 return;
             }
-            if (!DataBaseManager.AddNewSystem(tbSysName.Text.Trim(), tbSysManager1.Text.Trim(),
+            if (!CommunicationHelper.AddNewSystem(tbSysName.Text.Trim(), tbSysManager1.Text.Trim(),
                 tbSysManager2.Text.Trim(), tbSysRemark.Text.Trim()))
             {
                 MessageBox.Show("添加系统失败！");
@@ -80,7 +80,7 @@ namespace 项目管理.Pages
                 MessageBox.Show("请输入系统名称");
                 return;
             }
-            if (!DataBaseManager.ModSystem(drv.Row[0].ToString(), tbSysName.Text.Trim(), tbSysManager1.Text.Trim(),
+            if (!CommunicationHelper.ModSystem(drv.Row[0].ToString(), tbSysName.Text.Trim(), tbSysManager1.Text.Trim(),
                 tbSysManager2.Text.Trim(), tbSysRemark.Text.Trim()))
             {
                 MessageBox.Show("修改系统失败！");
@@ -101,7 +101,7 @@ namespace 项目管理.Pages
             {
                 return;
             }
-            if (!DataBaseManager.DelSystem(drv.Row[0].ToString()))
+            if (!CommunicationHelper.DelSystem(drv.Row[0].ToString()))
             {
                 MessageBox.Show("删除系统失败！");
                 return;

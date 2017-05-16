@@ -11,8 +11,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Data;
-using 项目管理.DataBases;
 using 项目管理.Tools;
+using 项目管理.Connect;
+using System.IO;
 
 namespace 项目管理
 {
@@ -21,25 +22,32 @@ namespace 项目管理
     /// </summary>
     public partial class LoginWindow : Window
     {
+        static string IP_CONFIG_FILE = "CONFIG_IP_ADDR";
         public LoginWindow()
         {
             InitializeComponent();
-            if (!DataBaseManager.InitDataBases())
+            if (File.Exists(IP_CONFIG_FILE))
             {
-                MessageBox.Show("初始化数据库失败！");
-                this.Close();
+                tbIPAddr.Text = File.ReadAllText(IP_CONFIG_FILE);
             }
         }
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
+            if (!CommunicationHelper.AppConnectInit(tbIPAddr.Text))
+            {
+                MessageBox.Show("网络连接失败！");
+                return;
+            }
+            File.WriteAllText(IP_CONFIG_FILE, tbIPAddr.Text);
+
             if (tbUserName.Text == GlobalFuns.ADMIN_USER && tbUserPsw.Password == GlobalFuns.ADMIN_PASSWORD)
             {
                 new MainWindow().Show();
                 this.Close();
                 return;
             }
-            DataTable dt = DataBaseManager.GetUserInfo(tbUserName.Text);
+            DataTable dt = CommunicationHelper.GetUserInfo(tbUserName.Text);
             if (dt == null)
             {
                 MessageBox.Show("数据查询错误");
