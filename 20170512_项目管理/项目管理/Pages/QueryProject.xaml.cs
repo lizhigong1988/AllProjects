@@ -38,11 +38,18 @@ namespace 项目管理.Pages
                 "全部", "正常", "延迟" , "关闭", "暂停", "全部未完成", "完成"
             };
             cbProState.SelectedIndex = 0;
+
+            cbSystem.ItemsSource = CommunicationHelper.GetAllSysDic();
+            (cbSystem.ItemsSource as Dictionary<string, string>).Add("", "全部");
+            cbSystem.SelectedValuePath = "Key";
+            cbSystem.DisplayMemberPath = "Value";
+            cbSystem.SelectedIndex = 0;
         }
 
         private void btnQuery_Click(object sender, RoutedEventArgs e)
         {
-            DataTable dt = CommunicationHelper.QueryProInfo(cbProStage.Text, cbProState.Text, tbProDate.Text);
+            DataTable dt = CommunicationHelper.QueryProInfo(cbProStage.Text, cbProState.Text, tbProDate.Text,
+                cbSystem.SelectedValue.ToString());
             dgProInfo.DataContext = dt;
         }
 
@@ -61,22 +68,44 @@ namespace 项目管理.Pages
             dgDevelopmentInfo.DataContext = dtTrades;
             curFilePath = "projects/" + drv.Row["DEMAND_DATE"].ToString() + "_" + drv.Row["DEMAND_NAME"].ToString();
 
+            DataTable dtFiles = CommunicationHelper.GetProFileInfo(drv.Row["DEMAND_ID"].ToString());
             DataTable dtFile = new DataTable();
+            dtFile.Columns.Add("FILE_ALL_NAME");
             dtFile.Columns.Add("FILE_NAME");
             dtFile.Columns.Add("IS_DOWNLOAD");
             dtFile.Columns.Add("IS_RENEW");
             if (Directory.Exists(curFilePath))
             {
-                string[] files = Directory.GetFiles(curFilePath);
-                foreach (string file in files)
+                foreach (DataRow drFile in dtFiles.Rows)
                 {
-                    string fileName = System.IO.Path.GetFileName(file);
-                    dtFile.Rows.Add(new string[] { fileName, "是", "是" });
+                    string fileAllName = curFilePath + "/" + drFile["FILE_NAME"].ToString();
+                    if (File.Exists(fileAllName))
+                    {
+                        string fileName = System.IO.Path.GetFileName(fileAllName);
+                        string time = File.GetLastWriteTime(fileAllName).ToString("yyyyMMddHHmmss");
+                        if (time.CompareTo(drFile["FILE_TIME"].ToString()) >= 0) // 本地的日期大 本地较新
+                        {
+                            dtFile.Rows.Add(new string[] { fileAllName, drFile["FILE_NAME"].ToString(), "是", "是" });
+                        }
+                        else
+                        {
+                            dtFile.Rows.Add(new string[] { fileAllName, drFile["FILE_NAME"].ToString(), "是", "否" });
+                        }
+                    }
+                    else
+                    {
+                        dtFile.Rows.Add(new string[] { fileAllName, drFile["FILE_NAME"].ToString(), "否", "否" });
+                    }
                 }
             }
             else
             {
                 Directory.CreateDirectory(curFilePath);
+                foreach (DataRow drFile in dtFiles.Rows)
+                {
+                    string fileAllName = curFilePath + "/" + drFile["FILE_NAME"].ToString();
+                    dtFile.Rows.Add(new string[] { fileAllName, drFile["FILE_NAME"].ToString(), "否", "否" });
+                }
             }
             dgFiles.DataContext = dtFile;
         }
@@ -143,7 +172,22 @@ namespace 项目管理.Pages
 
         private void btnDownLoad_Click(object sender, RoutedEventArgs e)
         {
-
+            DataRowView drv = dgFiles.SelectedItem as DataRowView;
+            if (drv == null)
+            {
+                MessageBox.Show("请选择要下载的文件！");
+                return;
+            }
+            if (CommunicationHelper.DownloadFile(drv.Row["FILE_ALL_NAME"].ToString()))
+            {
+                drv.Row["IS_DOWNLOAD"] = "是";
+                drv.Row["IS_RENEW"] = "是";
+            }
+            else
+            {
+                MessageBox.Show("下载失败！");
+                return;
+            }
         }
 
     }

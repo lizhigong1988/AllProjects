@@ -46,6 +46,8 @@ namespace ProjectsManageServer.DataBases
             return retList;
         }
 
+        static string PRO_FILE_PATH = "projects/";
+
         internal static bool AddNewProject(string demandName, string depart, string date, string expectDate,
             string kinds, string stage, string state, string note, string testPersion, string businessPersion, 
             string remark, DataTable dtSysInfo)
@@ -76,13 +78,22 @@ namespace ProjectsManageServer.DataBases
                     return false;
                 }
             }
+            string curFilePath = PRO_FILE_PATH + date + "_" + demandName;
+            if (!Directory.Exists(curFilePath))
+            {
+                Directory.CreateDirectory(curFilePath);
+            }
             return dataBaseTool.ActionFunc(sql);
         }
 
         internal static List<string> GetCurProNames(string sysId, bool showAll)
         {
             List<string> retList = new List<string>();
-            string sql = "select distinct DEMAND_NAME from T_PRO_INFO where 1=1";
+            string sql = "select distinct DEMAND_NAME from T_PRO_INFO where 1=1 ";
+            if (sysId != "")
+            {
+                sql += string.Format("and DEMAND_ID in (select distinct DEMAND_ID from T_PRO_SYS_INFO where SYS_ID = '{0}')", sysId);
+            }
             if (!showAll)
             {
                 sql += " and PRO_STATE != '完成'";
@@ -165,10 +176,15 @@ namespace ProjectsManageServer.DataBases
                     }
                 }
             }
+            string curFilePath = PRO_FILE_PATH + date + "_" + demandName;
+            if (!Directory.Exists(curFilePath))
+            {
+                Directory.CreateDirectory(curFilePath);
+            }
             return dataBaseTool.ActionFunc(sql);
         }
 
-        internal static DataTable QueryProInfo(string stage, string state, string date)
+        internal static DataTable QueryProInfo(string stage, string state, string date, string sysId)
         {
             string sql = "select * from T_PRO_INFO where 1=1";
             if (stage != "全部")
@@ -189,6 +205,10 @@ namespace ProjectsManageServer.DataBases
             if (date != "")
             {
                 sql += string.Format(" and DEMAND_DATE like '{0}%'", date);
+            }
+            if (sysId != "")
+            {
+                sql += string.Format(" and DEMAND_ID in (select distinct DEMAND_ID from T_PRO_SYS_INFO where SYS_ID = '{0}')", sysId);
             }
             return dataBaseTool.SelectFunc(sql);
         }
@@ -228,30 +248,33 @@ namespace ProjectsManageServer.DataBases
             return retList;
         }
 
-        internal static DataTable QueryProDaysInfo(string worker, string yearMonth)
+        internal static DataTable QueryProDaysInfo(string sysId, string worker, string yearMonth)
         {
             string sql = "select t1.DEMAND_ID, t1.DEMAND_NAME, t1.DEMAND_DATE, t1.EXPECT_DATE, t1.FINISH_DATE, ";
-            sql += "t1.PRO_STATE, t1.ESTIMATE_DAYS, sum(t2.WORKLOAD) as CURRENT_DAYS, ";
+            sql += "t1.PRO_STATE, t3.ESTIMATE_DAYS, sum(t2.WORKLOAD) as CURRENT_DAYS, ";
             sql += "sum(case when t2.WORKER = '{0}' then t2.WORKLOAD else 0 end) as PERSON_DAYS, ";
-            sql += "t1.REMARK from T_PRO_INFO t1, T_TRADE_INFO t2 where t1.DEMAND_ID = t2.DEMAND_ID ";
-            sql += "and t1.DEMAND_DATE < '{1}' and (t1.FINISH_DATE > '{2}' or t1.FINISH_DATE = '') group by t1.DEMAND_ID";
-            sql = string.Format(sql, worker, yearMonth + "99", yearMonth + "00");
+            sql += "t1.REMARK from T_PRO_INFO t1, T_TRADE_INFO t2, T_PRO_SYS_INFO t3 where ";
+            sql += "t1.DEMAND_ID = t2.DEMAND_ID and t1.DEMAND_ID = t3.DEMAND_ID and t3.SYS_ID = t2.SYS_ID ";
+            sql += "and t2.SYS_ID = '{1}' ";
+            sql += "and t1.DEMAND_DATE < '{2}' and (t1.FINISH_DATE > '{3}' or t1.FINISH_DATE = '') group by t1.DEMAND_ID";
+            sql = string.Format(sql, worker, sysId, yearMonth + "99", yearMonth + "00");
             return dataBaseTool.SelectFunc(sql);
         }
 
-        internal static DataTable GetWorkDays(string curQueryWorker, string demandId)
+        internal static DataTable GetWorkDays(string sysId, string curQueryWorker, string demandId)
         {
-            string sql = "select * from T_DAYS_INFO where DEMAND_ID = '{0}' and WORKER = '{1}'";
-            sql = string.Format(sql, demandId, curQueryWorker);
+            string sql = "select * from T_DAYS_INFO where SYS_ID = '{0}' and DEMAND_ID = '{1}' and WORKER = '{2}'";
+            sql = string.Format(sql, sysId, demandId, curQueryWorker);
             return dataBaseTool.SelectFunc(sql);
         }
 
-        internal static bool SaveAdjustWorkDays(string demandId, string worker, DataTable dataTable)
+        internal static bool SaveAdjustWorkDays(string demandId, string sysId, string worker, DataTable dataTable)
         {
-            string sql = string.Format("delete from T_DAYS_INFO where DEMAND_ID = '{0}' and WORKER = '{1}';", demandId, worker);
+            string sql = string.Format("delete from T_DAYS_INFO where DEMAND_ID = '{0}' and SYS_ID = '{1}' and WORKER = '{2}';", 
+                demandId, sysId, worker);
             foreach (DataRow dr in dataTable.Rows)
             {
-                List<string> values = new List<string>() { demandId, worker, dr["MONTH"].ToString(), dr["WORKLOAD"].ToString() };
+                List<string> values = new List<string>() { demandId, sysId, worker, dr["MONTH"].ToString(), dr["WORKLOAD"].ToString() };
                 if (!dataBaseTool.AddInfo("T_DAYS_INFO", T_DAYS_INFO.DIC_TABLE_COLUMS.Keys.ToList(), values, ref sql))
                 {
                     return false;
@@ -414,13 +437,13 @@ namespace ProjectsManageServer.DataBases
         }
 
 
-        internal static bool ModUserInfo(string userName, string psw, string sysId, string role,
+        internal static bool ModUserInfo(string userName, string orgSysId, string psw, string sysId, string role,
             string company, string remark)
         {
             List<string> values = new List<string>() { userName, psw, sysId, company, role, remark };
             string sql = "";
             if (!dataBaseTool.ModInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
-                values, ref sql))
+                values, ref sql, new Dictionary<string, string>() { { "USER_NAME", userName }, { "SYS_ID", orgSysId } }))
             {
                 return false;
             }
@@ -434,6 +457,47 @@ namespace ProjectsManageServer.DataBases
             sql += "where t1.SYS_ID = t2.SYS_ID ";
             sql += string.Format("and t1.DEMAND_ID = '{0}' group by t1.DEMAND_ID, t1.SYS_ID", curProId);
             return dataBaseTool.SelectFunc(sql);
+        }
+
+        internal static bool DelUserInfo(string userName, string sysId)
+        {
+            string sql = string.Format("delete from T_USER_INFO where USER_NAME = '{0}' and SYS_ID = '{1}'", userName, sysId);
+            return dataBaseTool.ActionFunc(sql);
+        }
+
+
+        internal static DataTable GetProFileInfo(string proId)
+        {
+            string sql = "select * from T_PRO_INFO where DEMAND_ID = '{0}'";
+            sql = string.Format(sql, proId);
+            DataTable dt = dataBaseTool.SelectFunc(sql);
+            if (dt == null)
+            {
+                return null;
+            }
+            if (dt.Rows.Count == 0)
+            {
+                return null;
+            }
+            DataTable dtRet = new DataTable();
+            dtRet.Columns.Add("FILE_NAME");
+            dtRet.Columns.Add("FILE_TIME");
+            string curFilePath = PRO_FILE_PATH + dt.Rows[0]["DEMAND_DATE"].ToString() + "_" + dt.Rows[0]["DEMAND_NAME"].ToString();
+            if (!Directory.Exists(curFilePath))
+            {
+                Directory.CreateDirectory(curFilePath);
+            }
+            else
+            {
+                string[] files = Directory.GetFiles(curFilePath);
+                foreach (string file in files)
+                {
+                    string fileName = System.IO.Path.GetFileName(file);
+                    string time = File.GetLastWriteTime(file).ToString("yyyyMMddHHmmss");
+                    dtRet.Rows.Add(new string[]{fileName, time});
+                }
+            }
+            return dtRet;
         }
     }
 }

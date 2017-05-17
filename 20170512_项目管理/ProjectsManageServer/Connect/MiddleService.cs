@@ -5,6 +5,7 @@ using System.Text;
 using CommonLib;
 using ProjectsManageServer.DataBases;
 using System.Data;
+using System.IO;
 
 namespace ProjectsManageServer.Connect
 {
@@ -82,11 +83,64 @@ namespace ProjectsManageServer.Connect
                 case CommonDef.FUN_NO.MOD_USER_INFO:
                     ret = ModUserInfo(elem);
                     break;
+                case CommonDef.FUN_NO.DEL_USER_INFO:
+                    ret = DelUserInfo(elem);
+                    break;
                 case CommonDef.FUN_NO.GET_PRO_SYS_INFO:
                     ret = GetProSysInfo(elem);
                     break;
+                case CommonDef.FUN_NO.GET_PRO_FILE_INFO:
+                    ret = GetProFileInfo(elem);
+                    break;
+                case CommonDef.FUN_NO.DOWNLOAD_FILE:
+                    ret = DownloadFile(elem);
+                    break;
+                case CommonDef.FUN_NO.UPLOAD_FILE:
+                    ret = UploadFile(elem);
+                    break;
+                case CommonDef.FUN_NO.DEL_FILE:
+                    ret = DelFile(elem);
+                    break;
             }
             return Encoding.Default.GetBytes(ret);
+        }
+
+        private static string DelFile(string[] elem)
+        {
+            File.Delete(elem[1]);
+            return "0";
+        }
+
+        private static string UploadFile(string[] elem)
+        {
+            byte[] fileData = Convert.FromBase64String(elem[2]);
+            File.WriteAllBytes(elem[1], fileData);
+            return "0";
+        }
+
+        private static string DownloadFile(string[] elem)
+        {
+            if (File.Exists(elem[1]))
+            {
+                byte[] fileData = File.ReadAllBytes(elem[1]);
+                return Convert.ToBase64String(fileData);
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        private static string GetProFileInfo(string[] elem)
+        {
+            DataTable dt = DataBaseManager.GetProFileInfo(elem[1]);
+            return "0\n" + CommonDef.GetDataTableStr(dt);
+        }
+
+        private static string DelUserInfo(string[] elem)
+        {
+            bool sec = DataBaseManager.DelUserInfo(elem[1], elem[2]);
+            return sec ? "0" : "-1";
         }
 
         private static string GetProSysInfo(string[] elem)
@@ -98,7 +152,7 @@ namespace ProjectsManageServer.Connect
         private static string ModUserInfo(string[] elem)
         {
             bool sec = DataBaseManager.ModUserInfo(elem[1], elem[2],
-                elem[3], elem[4], elem[5], elem[6]
+                elem[3], elem[4], elem[5], elem[6], elem[7]
                 );
             return sec ? "0" : "-1";
         }
@@ -167,21 +221,21 @@ namespace ProjectsManageServer.Connect
 
         private static string SaveAdjustWorkDays(string[] elem)
         {
-            DataTable dtSysInfo = CommonDef.GetDataTable(elem[15]);
-            bool sec = DataBaseManager.SaveAdjustWorkDays(elem[1], elem[2],
+            DataTable dtSysInfo = CommonDef.GetDataTable(elem[4]);
+            bool sec = DataBaseManager.SaveAdjustWorkDays(elem[1], elem[2], elem[3],
                 dtSysInfo);
             return sec ? "0" : "-1";
         }
 
         private static string GetWorkDays(string[] elem)
         {
-            DataTable dt = DataBaseManager.GetWorkDays(elem[1], elem[2]);
+            DataTable dt = DataBaseManager.GetWorkDays(elem[1], elem[2], elem[3]);
             return "0\n" + CommonDef.GetDataTableStr(dt);
         }
 
         private static string QueryProDaysInfo(string[] elem)
         {
-            DataTable dt = DataBaseManager.QueryProDaysInfo(elem[1], elem[2]);
+            DataTable dt = DataBaseManager.QueryProDaysInfo(elem[1], elem[2], elem[3]);
             return "0\n" + CommonDef.GetDataTableStr(dt);
         }
 
@@ -209,7 +263,7 @@ namespace ProjectsManageServer.Connect
 
         private static string QueryProInfo(string[] elem)
         {
-            DataTable dt = DataBaseManager.QueryProInfo(elem[1], elem[2], elem[3]);
+            DataTable dt = DataBaseManager.QueryProInfo(elem[1], elem[2], elem[3], elem[4]);
             return "0\n" + CommonDef.GetDataTableStr(dt);
         }
 
@@ -251,6 +305,7 @@ namespace ProjectsManageServer.Connect
             DataTable dt = CommonDef.GetDataTable(elem[12]);
             bool sec = DataBaseManager.AddNewProject(elem[1], elem[2], elem[3], elem[4], elem[5],
                 elem[6], elem[7], elem[8], elem[9], elem[10], elem[11], dt);
+
             return sec ? "0" : "-1";
         }
 

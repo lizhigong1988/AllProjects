@@ -44,7 +44,9 @@
             <Button Name="btnMod"
                     Click="btnMod_Click"
                     Content="修改" />
-            <Button Name="btnDel" Content="删除" />
+            <Button Name="btnDel"
+                    Click="btnDel_Click"
+                    Content="删除" />
         </StackPanel>
     </StackPanel>
 </UserControl>

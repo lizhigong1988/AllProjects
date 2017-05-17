@@ -111,8 +111,18 @@ namespace 项目管理.Pages
                 {
                     Directory.CreateDirectory(curFilePath);
                 }
-                File.Copy(imageFileDialog.FileName, curFilePath + "/" + fileName);
-                dtFiles.Rows.Add(new string[]{fileName,"是","是"});
+                string fileAllName = curFilePath + "/" + fileName;
+                File.Copy(imageFileDialog.FileName, fileAllName);
+                File.SetLastWriteTime(fileAllName, DateTime.Now.AddMinutes(5));
+                if (CommunicationHelper.UploadFile(fileAllName))
+                {
+                    dtFiles.Rows.Add(new string[] { fileAllName, fileName, "是", "是" });
+                }
+                else
+                {
+                    MessageBox.Show("上传失败！");
+                    return;
+                }
             }
         }
 
@@ -129,7 +139,15 @@ namespace 项目管理.Pages
             {
                 drv.Row.Table.Rows.Remove(drv.Row);
                 string fileName = curFilePath + "/" + select;
-                File.Delete(fileName);
+                if (CommunicationHelper.DelFile(fileName))
+                {
+                    File.Delete(fileName);
+                }
+                else
+                {
+                    MessageBox.Show("删除失败");
+                    return;
+                }
             }
         }
 
@@ -176,24 +194,48 @@ namespace 项目管理.Pages
             DataTable dtSystems = CommunicationHelper.GetProSystemInfo(curProId);
             dgProSysInfo.DataContext = dtSystems;
             DataTable dtTrades = CommunicationHelper.GetTradesInfo(curProId, GlobalFuns.LoginSysId);
+            dtTrades.Columns.Add("DIFF");
             dgDevelopmentInfo.DataContext = dtTrades;
+
+            DataTable dtFiles = CommunicationHelper.GetProFileInfo(curProId);
             curFilePath = "projects/" + tbDemandDate.Text + "_" + select;
             DataTable dtFile = new DataTable();
+            dtFile.Columns.Add("FILE_ALL_NAME");
             dtFile.Columns.Add("FILE_NAME");
             dtFile.Columns.Add("IS_DOWNLOAD");
             dtFile.Columns.Add("IS_RENEW");
             if (Directory.Exists(curFilePath))
             {
-                string[] files = Directory.GetFiles(curFilePath);
-                foreach (string file in files)
+                foreach (DataRow drFile in dtFiles.Rows)
                 {
-                    string fileName = System.IO.Path.GetFileName(file);
-                    dtFile.Rows.Add(new string[] { fileName, "是", "是" });
+                    string fileAllName = curFilePath + "/" + drFile["FILE_NAME"].ToString();
+                    if (File.Exists(fileAllName))
+                    {
+                        string fileName = System.IO.Path.GetFileName(fileAllName);
+                        string time = File.GetLastWriteTime(fileAllName).ToString("yyyyMMddHHmmss");
+                        if (time.CompareTo(drFile["FILE_TIME"].ToString()) >= 0) // 本地的日期大 本地较新
+                        {
+                            dtFile.Rows.Add(new string[] {fileAllName, drFile["FILE_NAME"].ToString(), "是", "是" });
+                        }
+                        else
+                        {
+                            dtFile.Rows.Add(new string[] {fileAllName, drFile["FILE_NAME"].ToString(), "是", "否" });
+                        }
+                    }
+                    else
+                    {
+                        dtFile.Rows.Add(new string[] {fileAllName, drFile["FILE_NAME"].ToString(), "否", "否" });
+                    }
                 }
             }
             else
             {
-                Directory.CreateDirectory(curFilePath);  
+                Directory.CreateDirectory(curFilePath);
+                foreach (DataRow drFile in dtFiles.Rows)
+                {
+                    string fileAllName = curFilePath + "/" + drFile["FILE_NAME"].ToString();
+                    dtFile.Rows.Add(new string[] {fileAllName, drFile["FILE_NAME"].ToString(), "否", "否" });
+                }
             }
             dgFiles.DataContext = dtFile;
         }
@@ -396,7 +438,22 @@ namespace 项目管理.Pages
 
         private void btnDownLoad_Click(object sender, RoutedEventArgs e)
         {
-
+            DataRowView drv = dgFiles.SelectedItem as DataRowView;
+            if (drv == null)
+            {
+                MessageBox.Show("请选择要下载的文件！");
+                return;
+            }
+            if (CommunicationHelper.DownloadFile(drv.Row["FILE_ALL_NAME"].ToString()))
+            {
+                drv.Row["IS_DOWNLOAD"] = "是";
+                drv.Row["IS_RENEW"] = "是";
+            }
+            else
+            {
+                MessageBox.Show("下载失败！");
+                return;
+            }
         }
 
     }

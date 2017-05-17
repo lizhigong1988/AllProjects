@@ -97,6 +97,10 @@ namespace 项目管理.Connect
 
         public static void ReceiveMsg(Byte[] msgBuf)
         {
+            if (isRecived)
+            {
+                return;
+            }
             retBuf.AddRange(msgBuf);
             string check = Encoding.Default.GetString(retBuf.ToArray());
             if (check.StartsWith("[BIGEN]") && check.EndsWith("[END]"))
@@ -126,7 +130,7 @@ namespace 项目管理.Connect
         {
             List<string> retList = new List<string>();
             string Msg = ((int)CommonDef.FUN_NO.GET_HIS_DEPARTS).ToString() + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -161,7 +165,7 @@ namespace 项目管理.Connect
             Msg += businessPersion + "\n";
             Msg += remark + "\n";
             Msg += CommonDef.GetDataTableStr(dtSysInfo) + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -176,7 +180,7 @@ namespace 项目管理.Connect
             string Msg = ((int)CommonDef.FUN_NO.GET_CUR_PRO_NAMES).ToString() + "\n";
             Msg += sysId + "\n";
             Msg += showAll.ToString() + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -198,7 +202,7 @@ namespace 项目管理.Connect
         {
             string Msg = ((int)CommonDef.FUN_NO.GET_PRO_INFO_FROM_NAME).ToString() + "\n";
             Msg += select + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -212,7 +216,7 @@ namespace 项目管理.Connect
             string Msg = ((int)CommonDef.FUN_NO.GET_TRADES_INFO).ToString() + "\n";
             Msg += curProId + "\n";
             Msg += sysId + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -243,7 +247,7 @@ namespace 项目管理.Connect
             Msg += remark + "\n";
             Msg += CommonDef.GetDataTableStr(dtSysInfo) + "\n";
             Msg += CommonDef.GetDataTableStr(dtTrades) + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -252,13 +256,14 @@ namespace 项目管理.Connect
             return revMsg == "0";
         }
 
-        internal static DataTable QueryProInfo(string stage, string state, string date)
+        internal static DataTable QueryProInfo(string stage, string state, string date, string sysId)
         {
             string Msg = ((int)CommonDef.FUN_NO.QUERY_PRO_INFO).ToString() + "\n";
             Msg += stage + "\n";
             Msg += state + "\n";
             Msg += date + "\n";
-            string revMsg;
+            Msg += sysId + "\n";
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -274,7 +279,7 @@ namespace 项目管理.Connect
             Msg += proID + "\n";
             Msg += sysId + "\n";
             Msg += tradeNo + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -297,7 +302,7 @@ namespace 项目管理.Connect
             List<string> retList = new List<string>();
             string Msg = ((int)CommonDef.FUN_NO.GET_HIS_WORKERS).ToString() + "\n";
             Msg += sysId + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -315,12 +320,13 @@ namespace 项目管理.Connect
             return retList;
         }
 
-        internal static DataTable QueryProDaysInfo(string worker, string yearMonth)
+        internal static DataTable QueryProDaysInfo(string sysId, string worker, string yearMonth)
         {
-            string Msg = ((int)CommonDef.FUN_NO.QUERY_PRO_INFO).ToString() + "\n";
+            string Msg = ((int)CommonDef.FUN_NO.QUERY_PRO_DAYS_INFO).ToString() + "\n";
+            Msg += sysId + "\n";
             Msg += worker + "\n";
             Msg += yearMonth + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -329,12 +335,13 @@ namespace 项目管理.Connect
             return CommonDef.GetDataTable(revMsg.Split('\n')[1]);
         }
 
-        internal static DataTable GetWorkDays(string curQueryWorker, string demandId)
+        internal static DataTable GetWorkDays(string sysId, string curQueryWorker, string demandId)
         {
             string Msg = ((int)CommonDef.FUN_NO.GET_WORK_DAYS).ToString() + "\n";
+            Msg += sysId + "\n";
             Msg += curQueryWorker + "\n";
             Msg += demandId + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -343,13 +350,14 @@ namespace 项目管理.Connect
             return CommonDef.GetDataTable(revMsg.Split('\n')[1]);
         }
 
-        internal static bool SaveAdjustWorkDays(string demandId, string worker, DataTable dataTable)
+        internal static bool SaveAdjustWorkDays(string demandId, string sysId, string worker, DataTable dataTable)
         {
-            string Msg = ((int)CommonDef.FUN_NO.MOD_PROJECT).ToString() + "\n";
+            string Msg = ((int)CommonDef.FUN_NO.SAVE_ADJUST_WORK_DAYS).ToString() + "\n";
             Msg += demandId + "\n";
+            Msg += sysId + "\n";
             Msg += worker + "\n";
             Msg += CommonDef.GetDataTableStr(dataTable) + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -363,7 +371,7 @@ namespace 项目管理.Connect
             string Msg = ((int)CommonDef.FUN_NO.GET_WORKER_MONTH_DAYS).ToString() + "\n";
             Msg += curQueryWorker + "\n";
             Msg += curQueryDate + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -376,7 +384,7 @@ namespace 项目管理.Connect
         {
             Dictionary<string, string> retList = new Dictionary<string, string>();
             string Msg = ((int)CommonDef.FUN_NO.GET_ALL_SYS_DIC).ToString() + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -402,7 +410,7 @@ namespace 项目管理.Connect
             Msg += manage1 + "\n";
             Msg += manage2 + "\n";
             Msg += remark + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -415,7 +423,7 @@ namespace 项目管理.Connect
         {
             string Msg = ((int)CommonDef.FUN_NO.GET_SYSTEM_INFO).ToString() + "\n";
             Msg += sysId + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -426,13 +434,13 @@ namespace 项目管理.Connect
 
         internal static bool ModSystem(string sysId, string sysName, string user1, string user2, string remark)
         {
-            string Msg = ((int)CommonDef.FUN_NO.ADD_NEW_SYSTEM).ToString() + "\n";
+            string Msg = ((int)CommonDef.FUN_NO.MOD_SYSTEM).ToString() + "\n";
             Msg += sysId + "\n";
             Msg += sysName + "\n";
             Msg += user1 + "\n";
             Msg += user2 + "\n";
             Msg += remark + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -445,7 +453,7 @@ namespace 项目管理.Connect
         {
             string Msg = ((int)CommonDef.FUN_NO.DEL_SYSTEM).ToString() + "\n";
             Msg += sysId + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -458,7 +466,7 @@ namespace 项目管理.Connect
         {
             string Msg = ((int)CommonDef.FUN_NO.GET_USER_INFO).ToString() + "\n";
             Msg += userName + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -472,7 +480,7 @@ namespace 项目管理.Connect
             string Msg = ((int)CommonDef.FUN_NO.MOD_PASSWORD).ToString() + "\n";
             Msg += userName + "\n";
             Msg += password + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -489,7 +497,7 @@ namespace 项目管理.Connect
             Msg += role + "\n";
             Msg += company + "\n";
             Msg += remark + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -499,17 +507,18 @@ namespace 项目管理.Connect
         }
 
 
-        internal static bool ModUserInfo(string userName, string psw, string sysId, string role,
+        internal static bool ModUserInfo(string userName, string orgSysId, string psw, string sysId, string role,
             string company, string remark)
         {
             string Msg = ((int)CommonDef.FUN_NO.MOD_USER_INFO).ToString() + "\n";
             Msg += userName + "\n";
+            Msg += orgSysId + "\n";
             Msg += psw + "\n";
             Msg += sysId + "\n";
             Msg += role + "\n";
             Msg += company + "\n";
             Msg += remark + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
@@ -522,13 +531,96 @@ namespace 项目管理.Connect
         {
             string Msg = ((int)CommonDef.FUN_NO.GET_PRO_SYS_INFO).ToString() + "\n";
             Msg += curProId + "\n";
-            string revMsg;
+            string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);
             if (!ret)
             {
                 return null;
             }
             return CommonDef.GetDataTable(revMsg.Split('\n')[1]);
+        }
+
+        internal static bool DelUserInfo(string userName, string sysId)
+        {
+            string Msg = ((int)CommonDef.FUN_NO.DEL_USER_INFO).ToString() + "\n";
+            Msg += userName + "\n";
+            Msg += sysId + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcv(Msg, out revMsg);
+            if (!ret)
+            {
+                return false;
+            }
+            return revMsg == "0";
+        }
+
+        internal static DataTable GetProFileInfo(string curProId)
+        {
+            string Msg = ((int)CommonDef.FUN_NO.GET_PRO_FILE_INFO).ToString() + "\n";
+            Msg += curProId + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcv(Msg, out revMsg);
+            if (!ret)
+            {
+                return null;
+            }
+            return CommonDef.GetDataTable(revMsg.Split('\n')[1]);
+        }
+
+        internal static bool DownloadFile(string fileName)
+        {
+            string Msg = ((int)CommonDef.FUN_NO.DOWNLOAD_FILE).ToString() + "\n";
+            Msg += fileName + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcv(Msg, out revMsg);
+            if (!ret)
+            {
+                return false;
+            }
+            try
+            {
+                if (revMsg == "")
+                {
+                    return false;
+                }
+                byte[] fileData = Convert.FromBase64String(revMsg);
+                File.WriteAllBytes(fileName, fileData);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+        internal static bool UploadFile(string fileAllName)
+        {
+
+            byte[] fileData = File.ReadAllBytes(fileAllName);
+            string strData = Convert.ToBase64String(fileData);
+            string Msg = ((int)CommonDef.FUN_NO.UPLOAD_FILE).ToString() + "\n";
+            Msg += fileAllName + "\n";
+            Msg += strData + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcv(Msg, out revMsg);
+            if (!ret)
+            {
+                return false;
+            }
+            return revMsg == "0";
+        }
+
+        internal static bool DelFile(string fileName)
+        {
+            string Msg = ((int)CommonDef.FUN_NO.DEL_FILE).ToString() + "\n";
+            Msg += fileName + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcv(Msg, out revMsg);
+            if (!ret)
+            {
+                return false;
+            }
+            return revMsg == "0";
         }
     }
 }

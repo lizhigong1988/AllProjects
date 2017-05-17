@@ -43,6 +43,7 @@ namespace 项目管理.Pages
             }
         }
 
+        private string curQuerySys = "";
         private string curQueryWorker = "";
         private string curQueryDate = "";
         private void btnQueryPro_Click(object sender, RoutedEventArgs e)
@@ -55,9 +56,10 @@ namespace 项目管理.Pages
             {
                 return;
             }
+            curQuerySys = cbSystem.SelectedValue.ToString();
             curQueryWorker = cbPerson.Text;
             curQueryDate = tbYearMonth.Text;
-            DataTable dt = CommunicationHelper.QueryProDaysInfo(cbPerson.Text, tbYearMonth.Text);
+            DataTable dt = CommunicationHelper.QueryProDaysInfo(curQuerySys, cbPerson.Text, tbYearMonth.Text);
             dgProInfo.DataContext = dt;
             RefreshMonthDays();
         }
@@ -69,7 +71,8 @@ namespace 项目管理.Pages
             {
                 return;
             }
-            DataTable dtWorkDays = CommunicationHelper.GetWorkDays(curQueryWorker, drv.Row["DEMAND_ID"].ToString());
+            DataTable dtWorkDays = CommunicationHelper.GetWorkDays(
+                curQuerySys, curQueryWorker, drv.Row["DEMAND_ID"].ToString());
             if (dtWorkDays == null)
             {
                 return;
@@ -102,7 +105,7 @@ namespace 项目管理.Pages
                 }
                 if (!hasRow)
                 {
-                    dtAjust.Rows.Add(new string[] { drv.Row["DEMAND_ID"].ToString(), curQueryWorker, i.ToString(), "0" });
+                    dtAjust.Rows.Add(new string[] { drv.Row["DEMAND_ID"].ToString(), curQuerySys, curQueryWorker, i.ToString(), "0" });
                 }
             }
             dgWorkDaysInfo.DataContext = dtAjust;
@@ -155,7 +158,8 @@ namespace 项目管理.Pages
                 MessageBox.Show("保存失败！");
                 return;
             }
-            if (!CommunicationHelper.SaveAdjustWorkDays(drv.Row["DEMAND_ID"].ToString(), curQueryWorker,dgWorkDaysInfo.DataContext as DataTable))
+            if (!CommunicationHelper.SaveAdjustWorkDays(drv.Row["DEMAND_ID"].ToString(), curQuerySys, 
+                curQueryWorker, dgWorkDaysInfo.DataContext as DataTable))
             {
                 MessageBox.Show("保存失败！");
                 return;
@@ -171,8 +175,19 @@ namespace 项目管理.Pages
 
         private void cbSystem_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            List<string> listWorkers;
+            if (cbSystem.SelectedValue == null)
+            {
+                listWorkers = CommunicationHelper.GetHisWorkers(GlobalFuns.LoginSysId);
+                cbPerson.ItemsSource = listWorkers;
+                if (listWorkers.Count != 0)
+                {
+                    cbPerson.SelectedIndex = 0;
+                }
+                return;
+            }
             string selectSys = cbSystem.SelectedValue.ToString();
-            List<string> listWorkers = CommunicationHelper.GetHisWorkers(selectSys);
+            listWorkers = CommunicationHelper.GetHisWorkers(selectSys);
             cbPerson.ItemsSource = listWorkers;
             if (listWorkers.Count != 0)
             {

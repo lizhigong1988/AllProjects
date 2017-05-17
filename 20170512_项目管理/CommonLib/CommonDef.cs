@@ -39,7 +39,12 @@ namespace CommonLib
             MOD_PASSWORD,
             ADD_NEW_USER,
             MOD_USER_INFO,
+            DEL_USER_INFO,
             GET_PRO_SYS_INFO,
+            GET_PRO_FILE_INFO,
+            DOWNLOAD_FILE,
+            UPLOAD_FILE,
+            DEL_FILE,
         };
 
 

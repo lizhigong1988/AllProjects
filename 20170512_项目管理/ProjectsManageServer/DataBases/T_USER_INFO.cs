@@ -17,7 +17,7 @@ namespace ProjectsManageServer.DataBases
         /// </summary>
         internal static Dictionary<string, string> DIC_TABLE_COLUMS = new Dictionary<string, string>()
         {
-            {"USER_NAME", "VARCHAR(32) UNIQUE"},
+            {"USER_NAME", "VARCHAR(32)"},
             {"USER_PSW", "VARCHAR(32)"},
             {"SYS_ID", "VARCHAR(36)"},
             {"COMPANY", "VARCHAR(64)"},

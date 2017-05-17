@@ -47,7 +47,7 @@ namespace 项目管理
                 this.Close();
                 return;
             }
-            DataTable dt = CommunicationHelper.GetUserInfo(tbUserName.Text);
+            dt = CommunicationHelper.GetUserInfo(tbUserName.Text);
             if (dt == null)
             {
                 MessageBox.Show("数据查询错误");
@@ -64,14 +64,41 @@ namespace 项目管理
                 MessageBox.Show("密码不正确");
                 return;
             }
-            GlobalFuns.LoginUser = tbUserName.Text;
-            GlobalFuns.LoginSysId = dr["SYS_ID"].ToString();
-            GlobalFuns.LoginSysName = dr["SYS_NAME"].ToString();
-            GlobalFuns.LoginRole = dr["USER_ROLE"].ToString();
-            new MainWindow().Show();
-            this.Close();
+            if (dt.Rows.Count == 1)
+            {
+                GlobalFuns.LoginUser = tbUserName.Text;
+                GlobalFuns.LoginSysId = dr["SYS_ID"].ToString();
+                GlobalFuns.LoginSysName = dr["SYS_NAME"].ToString();
+                GlobalFuns.LoginRole = dr["USER_ROLE"].ToString();
+                new MainWindow().Show();
+                this.Close();
+            }
+            else
+            {
+                Dictionary<string, string> dicSys = CommunicationHelper.GetAllSysDic();
+                Dictionary<string, string> manageDic = new Dictionary<string, string>();
+                foreach (DataRow dic in dt.Rows)
+                {
+                    string sysId = dic["SYS_ID"].ToString();
+                    if (sysId == "")
+                    {
+                        continue;
+                    }
+                    if (dicSys.ContainsKey(sysId))
+                    {
+                        manageDic.Add(sysId, dicSys[sysId]);
+                    }
+                }
+                cbSelectSys.ItemsSource = manageDic;
+                cbSelectSys.SelectedValuePath = "Key";
+                cbSelectSys.DisplayMemberPath = "Value";
+                cbSelectSys.SelectedIndex = 0;
+                spLogin.Visibility = Visibility.Collapsed;
+                spSelectSys.Visibility = Visibility.Visible;
+            }
         }
 
+        DataTable dt;
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
@@ -83,6 +110,23 @@ namespace 项目管理
             {
                 btnLogin_Click(null, null);
             }
+        }
+
+        private void btnSelectSys_Click(object sender, RoutedEventArgs e)
+        {
+            GlobalFuns.LoginUser = tbUserName.Text;
+            GlobalFuns.LoginSysId = cbSelectSys.SelectedValue.ToString();
+            GlobalFuns.LoginSysName = cbSelectSys.Text;
+            foreach (DataRow dr in dt.Rows)
+            {
+                if (dr["SYS_ID"].ToString() == GlobalFuns.LoginSysId)
+                {
+                    GlobalFuns.LoginRole = dr["USER_ROLE"].ToString();
+                    break;
+                }
+            }
+            new MainWindow().Show();
+            this.Close();
         }
     }
 }

@@ -67,6 +67,11 @@ namespace 项目管理.Pages
                 MessageBox.Show("请输入项目名称！");
                 return;
             }
+            if (tbDemandDate.Text == "")
+            {
+                MessageBox.Show("请输入项目提出日期！");
+                return;
+            }
             DataTable dt = dgProSysInfo.DataContext as DataTable;
             bool hasMain = false;
             foreach (DataRow dr in dt.Rows)

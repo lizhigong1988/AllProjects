@@ -20,6 +20,10 @@
                     <TextBlock Text="需求日期" />
                     <TextBox Name="tbProDate" />
                 </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="关联/主导系统" />
+                    <ComboBox Name="cbSystem" />
+                </StackPanel>
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                     <Button Name="btnQuery"
                             Width="0"
@@ -81,7 +85,7 @@
                         <DataGridTextColumn Binding="{Binding WORKER}" Header="开发人员" />
                         <DataGridTextColumn Binding="{Binding WORKLOAD}" Header="已用工作量" />
                         <DataGridTextColumn Binding="{Binding REMARK}" Header="备注" />
-
+                        <DataGridTextColumn Binding="{Binding DIFF}" Header="冲突" />
                     </DataGrid.Columns>
                 </DataGrid>
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">

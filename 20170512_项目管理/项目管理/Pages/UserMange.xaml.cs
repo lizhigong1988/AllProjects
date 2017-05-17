@@ -61,10 +61,21 @@ namespace 项目管理.Pages
                 MessageBox.Show("请输入人员名称");
                 return;
             }
-            if (!CommunicationHelper.AddNewUser(tbUserName.Text.Trim(), cbSystem.SelectedValue.ToString(),
+            string selectSys = cbSystem.SelectedValue.ToString();
+            if (GlobalFuns.LoginSysId != "")
+            {
+                if (GlobalFuns.LoginSysId != selectSys)
+                {
+                    MessageBox.Show("只能添加本系统的人员！");
+                    cbSystem.SelectedValue = GlobalFuns.LoginSysId;
+                    return;
+                }
+                selectSys = GlobalFuns.LoginSysId;
+            }
+            if (!CommunicationHelper.AddNewUser(tbUserName.Text.Trim(), selectSys,
                 cbRole.Text.Trim(), tbUserCompany.Text.Trim(), tbRemark.Text.Trim()))
             {
-                MessageBox.Show("添加系统失败！");
+                MessageBox.Show("添加人员信息失败！");
                 return;
             }
             RefreshTable();
@@ -140,10 +151,34 @@ namespace 项目管理.Pages
                 MessageBox.Show("用户名不能修改");
                 return;
             }
-            if (!CommunicationHelper.ModUserInfo(tbUserName.Text.Trim(), drv.Row["USER_PSW"].ToString(), cbSystem.SelectedValue.ToString(),
+            if (!CommunicationHelper.ModUserInfo(tbUserName.Text.Trim(), drv.Row["SYS_ID"].ToString(), drv.Row["USER_PSW"].ToString(), cbSystem.SelectedValue.ToString(),
                 cbRole.Text.Trim(), tbUserCompany.Text.Trim(), tbRemark.Text.Trim()))
             {
                 MessageBox.Show("修改人员信息失败！");
+                return;
+            }
+            RefreshTable();
+        }
+
+        private void btnDel_Click(object sender, RoutedEventArgs e)
+        {
+            DataRowView drv = dgUserInfo.SelectedItem as DataRowView;
+            if (drv == null)
+            {
+                MessageBox.Show("请选择要删除的人员");
+                return;
+            }
+            if (GlobalFuns.LoginSysId != "")
+            {
+                if (GlobalFuns.LoginSysId != drv.Row["SYS_ID"].ToString())
+                {
+                    MessageBox.Show("只能删除本系统的人员信息");
+                    return;
+                }
+            }
+            if (!CommunicationHelper.DelUserInfo(drv.Row["USER_NAME"].ToString(), drv.Row["SYS_ID"].ToString()))
+            {
+                MessageBox.Show("删除人员信息失败！");
                 return;
             }
             RefreshTable();
