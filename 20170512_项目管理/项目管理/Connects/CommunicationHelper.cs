@@ -120,6 +120,10 @@ namespace 项目管理.Connect
         /// <returns></returns>
         internal static bool AppConnectInit(string port)
         {
+            if (IsConnected)
+            {
+                return true;
+            }
             Connection.AddFunc(ReceiveMsg);
             IsConnected = Connection.AppConnectInit(port);
             return IsConnected;
@@ -174,9 +178,9 @@ namespace 项目管理.Connect
             return revMsg == "0";
         }
 
-        internal static List<string> GetCurProNames(string sysId, bool showAll)
+        internal static Dictionary<string, string> GetCurProNames(string sysId, bool showAll)
         {
-            List<string> retList = new List<string>();
+            Dictionary<string, string> retList = new Dictionary<string, string>();
             string Msg = ((int)CommonDef.FUN_NO.GET_CUR_PRO_NAMES).ToString() + "\n";
             Msg += sysId + "\n";
             Msg += showAll.ToString() + "\n";
@@ -193,14 +197,14 @@ namespace 项目管理.Connect
                 {
                     continue;
                 }
-                retList.Add(depart);
+                retList.Add(depart.Split('\t')[0], depart.Split('\t')[1]);
             }
             return retList;
         }
 
-        internal static DataTable GetProInfoFromName(string select)
+        internal static DataTable GetProInfo(string select)
         {
-            string Msg = ((int)CommonDef.FUN_NO.GET_PRO_INFO_FROM_NAME).ToString() + "\n";
+            string Msg = ((int)CommonDef.FUN_NO.GET_PRO_INFO).ToString() + "\n";
             Msg += select + "\n";
             string revMsg = "";
             bool ret = SendAndRcv(Msg, out revMsg);

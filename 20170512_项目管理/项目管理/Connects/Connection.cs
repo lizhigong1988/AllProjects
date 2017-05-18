@@ -79,7 +79,10 @@ namespace 项目管理.Connect
 
         public static void AddFunc(ReadByte func)
         {
-            ReadBytes += func;
+            if (ReadBytes == null)
+            {
+                ReadBytes += func;
+            }
         }
     }
 }

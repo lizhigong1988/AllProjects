@@ -44,6 +44,10 @@ namespace 项目管理.Pages
             cbSystem.SelectedValuePath = "Key";
             cbSystem.DisplayMemberPath = "Value";
             cbSystem.SelectedIndex = 0;
+            if (GlobalFuns.LoginSysId != "")
+            {
+                cbSystem.SelectedValue = GlobalFuns.LoginSysId;
+            }
         }
 
         private void btnQuery_Click(object sender, RoutedEventArgs e)

@@ -10,16 +10,20 @@
         <ResourceDictionary Source="/项目管理;component/StyleSource/CommonSource.xaml" />
     </UserControl.Resources>
     <StackPanel>
+        <GroupBox Header="选择项目">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="需求名称" />
+                <ComboBox Name="cbDemandName"
+                          Width="332"
+                          SelectionChanged="cbDemandName_SelectionChanged" />
+                <Button Name="btnShowAll"
+                        Click="btnShowAll_Click"
+                        Content="显示已完成" />
+            </StackPanel>
+        </GroupBox>
         <GroupBox Header="项目基础信息">
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="需求名称" />
-                    <ComboBox Name="cbDemandName"
-                              Width="332"
-                              SelectionChanged="cbDemandName_SelectionChanged" />
-                    <Button Name="btnShowAll"
-                            Click="btnShowAll_Click"
-                            Content="显示已完成" />
                     <TextBlock Text="提出部门" />
                     <ComboBox Name="cbDemandDepart" IsEditable="True" />
                 </StackPanel>

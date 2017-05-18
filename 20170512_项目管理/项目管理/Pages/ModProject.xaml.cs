@@ -59,13 +59,15 @@ namespace 项目管理.Pages
             cbSystem.DisplayMemberPath = "Value";
             cbSystem.SelectedIndex = 0;
 
-            List<string> proNames = CommunicationHelper.GetCurProNames(GlobalFuns.LoginSysId, false);
+            Dictionary<string, string> proNames = CommunicationHelper.GetCurProNames(GlobalFuns.LoginSysId, false);
             cbDemandName.ItemsSource = proNames;
             if (proNames.Count == 0)
             {
                 MessageBox.Show("当前无项目！");
                 return;
             }
+            cbDemandName.SelectedValuePath = "Key";
+            cbDemandName.DisplayMemberPath = "Value";
             cbDemandName.SelectedIndex = 0;
         }
 
@@ -169,8 +171,8 @@ namespace 项目管理.Pages
 
         private void cbDemandName_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string select = cbDemandName.SelectedItem as string;
-            DataTable dt = CommunicationHelper.GetProInfoFromName(select);
+            string select = cbDemandName.SelectedValue as string;
+            DataTable dt = CommunicationHelper.GetProInfo(select);
             if (dt == null)
             {
                 MessageBox.Show("查找项目信息失败！");
@@ -242,13 +244,15 @@ namespace 项目管理.Pages
 
         private void btnShowAll_Click(object sender, RoutedEventArgs e)
         {
-            List<string> proNames = CommunicationHelper.GetCurProNames(GlobalFuns.LoginSysId, true);
+            Dictionary<string, string> proNames = CommunicationHelper.GetCurProNames(GlobalFuns.LoginSysId, true);
             cbDemandName.ItemsSource = proNames;
             if (proNames.Count == 0)
             {
                 MessageBox.Show("当前无项目！");
                 return;
             }
+            cbDemandName.SelectedValuePath = "Key";
+            cbDemandName.DisplayMemberPath = "Value";
             cbDemandName.SelectedIndex = 0;
         }
 

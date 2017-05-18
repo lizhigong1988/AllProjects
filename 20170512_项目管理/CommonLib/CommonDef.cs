@@ -20,7 +20,7 @@ namespace CommonLib
             GET_HIS_DEPARTS,
             ADD_NEW_PROJECT,
             GET_CUR_PRO_NAMES,
-            GET_PRO_INFO_FROM_NAME,
+            GET_PRO_INFO,
             GET_TRADES_INFO,
             MOD_PROJECT,
             QUERY_PRO_INFO,

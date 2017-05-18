@@ -63,11 +63,11 @@ namespace 项目管理
                     listMenu.Items.RemoveAt(4);//系统信息管理
                     break;
                 default:
-                    listMenu.Items.RemoveAt(0);//新增项目
-                    listMenu.Items.RemoveAt(2);//项目统计
-                    listMenu.Items.RemoveAt(3);//工作量统计
-                    listMenu.Items.RemoveAt(4);//系统信息管理
                     listMenu.Items.RemoveAt(5);//人员管理
+                    listMenu.Items.RemoveAt(4);//系统信息管理
+                    listMenu.Items.RemoveAt(3);//工作量统计
+                    listMenu.Items.RemoveAt(2);//项目统计
+                    listMenu.Items.RemoveAt(0);//新增项目
                     break;
             }
         }

@@ -86,10 +86,10 @@ namespace ProjectsManageServer.DataBases
             return dataBaseTool.ActionFunc(sql);
         }
 
-        internal static List<string> GetCurProNames(string sysId, bool showAll)
+        internal static Dictionary<string, string> GetCurProNames(string sysId, bool showAll)
         {
-            List<string> retList = new List<string>();
-            string sql = "select distinct DEMAND_NAME from T_PRO_INFO where 1=1 ";
+            Dictionary<string, string> retList = new Dictionary<string, string>();
+            string sql = "select DEMAND_ID, DEMAND_NAME from T_PRO_INFO where 1=1 ";
             if (sysId != "")
             {
                 sql += string.Format("and DEMAND_ID in (select distinct DEMAND_ID from T_PRO_SYS_INFO where SYS_ID = '{0}')", sysId);
@@ -104,15 +104,15 @@ namespace ProjectsManageServer.DataBases
             {
                 foreach (DataRow dr in dt.Rows)
                 {
-                    retList.Add(dr[0].ToString());
+                    retList.Add(dr[0].ToString(), dr[1].ToString());
                 }
             }
             return retList;
         }
 
-        internal static DataTable GetProInfoFromName(string select)
+        internal static DataTable GetProInfo(string select)
         {
-            string sql = "select * from T_PRO_INFO where DEMAND_NAME = '{0}'";
+            string sql = "select * from T_PRO_INFO where DEMAND_ID = '{0}'";
             sql = string.Format(sql, select);
             return dataBaseTool.SelectFunc(sql);
         }

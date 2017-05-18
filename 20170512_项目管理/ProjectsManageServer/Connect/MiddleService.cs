@@ -26,8 +26,8 @@ namespace ProjectsManageServer.Connect
                 case CommonDef.FUN_NO.GET_CUR_PRO_NAMES:
                     ret = GetCurProNames(elem);
                     break;
-                case CommonDef.FUN_NO.GET_PRO_INFO_FROM_NAME:
-                    ret = GetProInfoFromName(elem);
+                case CommonDef.FUN_NO.GET_PRO_INFO:
+                    ret = GetProInfo(elem);
                     break;
                 case CommonDef.FUN_NO.GET_TRADES_INFO:
                     ret = GetTradesInfo(elem);
@@ -285,17 +285,17 @@ namespace ProjectsManageServer.Connect
 
         private static string GetProInfoFromName(string[] elem)
         {
-            DataTable dt = DataBaseManager.GetProInfoFromName(elem[1]);
+            DataTable dt = DataBaseManager.GetProInfo(elem[1]);
             return "0\n" + CommonDef.GetDataTableStr(dt);
         }
 
         private static string GetCurProNames(string[] elem)
         {
-            List<string> list = DataBaseManager.GetCurProNames(elem[1], bool.Parse(elem[2]));
+            Dictionary<string, string> list = DataBaseManager.GetCurProNames(elem[1], bool.Parse(elem[2]));
             string ret = "0\n";
-            foreach (string name in list)
+            foreach (var name in list)
             {
-                ret += name + "\r";
+                ret += name.Key + "\t" + name.Value + "\r";
             }
             return ret;
         }
