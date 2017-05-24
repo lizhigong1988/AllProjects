@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 
-namespace 人员管理
+namespace 项目管理
 {
     /// <summary>
     /// App.xaml 的交互逻辑
