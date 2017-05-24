@@ -39,10 +39,14 @@ namespace ProjectsManageServer.Connect
                 i++;
                 Thread.Sleep(5000);
                 Console.Write(".");
-                if (i > 10)
+                if (i % 10 == 0)
+                {
+                    Console.Write("\n");
+                }
+                if (i == 100)
                 {
                     i = 0;
-                    Console.Write("\n");
+                    Console.Clear();
                 }
             }
             //return true;

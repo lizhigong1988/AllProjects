@@ -283,7 +283,7 @@ namespace ProjectsManageServer.Connect
             return "0\n" + CommonDef.GetDataTableStr(dt);
         }
 
-        private static string GetProInfoFromName(string[] elem)
+        private static string GetProInfo(string[] elem)
         {
             DataTable dt = DataBaseManager.GetProInfo(elem[1]);
             return "0\n" + CommonDef.GetDataTableStr(dt);

@@ -22,7 +22,7 @@
             </StackPanel>
         </GroupBox>
         <GroupBox Header="项目基础信息">
-            <StackPanel>
+            <StackPanel Name="spProBaseInfo">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="提出部门" />
                     <ComboBox Name="cbDemandDepart" IsEditable="True" />
@@ -62,7 +62,7 @@
             </StackPanel>
         </GroupBox>
         <GroupBox Header="关联系统信息">
-            <StackPanel>
+            <StackPanel Name="spProSysInfo">
                 <DataGrid Name="dgProSysInfo"
                           Height="250"
                           IsReadOnly="True">
