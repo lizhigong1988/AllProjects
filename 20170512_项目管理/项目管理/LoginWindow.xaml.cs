@@ -28,7 +28,12 @@ namespace 项目管理
             InitializeComponent();
             if (File.Exists(IP_CONFIG_FILE))
             {
-                tbIPAddr.Text = File.ReadAllText(IP_CONFIG_FILE);
+                string[] fileInfo = File.ReadAllText(IP_CONFIG_FILE).Split('\n');
+                if(fileInfo.Length > 1)
+                {
+                    tbIPAddr.Text = fileInfo[0];
+                    tbUserName.Text = fileInfo[1];
+                }
             }
         }
 
@@ -39,7 +44,6 @@ namespace 项目管理
                 MessageBox.Show("网络连接失败！");
                 return;
             }
-            File.WriteAllText(IP_CONFIG_FILE, tbIPAddr.Text);
 
             if (tbUserName.Text == GlobalFuns.ADMIN_USER && tbUserPsw.Password == GlobalFuns.ADMIN_PASSWORD)
             {
@@ -58,14 +62,23 @@ namespace 项目管理
                 MessageBox.Show("没有此用户");
                 return;
             }
-            DataRow dr = dt.Rows[0];
-            if (dr["USER_PSW"].ToString() != tbUserPsw.Password)
+            bool loginFlag = false;
+            foreach (DataRow dr in dt.Rows)
             {
-                MessageBox.Show("密码不正确");
+                if (dr["USER_PSW"].ToString() == tbUserPsw.Password)
+                {
+                    loginFlag = true;
+                    break;
+                }
+            }
+            if (!loginFlag)
+            {
+                MessageBox.Show("密码错误");
                 return;
             }
             if (dt.Rows.Count == 1)
             {
+                DataRow dr = dt.Rows[0];
                 GlobalFuns.LoginUser = tbUserName.Text;
                 GlobalFuns.LoginSysId = dr["SYS_ID"].ToString();
                 GlobalFuns.LoginSysName = dr["SYS_NAME"].ToString();
@@ -96,6 +109,7 @@ namespace 项目管理
                 spLogin.Visibility = Visibility.Collapsed;
                 spSelectSys.Visibility = Visibility.Visible;
             }
+            File.WriteAllText(IP_CONFIG_FILE, tbIPAddr.Text + "\n" + tbUserName.Text);
         }
 
         DataTable dt;

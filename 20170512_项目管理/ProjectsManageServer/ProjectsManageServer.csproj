@@ -37,7 +37,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite">
-      <HintPath>..\..\..\..\VirtualBoxCommonFile\Svn\存档\CommonLib\System.Data.SQLite.DLL</HintPath>
+      <HintPath>..\..\..\..\CodeSource\CommonLib\System.Data.SQLite.DLL</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />

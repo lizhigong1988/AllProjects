@@ -176,6 +176,10 @@ namespace 项目管理.Pages
                     return;
                 }
             }
+            if (MessageBox.Show("确定要删除所选人员？", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+            {
+                return;
+            }
             if (!CommunicationHelper.DelUserInfo(drv.Row["USER_NAME"].ToString(), drv.Row["SYS_ID"].ToString()))
             {
                 MessageBox.Show("删除人员信息失败！");

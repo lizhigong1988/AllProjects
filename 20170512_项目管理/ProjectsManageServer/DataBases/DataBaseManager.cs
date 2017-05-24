@@ -326,13 +326,7 @@ namespace ProjectsManageServer.DataBases
             {
                 return false;
             }
-            string selectSql = string.Format("select count(*) from T_USER_INFO where USER_NAME = '{0}'", manage1);
-            DataTable dt = dataBaseTool.SelectFunc(selectSql);
-            if (dt == null)
-            {
-                return false;
-            }
-            if (dt.Rows[0][0].ToString() == "0")
+            if (manage1 != "")
             {
                 values = new List<string>() { manage1, "111111", guid, "焦作中旅银行股份有限公司", "项目经理", "" };
                 if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
@@ -341,13 +335,7 @@ namespace ProjectsManageServer.DataBases
                     return false;
                 }
             }
-            selectSql = string.Format("select count(*) from T_USER_INFO where USER_NAME = '{0}'", manage2);
-            dt = dataBaseTool.SelectFunc(selectSql);
-            if (dt == null)
-            {
-                return false;
-            }
-            if (dt.Rows[0][0].ToString() == "0")
+            if (manage2 != "")
             {
                 values = new List<string>() { manage2, "111111", guid, "焦作中旅银行股份有限公司", "项目经理", "" };
                 if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
@@ -369,14 +357,52 @@ namespace ProjectsManageServer.DataBases
             return dataBaseTool.SelectFunc(sql);
         }
 
-        internal static bool ModSystem(string sysId, string sysName, string uesr1, string user2, string remark)
+        internal static bool ModSystem(string sysId, string sysName, string manage1, string manage2, string remark)
         {
-            List<string> values = new List<string>() { sysId, sysName, uesr1, user2, remark };
+            List<string> values = new List<string>() { sysId, sysName, manage1, manage2, remark };
             string sql = "";
             if (!dataBaseTool.ModInfo(T_SYS_INFO.TABLE_NAME, T_SYS_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
                 values, ref sql))
             {
                 return false;
+            }
+            if (manage1 != "")
+            {
+                string selectSql = string.Format("select count(*) from T_USER_INFO where USER_NAME = '{0}' and SYS_ID = '{1}'",
+                manage1, sysId);
+                DataTable dt = dataBaseTool.SelectFunc(selectSql);
+                if (dt == null)
+                {
+                    return false;
+                }
+                if (dt.Rows[0][0].ToString() == "0")
+                {
+                    values = new List<string>() { manage1, "111111", sysId, "焦作中旅银行股份有限公司", "项目经理", "" };
+                    if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                        values, ref sql))
+                    {
+                        return false;
+                    }
+                }
+            }
+            if (manage2 != "")
+            {
+                string selectSql = string.Format("select count(*) from T_USER_INFO where USER_NAME = '{0}' and SYS_ID = '{1}'",
+                    manage2, sysId);
+                DataTable dt = dataBaseTool.SelectFunc(selectSql);
+                if (dt == null)
+                {
+                    return false;
+                }
+                if (dt.Rows[0][0].ToString() == "0")
+                {
+                    values = new List<string>() { manage2, "111111", sysId, "焦作中旅银行股份有限公司", "项目经理", "" };
+                    if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                        values, ref sql))
+                    {
+                        return false;
+                    }
+                }
             }
             return dataBaseTool.ActionFunc(sql);
         }
@@ -409,7 +435,8 @@ namespace ProjectsManageServer.DataBases
 
         internal static DataTable GetUserInfo(string userName = "")
         {
-            string sql = "select t1.*, t2.SYS_NAME from T_USER_INFO t1, T_SYS_INFO t2 where t1.SYS_ID = t2.SYS_ID";
+            string sql = "select t1.*, case when t2.SYS_NAME is null then '无' else t2.SYS_NAME end as SYS_NAME from T_USER_INFO t1 ";
+            sql += "LEFT JOIN T_SYS_INFO t2 on t1.SYS_ID = t2.SYS_ID where 1=1";
             if (userName != "")
             {
                 sql += string.Format(" and t1.USER_NAME = '{0}'", userName);
