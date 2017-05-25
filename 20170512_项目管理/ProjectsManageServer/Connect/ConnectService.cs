@@ -124,7 +124,7 @@ namespace ProjectsManageServer.Connect
                 }
                 #endregion
                 #region 解析报文并发送
-                List<byte> sendList = MiddleService.AnalysisFile(msgData).ToList();
+                List<byte> sendList = MiddleService.AnalysisFile(connectFlag, msgData).ToList();
                 int totalLength = sendList.Count;
                 if (sendList.Count > CommonDef.MAX_MSG_LENGTH)//回复长报文，分多次传输
                 {
@@ -140,6 +140,8 @@ namespace ProjectsManageServer.Connect
                 Console.Write("\n异常：" + ex.Message);
                 string send = CommonDef.ERROR.ToString();
                 SendData = Encoding.Default.GetBytes("0\n" + send.Length.ToString() + "\n" + send);
+                string ERRORLOG = MiddleService.LOG_PATH + "\\" + "ERROR_LOG";
+                File.AppendAllText(ERRORLOG, ex.Message);
             }
         }
 

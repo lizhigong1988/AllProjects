@@ -15,6 +15,8 @@ using 项目管理.Pages;
 using System.IO;
 using 项目管理.Tools;
 using System.Data;
+using CommonLib;
+using 项目管理.Connect;
 
 namespace 项目管理
 {
@@ -26,6 +28,15 @@ namespace 项目管理
         public MainWindow()
         {
             InitializeComponent();
+            tbVersionClient.Text = "客户端版本：" + CommonDef.VERSION_NUM;
+            string serverVersion = CommunicationHelper.GetServerVersion();
+            tbVersionServer.Text = "服务端版本：" + serverVersion;
+            if (CommonDef.VERSION_NUM.Split('.')[0] != serverVersion.Split('.')[0])
+            {
+                MessageBox.Show("版本过旧！");
+                this.Close();
+                return;
+            }
             Tools.GlobalFuns.MainWind = this;
             if (Directory.Exists("TEMP"))
             {

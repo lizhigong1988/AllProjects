@@ -453,6 +453,17 @@ namespace ProjectsManageServer.DataBases
 
         internal static bool AddNewUser(string userName, string sysId, string role, string company, string remark)
         {
+            string selectSql = string.Format("select count(*) from T_USER_INFO where USER_NAME = '{0}' and SYS_ID = '{1}'",
+                userName, sysId);
+            DataTable dt = dataBaseTool.SelectFunc(selectSql);
+            if (dt == null)
+            {
+                return false;
+            }
+            if (dt.Rows[0][0].ToString() != "0")
+            {
+                return false;
+            }
             List<string> values = new List<string>() { userName, "111111", sysId, company, role, remark };
             string sql = "";
             if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
@@ -467,6 +478,20 @@ namespace ProjectsManageServer.DataBases
         internal static bool ModUserInfo(string userName, string orgSysId, string psw, string sysId, string role,
             string company, string remark)
         {
+            if (orgSysId != sysId)
+            {
+                string selectSql = string.Format("select count(*) from T_USER_INFO where USER_NAME = '{0}' and SYS_ID = '{1}'",
+                    userName, sysId);
+                DataTable dt = dataBaseTool.SelectFunc(selectSql);
+                if (dt == null)
+                {
+                    return false;
+                }
+                if (dt.Rows[0][0].ToString() != "0")
+                {
+                    return false;
+                }
+            }
             List<string> values = new List<string>() { userName, psw, sysId, company, role, remark };
             string sql = "";
             if (!dataBaseTool.ModInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),

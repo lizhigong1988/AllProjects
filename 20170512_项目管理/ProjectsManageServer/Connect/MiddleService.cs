@@ -11,9 +11,28 @@ namespace ProjectsManageServer.Connect
 {
     class MiddleService
     {
-        public static byte[] AnalysisFile(string msgData)
+        public static string LOG_PATH = "LOG";
+        private static string curDate = DateTime.Now.ToString("yyyyMMdd");
+        static int LOG_LENGH = 256;
+
+        public static byte[] AnalysisFile(string connectFlag, string msgData)
         {
             string[] elem = msgData.Split('\n');
+            string logPath = LOG_PATH + "\\" + curDate;
+            if (!Directory.Exists(logPath))
+            {
+                Directory.CreateDirectory(logPath);
+            }
+            logPath += "\\" + connectFlag.Replace(".", "_").Replace(":", "_");
+            string log = "";
+            if (msgData.Length > LOG_LENGH)
+            {
+                log += "[REV]" + DateTime.Now.ToString("HHmmss") + ":" + msgData.Substring(0, LOG_LENGH) + "\r\n";
+            }
+            else
+            {
+                log += "[REV]" + DateTime.Now.ToString("HHmmss") + ":" + msgData + "\r\n";
+            }
             string ret = "";
             switch ((CommonDef.FUN_NO)int.Parse(elem[0]))
             {
@@ -101,7 +120,19 @@ namespace ProjectsManageServer.Connect
                 case CommonDef.FUN_NO.DEL_FILE:
                     ret = DelFile(elem);
                     break;
+                case CommonDef.FUN_NO.GET_SERVER_VERSION:
+                    ret = CommonDef.VERSION_NUM;
+                    break;
             }
+            if (ret.Length > LOG_LENGH)
+            {
+                log += "[SEND]" + DateTime.Now.ToString("HHmmss") + ":" + ret.Substring(0, LOG_LENGH) + "\r\n";
+            }
+            else
+            {
+                log += "[SEND]" + DateTime.Now.ToString("HHmmss") + ":" + ret + "\r\n";
+            }
+            File.AppendAllText(logPath, log);
             return Encoding.Default.GetBytes(ret);
         }
 

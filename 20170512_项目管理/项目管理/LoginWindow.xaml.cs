@@ -49,6 +49,7 @@ namespace 项目管理
             {
                 new MainWindow().Show();
                 this.Close();
+                File.WriteAllText(IP_CONFIG_FILE, tbIPAddr.Text + "\n" + tbUserName.Text);
                 return;
             }
             dt = CommunicationHelper.GetUserInfo(tbUserName.Text);

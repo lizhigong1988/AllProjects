@@ -36,6 +36,16 @@
                        Canvas.Left="40"
                        Canvas.Top="40"
                        Text="焦作中旅银行-&gt;信息技术部" />
+            <TextBlock Name="tbVersionClient"
+                       Canvas.Top="26"
+                       Canvas.Right="26"
+                       Foreground="White"
+                       Text="客户端版本:" />
+            <TextBlock Name="tbVersionServer"
+                       Canvas.Top="6"
+                       Canvas.Right="26"
+                       Foreground="White"
+                       Text="服务端版本:" />
         </Canvas>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>

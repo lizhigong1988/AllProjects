@@ -8,11 +8,17 @@ namespace CommonLib
 {
     public class CommonDef
     {
+        /// <summary>
+        /// 版本号，用于客户端与服务端对比 1级不一致不允许登录 2级版不一致可正常使用，仅提示
+        /// </summary>
+        public static string VERSION_NUM = "1.1";
+
         public static int MAX_MSG_LENGTH = 2048;
 
         public static int TIME_OUT = 10000;
 
         public static int ERROR = -1;
+
         public static int OK = 0;
 
         public enum FUN_NO
@@ -45,6 +51,7 @@ namespace CommonLib
             DOWNLOAD_FILE,
             UPLOAD_FILE,
             DEL_FILE,
+            GET_SERVER_VERSION,
         };
 
 

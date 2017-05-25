@@ -626,5 +626,17 @@ namespace 项目管理.Connect
             }
             return revMsg == "0";
         }
+
+        internal static string GetServerVersion()
+        {
+            string Msg = ((int)CommonDef.FUN_NO.GET_SERVER_VERSION).ToString() + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcv(Msg, out revMsg);
+            if (!ret)
+            {
+                return "";
+            }
+            return revMsg;
+        }
     }
 }

@@ -5,13 +5,38 @@ using System.Text;
 using ProjectsManageServer.DataBases;
 using System.Net;
 using ProjectsManageServer.Connect;
+using System.Runtime.InteropServices;
 
 namespace ProjectsManageServer
 {
     class Program
     {
+        [DllImport("user32.dll", EntryPoint = "FindWindow")]
+        extern static IntPtr FindWindow(string lpClassName, string lpWindowName);
+        [DllImport("user32.dll", EntryPoint = "GetSystemMenu")]
+        extern static IntPtr GetSystemMenu(IntPtr hWnd, IntPtr bRevert);
+        [DllImport("user32.dll", EntryPoint = "RemoveMenu")]
+        extern static IntPtr RemoveMenu(IntPtr hMenu, uint uPosition, uint uFlags);
+
+        /// <summary>  
+        /// 关闭时的事件  
+        /// </summary>  
+        /// <param name="sender">对象</param>  
+        /// <param name="e">参数</param>  
+        protected static void CloseConsole(object sender, ConsoleCancelEventArgs e)
+        {
+            Environment.Exit(0);
+            //return;
+        }
+
         static void Main(string[] args)
-        {    
+        {
+            Console.Title = "项目管理服务端";
+            IntPtr windowHandle = FindWindow(null, "项目管理服务端");
+            IntPtr closeMenu = GetSystemMenu(windowHandle, IntPtr.Zero);
+            uint SC_CLOSE = 0xF060;
+            RemoveMenu(closeMenu, SC_CLOSE, 0x0);
+            Console.CancelKeyPress += new ConsoleCancelEventHandler(CloseConsole);
             try
             {
                 if (!DataBaseManager.InitDataBases())

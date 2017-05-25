@@ -47,23 +47,31 @@ namespace ProjectsManageServer.Connect
                 {
                     i = 0;
                     Console.Clear();
+                    Console.Write("\n已建立服务器监听" + AddressIP + ":" + portNO.ToString() + "\n");
+                    Console.Write("已连接[" + connectedEndPoint.Count + "]:\n");
+                    foreach (string connect in connectedEndPoint)
+                    {
+                        Console.Write(connect + "\n");
+                    }
                 }
             }
             //return true;
         }
 
-
+        static List<string> connectedEndPoint = new List<string>();
         private static void OnConnectRequest(IAsyncResult ar)
         {
             Socket listener = (Socket)ar.AsyncState;
             Socket sock = listener.EndAccept(ar);
             listener.BeginAccept(new AsyncCallback(OnConnectRequest), listener);
             Console.Write("\n连接:" + sock.RemoteEndPoint.ToString() + "\n");
+            if (!connectedEndPoint.Contains(sock.RemoteEndPoint.ToString()))
+            {
+                connectedEndPoint.Add(sock.RemoteEndPoint.ToString());
+            }
             byte[] temp = new byte[0];
             sock.BeginReceive(temp, 0, 0, SocketFlags.None, new AsyncCallback(OnRecievedData), sock);
         }
-
-        static string LOG_PATH = "LOG";
 
 
         private static void OnRecievedData(IAsyncResult ar)
@@ -73,16 +81,16 @@ namespace ProjectsManageServer.Connect
             if (RecievedSize == 0)
             {
                 Console.Write("\n退出:" + sock.RemoteEndPoint.ToString() + "\n");
+                if (connectedEndPoint.Contains(sock.RemoteEndPoint.ToString()))
+                {
+                    connectedEndPoint.Remove(sock.RemoteEndPoint.ToString());
+                }
                 sock.Close();
                 return;
             }
             byte[] RecievedData = new byte[RecievedSize];
             sock.Receive(RecievedData);
             byte[] SendData = new byte[0];
-            if (!Directory.Exists(LOG_PATH))
-            {
-                Directory.CreateDirectory(LOG_PATH);
-            }
             ConnectService.Services(sock.RemoteEndPoint.ToString(), RecievedData, ref SendData);
             List<byte> listSendData = new List<byte>(Encoding.Default.GetBytes("[BIGEN]"));
             listSendData.AddRange(SendData);
