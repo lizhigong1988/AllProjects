@@ -19,6 +19,9 @@
                 <Button Name="btnShowAll"
                         Click="btnShowAll_Click"
                         Content="显示已完成" />
+                <Button Name="btnRefresh"
+                        Click="btnRefresh_Click"
+                        Content="刷新" />
             </StackPanel>
         </GroupBox>
         <GroupBox Header="项目基础信息">

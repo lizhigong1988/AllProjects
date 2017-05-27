@@ -95,6 +95,7 @@ namespace 项目管理.Pages
                 return;
             }
             MessageBox.Show("保存成功！");
+           // GlobalFuns.MainWind.CloseThisPage("新增项目");
         }
 
         private void btnAddNewSys_Click(object sender, RoutedEventArgs e)

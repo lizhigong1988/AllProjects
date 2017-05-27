@@ -23,7 +23,7 @@ namespace ProjectsManageServer.Connect
             {
                 Directory.CreateDirectory(logPath);
             }
-            logPath += "\\" + connectFlag.Replace(".", "_").Replace(":", "_");
+            logPath += "\\" + connectFlag.Replace(".", "_").Split(':')[0];
             string log = "";
             if (msgData.Length > LOG_LENGH)
             {

@@ -66,6 +66,9 @@
     </ApplicationDefinition>
     <Compile Include="Connects\CommunicationHelper.cs" />
     <Compile Include="Connects\Connection.cs" />
+    <Compile Include="Connects\LoadingWorker.xaml.cs">
+      <DependentUpon>LoadingWorker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ExcelOperation2010.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
@@ -91,6 +94,10 @@
     <Compile Include="Tools\InputCheck.cs" />
     <Compile Include="Tools\InputTypeControl.cs" />
     <Compile Include="Tools\GlobalFuns.cs" />
+    <Page Include="Connects\LoadingWorker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="LoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

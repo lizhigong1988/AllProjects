@@ -10,7 +10,7 @@ namespace 项目管理.Tools
     public class GlobalFuns
     {
 
-        public static Window MainWind;
+        public static MainWindow MainWind;
 
         public static void ShowDialogWind(Window handle,Window wind)
         {

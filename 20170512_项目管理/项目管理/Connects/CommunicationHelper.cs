@@ -23,7 +23,16 @@ namespace 项目管理.Connect
         public static bool IsConnected = false;
 
 
-        private static bool SendAndRcv(string sendData, out string recvData)
+        private static bool SendAndRcvWorker(string Msg, out string revMsg)
+        {
+            LoadingWorker loading = new LoadingWorker();
+            loading.MsgData = Msg;
+            loading.ShowDialog();
+            revMsg = loading.RecvData;
+            return loading.ret;
+        }
+
+        public static bool SendAndRcv(string sendData, out string recvData)
         {
             List<byte> listSendData = Encoding.Default.GetBytes(sendData).ToList();
             List<byte> sendOnce;
@@ -135,7 +144,7 @@ namespace 项目管理.Connect
             List<string> retList = new List<string>();
             string Msg = ((int)CommonDef.FUN_NO.GET_HIS_DEPARTS).ToString() + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return retList;
@@ -170,7 +179,7 @@ namespace 项目管理.Connect
             Msg += remark + "\n";
             Msg += CommonDef.GetDataTableStr(dtSysInfo) + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return false;
@@ -185,7 +194,7 @@ namespace 项目管理.Connect
             Msg += sysId + "\n";
             Msg += showAll.ToString() + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return retList;
@@ -207,7 +216,7 @@ namespace 项目管理.Connect
             string Msg = ((int)CommonDef.FUN_NO.GET_PRO_INFO).ToString() + "\n";
             Msg += select + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return null;
@@ -221,7 +230,7 @@ namespace 项目管理.Connect
             Msg += curProId + "\n";
             Msg += sysId + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return null;
@@ -252,7 +261,7 @@ namespace 项目管理.Connect
             Msg += CommonDef.GetDataTableStr(dtSysInfo) + "\n";
             Msg += CommonDef.GetDataTableStr(dtTrades) + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return false;
@@ -268,7 +277,7 @@ namespace 项目管理.Connect
             Msg += date + "\n";
             Msg += sysId + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return null;
@@ -284,7 +293,7 @@ namespace 项目管理.Connect
             Msg += sysId + "\n";
             Msg += tradeNo + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return retList;
@@ -307,7 +316,7 @@ namespace 项目管理.Connect
             string Msg = ((int)CommonDef.FUN_NO.GET_HIS_WORKERS).ToString() + "\n";
             Msg += sysId + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return retList;
@@ -331,7 +340,7 @@ namespace 项目管理.Connect
             Msg += worker + "\n";
             Msg += yearMonth + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return null;
@@ -346,7 +355,7 @@ namespace 项目管理.Connect
             Msg += curQueryWorker + "\n";
             Msg += demandId + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return null;
@@ -362,7 +371,7 @@ namespace 项目管理.Connect
             Msg += worker + "\n";
             Msg += CommonDef.GetDataTableStr(dataTable) + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return false;
@@ -376,7 +385,7 @@ namespace 项目管理.Connect
             Msg += curQueryWorker + "\n";
             Msg += curQueryDate + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return "";
@@ -389,7 +398,7 @@ namespace 项目管理.Connect
             Dictionary<string, string> retList = new Dictionary<string, string>();
             string Msg = ((int)CommonDef.FUN_NO.GET_ALL_SYS_DIC).ToString() + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return retList;
@@ -415,7 +424,7 @@ namespace 项目管理.Connect
             Msg += manage2 + "\n";
             Msg += remark + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return false;
@@ -428,7 +437,7 @@ namespace 项目管理.Connect
             string Msg = ((int)CommonDef.FUN_NO.GET_SYSTEM_INFO).ToString() + "\n";
             Msg += sysId + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return null;
@@ -445,7 +454,7 @@ namespace 项目管理.Connect
             Msg += user2 + "\n";
             Msg += remark + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return false;
@@ -458,7 +467,7 @@ namespace 项目管理.Connect
             string Msg = ((int)CommonDef.FUN_NO.DEL_SYSTEM).ToString() + "\n";
             Msg += sysId + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return false;
@@ -471,7 +480,7 @@ namespace 项目管理.Connect
             string Msg = ((int)CommonDef.FUN_NO.GET_USER_INFO).ToString() + "\n";
             Msg += userName + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return null;
@@ -485,7 +494,7 @@ namespace 项目管理.Connect
             Msg += userName + "\n";
             Msg += password + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return false;
@@ -502,7 +511,7 @@ namespace 项目管理.Connect
             Msg += company + "\n";
             Msg += remark + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return false;
@@ -523,7 +532,7 @@ namespace 项目管理.Connect
             Msg += company + "\n";
             Msg += remark + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return false;
@@ -536,7 +545,7 @@ namespace 项目管理.Connect
             string Msg = ((int)CommonDef.FUN_NO.GET_PRO_SYS_INFO).ToString() + "\n";
             Msg += curProId + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return null;
@@ -550,7 +559,7 @@ namespace 项目管理.Connect
             Msg += userName + "\n";
             Msg += sysId + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return false;
@@ -563,7 +572,7 @@ namespace 项目管理.Connect
             string Msg = ((int)CommonDef.FUN_NO.GET_PRO_FILE_INFO).ToString() + "\n";
             Msg += curProId + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return null;
@@ -576,7 +585,7 @@ namespace 项目管理.Connect
             string Msg = ((int)CommonDef.FUN_NO.DOWNLOAD_FILE).ToString() + "\n";
             Msg += fileName + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return false;
@@ -606,7 +615,7 @@ namespace 项目管理.Connect
             Msg += fileAllName + "\n";
             Msg += strData + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return false;
@@ -619,7 +628,7 @@ namespace 项目管理.Connect
             string Msg = ((int)CommonDef.FUN_NO.DEL_FILE).ToString() + "\n";
             Msg += fileName + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return false;
@@ -631,7 +640,7 @@ namespace 项目管理.Connect
         {
             string Msg = ((int)CommonDef.FUN_NO.GET_SERVER_VERSION).ToString() + "\n";
             string revMsg = "";
-            bool ret = SendAndRcv(Msg, out revMsg);
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
                 return "";

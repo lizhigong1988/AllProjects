@@ -37,6 +37,7 @@ namespace 项目管理.Pages
                 cbSystem.IsEnabled = false;
             }
             RefreshTable();
+            tbSelectKey.Text = GlobalFuns.LoginSysName;
         }
 
         private void dgUserInfo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -81,14 +82,12 @@ namespace 项目管理.Pages
             RefreshTable();
         }
 
+        DataTable allDt = null;
+
         private void RefreshTable()
         {
-            DataTable dt = CommunicationHelper.GetUserInfo();
-            if (dt == null)
-            {
-                MessageBox.Show("查询人员信息失败");
-            }
-            dgUserInfo.DataContext = dt;
+            allDt = CommunicationHelper.GetUserInfo();
+            btnQuery_Click(null, null);
         }
 
         private void cbSystem_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -186,6 +185,32 @@ namespace 项目管理.Pages
                 return;
             }
             RefreshTable();
+        }
+
+        private void btnQuery_Click(object sender, RoutedEventArgs e)
+        {
+            if (allDt == null)
+            {
+                return;
+            }
+            if (tbSelectKey.Text.Trim() == "")
+            {
+                dgUserInfo.DataContext = allDt;
+                return;
+            }
+            DataTable queryDt = allDt.Clone();
+            foreach (DataRow dr in allDt.Rows)
+            {
+                for (int i = 0; i < allDt.Columns.Count; i++ )
+                {
+                    if (dr[i].ToString().Contains(tbSelectKey.Text))
+                    {
+                        queryDt.Rows.Add(dr.ItemArray);
+                        break;
+                    }
+                }
+            }
+            dgUserInfo.DataContext = queryDt;
         }
     }
 }

@@ -114,7 +114,12 @@ namespace 项目管理.Pages
                     Directory.CreateDirectory(curFilePath);
                 }
                 string fileAllName = curFilePath + "/" + fileName;
-                File.Copy(imageFileDialog.FileName, fileAllName);
+                File.Copy(imageFileDialog.FileName, fileAllName + "new");
+                if (File.Exists(fileAllName))
+                {
+                    File.Delete(fileAllName);
+                }
+                File.Move(fileAllName + "new", fileAllName);
                 File.SetLastWriteTime(fileAllName, DateTime.Now.AddMinutes(5));
                 if (CommunicationHelper.UploadFile(fileAllName))
                 {
@@ -199,14 +204,17 @@ namespace 项目管理.Pages
             spProSysInfo.IsEnabled = false;
             if (GlobalFuns.LoginSysId != "")//项目经理
             {
-                foreach (DataRow drSys in dtSystems.Rows)
+                if (GlobalFuns.LoginRole != "开发人员")//开发人员无权修改基础信息
                 {
-                    if (drSys["IS_MAIN"].ToString() == "是" &&
-                        drSys["SYS_ID"].ToString() == GlobalFuns.LoginSysId)
+                    foreach (DataRow drSys in dtSystems.Rows)
                     {
-                        spProBaseInfo.IsEnabled = true;
-                        spProSysInfo.IsEnabled = true;
-                        break;
+                        if (drSys["IS_MAIN"].ToString() == "是" &&
+                            drSys["SYS_ID"].ToString() == GlobalFuns.LoginSysId)
+                        {
+                            spProBaseInfo.IsEnabled = true;
+                            spProSysInfo.IsEnabled = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -221,7 +229,8 @@ namespace 项目管理.Pages
             dgDevelopmentInfo.DataContext = dtTrades;
 
             DataTable dtFiles = CommunicationHelper.GetProFileInfo(curProId);
-            curFilePath = "projects/" + tbDemandDate.Text + "_" + select;
+            curFilePath = "projects/" + tbDemandDate.Text + "_" +
+                (cbDemandName.ItemsSource as Dictionary<string, string>).ElementAt(cbDemandName.SelectedIndex).Value;
             DataTable dtFile = new DataTable();
             dtFile.Columns.Add("FILE_ALL_NAME");
             dtFile.Columns.Add("FILE_NAME");
@@ -479,6 +488,11 @@ namespace 项目管理.Pages
                 MessageBox.Show("下载失败！");
                 return;
             }
+        }
+
+        private void btnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            Refresh();
         }
 
     }

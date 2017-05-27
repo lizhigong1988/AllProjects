@@ -10,18 +10,27 @@
     </UserControl.Resources>
     <StackPanel>
         <GroupBox Header="人员信息表">
-            <DataGrid Name="dgUserInfo"
-                      Height="350"
-                      IsReadOnly="True"
-                      SelectionChanged="dgUserInfo_SelectionChanged">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding USER_NAME}" Header="人员名称" />
-                    <DataGridTextColumn Binding="{Binding SYS_NAME}" Header="所属系统" />
-                    <DataGridTextColumn Binding="{Binding USER_ROLE}" Header="角色" />
-                    <DataGridTextColumn Binding="{Binding COMPANY}" Header="公司名称" />
-                    <DataGridTextColumn Binding="{Binding REMARK}" Header="备注" />
-                </DataGrid.Columns>
-            </DataGrid>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="筛选条件" />
+                    <TextBox Name="tbSelectKey" />
+                    <Button Name="btnQuery"
+                            Click="btnQuery_Click"
+                            Content="筛选" />
+                </StackPanel>
+                <DataGrid Name="dgUserInfo"
+                          Height="350"
+                          IsReadOnly="True"
+                          SelectionChanged="dgUserInfo_SelectionChanged">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding USER_NAME}" Header="人员名称" />
+                        <DataGridTextColumn Binding="{Binding SYS_NAME}" Header="所属系统" />
+                        <DataGridTextColumn Binding="{Binding USER_ROLE}" Header="角色" />
+                        <DataGridTextColumn Binding="{Binding COMPANY}" Header="公司名称" />
+                        <DataGridTextColumn Binding="{Binding REMARK}" Header="备注" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
         </GroupBox>
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="人员名称" />
