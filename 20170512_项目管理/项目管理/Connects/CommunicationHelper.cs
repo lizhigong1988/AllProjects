@@ -502,14 +502,15 @@ namespace 项目管理.Connect
             return revMsg == "0";
         }
 
-        internal static bool AddNewUser(string userName, string sysId, string role, string company, string remark)
+        internal static bool AddNewUser(string userName, string email, string role, string company, string remark, string sysInfo)
         {
             string Msg = ((int)CommonDef.FUN_NO.ADD_NEW_USER).ToString() + "\n";
             Msg += userName + "\n";
-            Msg += sysId + "\n";
+            Msg += email + "\n";
             Msg += role + "\n";
             Msg += company + "\n";
             Msg += remark + "\n";
+            Msg += sysInfo + "\n";
             string revMsg = "";
             bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
@@ -520,17 +521,17 @@ namespace 项目管理.Connect
         }
 
 
-        internal static bool ModUserInfo(string userName, string orgSysId, string psw, string sysId, string role,
-            string company, string remark)
+        internal static bool ModUserInfo(string userName, string email, string psw, string role,
+            string company, string remark, string sysInfo)
         {
             string Msg = ((int)CommonDef.FUN_NO.MOD_USER_INFO).ToString() + "\n";
             Msg += userName + "\n";
-            Msg += orgSysId + "\n";
+            Msg += email + "\n";
             Msg += psw + "\n";
-            Msg += sysId + "\n";
             Msg += role + "\n";
             Msg += company + "\n";
             Msg += remark + "\n";
+            Msg += sysInfo + "\n";
             string revMsg = "";
             bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
@@ -553,11 +554,10 @@ namespace 项目管理.Connect
             return CommonDef.GetDataTable(revMsg.Split('\n')[1]);
         }
 
-        internal static bool DelUserInfo(string userName, string sysId)
+        internal static bool DelUserInfo(string userName)
         {
             string Msg = ((int)CommonDef.FUN_NO.DEL_USER_INFO).ToString() + "\n";
             Msg += userName + "\n";
-            Msg += sysId + "\n";
             string revMsg = "";
             bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
@@ -646,6 +646,51 @@ namespace 项目管理.Connect
                 return "";
             }
             return revMsg;
+        }
+
+        internal static DataTable GetUserSysInfo(string userName)
+        {
+            string Msg = ((int)CommonDef.FUN_NO.GET_USER_SYS_INFO).ToString() + "\n";
+            Msg += userName + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
+            if (!ret)
+            {
+                return null;
+            }
+            return CommonDef.GetDataTable(revMsg.Split('\n')[1]);
+        }
+
+        internal static DataTable GetProRateInfo(string proId)
+        {
+            string Msg = ((int)CommonDef.FUN_NO.GET_PRO_RATE_INFO).ToString() + "\n";
+            Msg += proId + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
+            if (!ret)
+            {
+                return null;
+            }
+            return CommonDef.GetDataTable(revMsg.Split('\n')[1]);
+        }
+
+        internal static bool EntryProRate(string proId, string sysId, string date, string rate, 
+            string explain, string problem)
+        {
+            string Msg = ((int)CommonDef.FUN_NO.ENTRY_PRO_RATE).ToString() + "\n";
+            Msg += proId + "\n";
+            Msg += sysId + "\n";
+            Msg += date + "\n";
+            Msg += rate + "\n";
+            Msg += explain + "\n";
+            Msg += problem + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
+            if (!ret)
+            {
+                return false;
+            }
+            return revMsg == "0";
         }
     }
 }

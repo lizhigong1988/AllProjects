@@ -17,11 +17,11 @@ using 项目管理.Connect;
 namespace 项目管理.Pages
 {
     /// <summary>
-    /// SystemMange.xaml 的交互逻辑
+    /// UserManage.xaml 的交互逻辑
     /// </summary>
-    public partial class SystemMange : UserControl
+    public partial class SystemManage : UserControl
     {
-        public SystemMange()
+        public SystemManage()
         {
             InitializeComponent();
             RefreshTable();

@@ -60,27 +60,21 @@
                      Background="Transparent"
                      BorderThickness="0"
                      MouseDoubleClick="listMenu_MouseDoubleClick">
-                <ListBoxItem Height="25"
-                             HorizontalContentAlignment="Center"
-                             Content="新增项目" />
-                <ListBoxItem Height="25"
-                             HorizontalContentAlignment="Center"
-                             Content="项目维护" />
-                <ListBoxItem Height="25"
-                             HorizontalContentAlignment="Center"
-                             Content="项目统计" />
-                <ListBoxItem Height="25"
-                             HorizontalContentAlignment="Center"
-                             Content="工作量统计" />
-                <ListBoxItem Height="25"
-                             HorizontalContentAlignment="Center"
-                             Content="系统信息管理" />
-                <ListBoxItem Height="25"
-                             HorizontalContentAlignment="Center"
-                             Content="人员管理" />
-                <ListBoxItem Height="25"
-                             HorizontalContentAlignment="Center"
-                             Content="修改密码" />
+                <ListBox.Resources>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Height" Value="25" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    </Style>
+                </ListBox.Resources>
+                <ListBoxItem Content="新增项目" />
+                <ListBoxItem Content="项目维护" />
+                <ListBoxItem Content="进度录入" />
+                <ListBoxItem Content="项目统计" />
+                <ListBoxItem Content="工作量统计" />
+                <ListBoxItem Content="系统信息管理" />
+                <ListBoxItem Content="人员管理" />
+                <ListBoxItem Content="修改密码" />
+                <ListBoxItem Content="系统设置" />
             </ListBox>
             <Border Grid.Column="1"
                     Margin="3"

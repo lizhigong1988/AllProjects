@@ -62,23 +62,42 @@ namespace 项目管理
             {
                 tbAlert.Text += "->系统管理员";
             }
-
+            listMenu.Items.Clear();
             switch (GlobalFuns.LoginRole)
             { 
                 case ""://系统管理员
-                    listMenu.Items.RemoveAt(6);//修改密码
+                    listMenu.Items.Add(new ListBoxItem() { Content = "新增项目" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "项目维护" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "进度录入" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "项目统计" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "工作量统计" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "系统信息管理" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "人员管理" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "系统设置" });
                     break;
                 case "部门领导":
+                    listMenu.Items.Add(new ListBoxItem() { Content = "新增项目" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "项目维护" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "进度录入" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "项目统计" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "工作量统计" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "系统信息管理" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "人员管理" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "修改密码" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "系统设置" });
                     break;
                 case "项目经理":
-                    listMenu.Items.RemoveAt(4);//系统信息管理
+                    listMenu.Items.Add(new ListBoxItem() { Content = "新增项目" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "项目维护" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "进度录入" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "项目统计" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "工作量统计" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "人员管理" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "修改密码" });
                     break;
-                default:
-                    listMenu.Items.RemoveAt(5);//人员管理
-                    listMenu.Items.RemoveAt(4);//系统信息管理
-                    listMenu.Items.RemoveAt(3);//工作量统计
-                    listMenu.Items.RemoveAt(2);//项目统计
-                    listMenu.Items.RemoveAt(0);//新增项目
+                case "开发人员":
+                    listMenu.Items.Add(new ListBoxItem() { Content = "项目维护" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "修改密码" });
                     break;
             }
         }
@@ -127,6 +146,9 @@ namespace 项目管理
                 case "项目维护":
                     scrl.Content = new ModProject();
                     break;
+                case "进度录入":
+                    scrl.Content = new ProRateEntry();
+                    break;
                 case "项目统计":
                     scrl.Content = new QueryProject();
                     break;
@@ -134,10 +156,10 @@ namespace 项目管理
                     scrl.Content = new QueryWorkDays();
                     break;
                 case "系统信息管理":
-                    scrl.Content = new SystemMange();
+                    scrl.Content = new SysConfig();
                     break;
                 case "人员管理":
-                    scrl.Content = new UserMange();
+                    scrl.Content = new UserManage();
                     break;
                 case "修改密码":
                     scrl.Content = new ModPassword();

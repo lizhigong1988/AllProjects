@@ -5,12 +5,12 @@ using System.Text;
 
 namespace ProjectsManageServer.DataBases
 {
-    class T_USER_INFO
+    class T_USER_SYS_INFO
     { 
         /// <summary>
         /// 定义表名
         /// </summary>
-        internal static string TABLE_NAME = "T_USER_INFO";
+        internal static string TABLE_NAME = "T_USER_SYS_INFO";
 
         /// <summary>
         /// 定义列标题
@@ -18,11 +18,7 @@ namespace ProjectsManageServer.DataBases
         internal static Dictionary<string, string> DIC_TABLE_COLUMS = new Dictionary<string, string>()
         {
             {"USER_NAME", "VARCHAR(32)"},
-            {"USER_PSW", "VARCHAR(32)"},
-            {"EMAIL", "VARCHAR(36)"},
-            {"COMPANY", "VARCHAR(64)"},
-            {"USER_ROLE", "VARCHAR(16)"},
-            {"REMARK", "VARCHAR(128)"},
+            {"SYS_ID", "VARCHAR(36)"},
         };
 
         static DataBaseTool_SQLite3 dataBaseTool;

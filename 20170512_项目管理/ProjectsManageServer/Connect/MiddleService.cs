@@ -123,6 +123,15 @@ namespace ProjectsManageServer.Connect
                 case CommonDef.FUN_NO.GET_SERVER_VERSION:
                     ret = CommonDef.VERSION_NUM;
                     break;
+                case CommonDef.FUN_NO.GET_USER_SYS_INFO:
+                    ret = GetUserSysInfo(elem);
+                    break;
+                case CommonDef.FUN_NO.GET_PRO_RATE_INFO:
+                    ret = GetProRateInfo(elem);
+                    break;
+                case CommonDef.FUN_NO.ENTRY_PRO_RATE:
+                    ret = EntryProRate(elem);
+                    break;
             }
             if (ret.Length > LOG_LENGH)
             {
@@ -134,6 +143,25 @@ namespace ProjectsManageServer.Connect
             }
             File.AppendAllText(logPath, log);
             return Encoding.Default.GetBytes(ret);
+        }
+
+        private static string EntryProRate(string[] elem)
+        {
+            bool sec = DataBaseManager.EntryProRate(elem[1], elem[2], elem[3],
+                elem[4], elem[5], elem[6]);
+            return sec ? "0" : "-1";
+        }
+
+        private static string GetProRateInfo(string[] elem)
+        {
+            DataTable dt = DataBaseManager.GetProRateInfo(elem[1]);
+            return "0\n" + CommonDef.GetDataTableStr(dt);
+        }
+
+        private static string GetUserSysInfo(string[] elem)
+        {
+            DataTable dt = DataBaseManager.GetUserSysInfo(elem[1]);
+            return "0\n" + CommonDef.GetDataTableStr(dt);
         }
 
         private static string DelFile(string[] elem)
@@ -170,7 +198,7 @@ namespace ProjectsManageServer.Connect
 
         private static string DelUserInfo(string[] elem)
         {
-            bool sec = DataBaseManager.DelUserInfo(elem[1], elem[2]);
+            bool sec = DataBaseManager.DelUserInfo(elem[1]);
             return sec ? "0" : "-1";
         }
 
@@ -191,7 +219,7 @@ namespace ProjectsManageServer.Connect
         private static string AddNewUser(string[] elem)
         {
             bool sec = DataBaseManager.AddNewUser(elem[1], elem[2],
-                elem[3], elem[4], elem[5]
+                elem[3], elem[4], elem[5], elem[6]
                 );
             return sec ? "0" : "-1";
         }

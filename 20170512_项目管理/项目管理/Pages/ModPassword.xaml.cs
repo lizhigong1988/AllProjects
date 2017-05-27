@@ -18,7 +18,7 @@ using 项目管理.Connect;
 namespace 项目管理.Pages
 {
     /// <summary>
-    /// UserMange.xaml 的交互逻辑
+    /// UserManage.xaml 的交互逻辑
     /// </summary>
     public partial class ModPassword : UserControl
     {

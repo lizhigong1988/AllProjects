@@ -29,9 +29,9 @@ namespace 项目管理
             if (File.Exists(IP_CONFIG_FILE))
             {
                 string[] fileInfo = File.ReadAllText(IP_CONFIG_FILE).Split('\n');
-                if(fileInfo.Length > 1)
+                tbIPAddr.Text = fileInfo[0];
+                if (fileInfo.Length > 1)
                 {
-                    tbIPAddr.Text = fileInfo[0];
                     tbUserName.Text = fileInfo[1];
                 }
             }
@@ -63,44 +63,53 @@ namespace 项目管理
                 MessageBox.Show("没有此用户");
                 return;
             }
-            bool loginFlag = false;
-            foreach (DataRow dr in dt.Rows)
-            {
-                if (dr["USER_PSW"].ToString() == tbUserPsw.Password)
-                {
-                    loginFlag = true;
-                    break;
-                }
-            }
-            if (!loginFlag)
+            DataRow dr = dt.Rows[0];
+            if (dr["USER_PSW"].ToString() != tbUserPsw.Password)
             {
                 MessageBox.Show("密码错误");
                 return;
             }
-            if (dt.Rows.Count == 1)
+
+            File.WriteAllText(IP_CONFIG_FILE, tbIPAddr.Text + "\n" + tbUserName.Text);
+            GlobalFuns.LoginUser = tbUserName.Text;
+            GlobalFuns.LoginRole = dr["USER_ROLE"].ToString();
+
+            DataTable dtUserSys = CommunicationHelper.GetUserSysInfo(tbUserName.Text);
+
+            if (dtUserSys == null)
             {
-                DataRow dr = dt.Rows[0];
-                GlobalFuns.LoginUser = tbUserName.Text;
-                GlobalFuns.LoginSysId = dr["SYS_ID"].ToString();
-                GlobalFuns.LoginSysName = dr["SYS_NAME"].ToString();
-                GlobalFuns.LoginRole = dr["USER_ROLE"].ToString();
+                MessageBox.Show("数据查询错误");
+                return;
+            }
+            if (dtUserSys.Rows.Count == 0)
+            {
+                GlobalFuns.LoginSysId = "";
+                GlobalFuns.LoginSysName = "";
                 new MainWindow().Show();
                 this.Close();
+                return;
             }
-            else
+            if (dtUserSys.Rows.Count == 1)
             {
-                Dictionary<string, string> dicSys = CommunicationHelper.GetAllSysDic();
+                GlobalFuns.LoginSysId = dtUserSys.Rows[0]["SYS_ID"].ToString();
+                GlobalFuns.LoginSysName = dtUserSys.Rows[0]["SYS_NAME"].ToString();
+                new MainWindow().Show();
+                this.Close();
+                return;
+            }
+            if (dtUserSys.Rows.Count > 1)
+            {
                 Dictionary<string, string> manageDic = new Dictionary<string, string>();
-                foreach (DataRow dic in dt.Rows)
+                foreach (DataRow dic in dtUserSys.Rows)
                 {
                     string sysId = dic["SYS_ID"].ToString();
                     if (sysId == "")
                     {
                         continue;
                     }
-                    if (dicSys.ContainsKey(sysId))
+                    if (!manageDic.ContainsKey(sysId))
                     {
-                        manageDic.Add(sysId, dicSys[sysId]);
+                        manageDic.Add(sysId, dic["SYS_NAME"].ToString());
                     }
                 }
                 cbSelectSys.ItemsSource = manageDic;
@@ -110,7 +119,6 @@ namespace 项目管理
                 spLogin.Visibility = Visibility.Collapsed;
                 spSelectSys.Visibility = Visibility.Visible;
             }
-            File.WriteAllText(IP_CONFIG_FILE, tbIPAddr.Text + "\n" + tbUserName.Text);
         }
 
         DataTable dt;
@@ -129,17 +137,8 @@ namespace 项目管理
 
         private void btnSelectSys_Click(object sender, RoutedEventArgs e)
         {
-            GlobalFuns.LoginUser = tbUserName.Text;
             GlobalFuns.LoginSysId = cbSelectSys.SelectedValue.ToString();
             GlobalFuns.LoginSysName = cbSelectSys.Text;
-            foreach (DataRow dr in dt.Rows)
-            {
-                if (dr["SYS_ID"].ToString() == GlobalFuns.LoginSysId)
-                {
-                    GlobalFuns.LoginRole = dr["USER_ROLE"].ToString();
-                    break;
-                }
-            }
             new MainWindow().Show();
             this.Close();
         }

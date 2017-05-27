@@ -10,8 +10,10 @@ namespace CommonLib
     {
         /// <summary>
         /// 版本号，用于客户端与服务端对比 1级不一致不允许登录 2级版不一致可正常使用，仅提示
+        /// 1.1增加版本号对比功能
+        /// 2.1修改人员管理中人员与系统的对应方式，增加电子邮件字段
         /// </summary>
-        public static string VERSION_NUM = "1.1";
+        public static string VERSION_NUM = "2.1";
 
         public static int MAX_MSG_LENGTH = 2048;
 
@@ -52,8 +54,18 @@ namespace CommonLib
             UPLOAD_FILE,
             DEL_FILE,
             GET_SERVER_VERSION,
+            GET_USER_SYS_INFO,
+            GET_PRO_RATE_INFO,
+            ENTRY_PRO_RATE,
         };
 
+        public enum CONFIG_KEYS
+        {
+            SEND_EMAIL_NAME,
+            SEND_EMAIL_ADDR,
+            SEND_EMAIL_PASSWORD,
+            SEND_EMAIL_HOST,//smtp.hkcts.com
+        };
 
         public static DataTable GetDataTable(string str)
         {

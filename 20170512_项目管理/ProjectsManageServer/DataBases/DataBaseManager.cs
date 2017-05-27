@@ -21,9 +21,12 @@ namespace ProjectsManageServer.DataBases
         internal static bool InitDataBases()
         {
             bool ret = dataBaseTool.InitDataBase();
+            if (ret) ret = T_CONFIG_INFO.InitTable(dataBaseTool);
             if (ret) ret = T_DAYS_INFO.InitTable(dataBaseTool);
             if (ret) ret = T_USER_INFO.InitTable(dataBaseTool);
+            if (ret) ret = T_USER_SYS_INFO.InitTable(dataBaseTool);
             if (ret) ret = T_PRO_INFO.InitTable(dataBaseTool);
+            if (ret) ret = T_PRO_RATE.InitTable(dataBaseTool);
             if (ret) ret = T_PRO_SYS_INFO.InitTable(dataBaseTool);
             if (ret) ret = T_SYS_INFO.InitTable(dataBaseTool);
             if (ret) ret = T_TRADE_INFO.InitTable(dataBaseTool);
@@ -328,8 +331,24 @@ namespace ProjectsManageServer.DataBases
             }
             if (manage1 != "")
             {
-                values = new List<string>() { manage1, "111111", guid, "焦作中旅银行股份有限公司", "项目经理", "" };
-                if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                string selectSql = string.Format("select count(*) from T_USER_INFO where USER_NAME = '{0}'",
+                manage1);
+                DataTable dt = dataBaseTool.SelectFunc(selectSql);
+                if (dt == null)
+                {
+                    return false;
+                }
+                if (dt.Rows[0][0].ToString() == "0")
+                {
+                    values = new List<string>() { manage1, "111111", "", "焦作中旅银行股份有限公司", "项目经理", "" };
+                    if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                        values, ref sql))
+                    {
+                        return false;
+                    }
+                }
+                values = new List<string> { manage1, guid};
+                if (!dataBaseTool.AddInfo(T_USER_SYS_INFO.TABLE_NAME, T_USER_SYS_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
                     values, ref sql))
                 {
                     return false;
@@ -337,8 +356,24 @@ namespace ProjectsManageServer.DataBases
             }
             if (manage2 != "")
             {
-                values = new List<string>() { manage2, "111111", guid, "焦作中旅银行股份有限公司", "项目经理", "" };
-                if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                string selectSql = string.Format("select count(*) from T_USER_INFO where USER_NAME = '{0}'",
+                manage2);
+                DataTable dt = dataBaseTool.SelectFunc(selectSql);
+                if (dt == null)
+                {
+                    return false;
+                }
+                if (dt.Rows[0][0].ToString() == "0")
+                {
+                    values = new List<string>() { manage2, "111111", guid, "焦作中旅银行股份有限公司", "项目经理", "" };
+                    if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                        values, ref sql))
+                    {
+                        return false;
+                    }
+                }
+                values = new List<string> { manage2, guid };
+                if (!dataBaseTool.AddInfo(T_USER_SYS_INFO.TABLE_NAME, T_USER_SYS_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
                     values, ref sql))
                 {
                     return false;
@@ -368,8 +403,8 @@ namespace ProjectsManageServer.DataBases
             }
             if (manage1 != "")
             {
-                string selectSql = string.Format("select count(*) from T_USER_INFO where USER_NAME = '{0}' and SYS_ID = '{1}'",
-                manage1, sysId);
+                string selectSql = string.Format("select count(*) from T_USER_INFO where USER_NAME = '{0}'",
+                manage1);
                 DataTable dt = dataBaseTool.SelectFunc(selectSql);
                 if (dt == null)
                 {
@@ -377,8 +412,14 @@ namespace ProjectsManageServer.DataBases
                 }
                 if (dt.Rows[0][0].ToString() == "0")
                 {
-                    values = new List<string>() { manage1, "111111", sysId, "焦作中旅银行股份有限公司", "项目经理", "" };
+                    values = new List<string>() { manage1, "111111", "", "焦作中旅银行股份有限公司", "项目经理", "" };
                     if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                        values, ref sql))
+                    {
+                        return false;
+                    }
+                    values = new List<string> { manage1, sysId };
+                    if (!dataBaseTool.AddInfo(T_USER_SYS_INFO.TABLE_NAME, T_USER_SYS_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
                         values, ref sql))
                     {
                         return false;
@@ -398,6 +439,12 @@ namespace ProjectsManageServer.DataBases
                 {
                     values = new List<string>() { manage2, "111111", sysId, "焦作中旅银行股份有限公司", "项目经理", "" };
                     if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                        values, ref sql))
+                    {
+                        return false;
+                    }
+                    values = new List<string> { manage2, sysId };
+                    if (!dataBaseTool.AddInfo(T_USER_SYS_INFO.TABLE_NAME, T_USER_SYS_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
                         values, ref sql))
                     {
                         return false;
@@ -435,11 +482,10 @@ namespace ProjectsManageServer.DataBases
 
         internal static DataTable GetUserInfo(string userName = "")
         {
-            string sql = "select t1.*, case when t2.SYS_NAME is null then '无' else t2.SYS_NAME end as SYS_NAME from T_USER_INFO t1 ";
-            sql += "LEFT JOIN T_SYS_INFO t2 on t1.SYS_ID = t2.SYS_ID where 1=1";
+            string sql = "select * from T_USER_INFO where 1=1";
             if (userName != "")
             {
-                sql += string.Format(" and t1.USER_NAME = '{0}'", userName);
+                sql += string.Format(" and USER_NAME = '{0}'", userName);
             }
             return dataBaseTool.SelectFunc(sql);
         }
@@ -451,10 +497,10 @@ namespace ProjectsManageServer.DataBases
             return dataBaseTool.ActionFunc(sql);
         }
 
-        internal static bool AddNewUser(string userName, string sysId, string role, string company, string remark)
+        internal static bool AddNewUser(string userName, string email, string role, string company, string remark, string sysInfo)
         {
-            string selectSql = string.Format("select count(*) from T_USER_INFO where USER_NAME = '{0}' and SYS_ID = '{1}'",
-                userName, sysId);
+            string selectSql = string.Format("select count(*) from T_USER_INFO where USER_NAME = '{0}'",
+                userName);
             DataTable dt = dataBaseTool.SelectFunc(selectSql);
             if (dt == null)
             {
@@ -464,40 +510,56 @@ namespace ProjectsManageServer.DataBases
             {
                 return false;
             }
-            List<string> values = new List<string>() { userName, "111111", sysId, company, role, remark };
+            List<string> values = new List<string>() { userName, "111111", email, company, role, remark };
             string sql = "";
             if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
                 values, ref sql))
             {
                 return false;
             }
-            return dataBaseTool.ActionFunc(sql);
-        }
-
-
-        internal static bool ModUserInfo(string userName, string orgSysId, string psw, string sysId, string role,
-            string company, string remark)
-        {
-            if (orgSysId != sysId)
+            sql += string.Format("delete from T_USER_SYS_INFO where USER_NAME = '{0}';", userName);
+            string[] sysInfos = sysInfo.Split('\r');
+            foreach (string sys in sysInfos)
             {
-                string selectSql = string.Format("select count(*) from T_USER_INFO where USER_NAME = '{0}' and SYS_ID = '{1}'",
-                    userName, sysId);
-                DataTable dt = dataBaseTool.SelectFunc(selectSql);
-                if (dt == null)
+                if (sys == "")
                 {
-                    return false;
+                    continue;
                 }
-                if (dt.Rows[0][0].ToString() != "0")
+                values = new List<string>() { userName, sys };
+                if (!dataBaseTool.AddInfo(T_USER_SYS_INFO.TABLE_NAME, T_USER_SYS_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                    values, ref sql))
                 {
                     return false;
                 }
             }
-            List<string> values = new List<string>() { userName, psw, sysId, company, role, remark };
+            return dataBaseTool.ActionFunc(sql);
+        }
+
+
+        internal static bool ModUserInfo(string userName, string email, string psw, string role,
+            string company, string remark, string sysInfo)
+        {
+            List<string> values = new List<string>() { userName, psw, email, company, role, remark };
             string sql = "";
             if (!dataBaseTool.ModInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
-                values, ref sql, new Dictionary<string, string>() { { "USER_NAME", userName }, { "SYS_ID", orgSysId } }))
+                values, ref sql))
             {
                 return false;
+            }
+            sql += string.Format("delete from T_USER_SYS_INFO where USER_NAME = '{0}';", userName);
+            string[] sysInfos = sysInfo.Split('\r');
+            foreach (string sys in sysInfos)
+            {
+                if (sys == "")
+                {
+                    continue;
+                }
+                values = new List<string>() { userName, sys };
+                if (!dataBaseTool.AddInfo(T_USER_SYS_INFO.TABLE_NAME, T_USER_SYS_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                    values, ref sql))
+                {
+                    return false;
+                }
             }
             return dataBaseTool.ActionFunc(sql);
         }
@@ -511,9 +573,10 @@ namespace ProjectsManageServer.DataBases
             return dataBaseTool.SelectFunc(sql);
         }
 
-        internal static bool DelUserInfo(string userName, string sysId)
+        internal static bool DelUserInfo(string userName)
         {
-            string sql = string.Format("delete from T_USER_INFO where USER_NAME = '{0}' and SYS_ID = '{1}'", userName, sysId);
+            string sql = string.Format("delete from T_USER_INFO where USER_NAME = '{0}';", userName);
+            sql += string.Format("delete from T_USER_SYS_INFO where USER_NAME = '{0}'", userName);
             return dataBaseTool.ActionFunc(sql);
         }
 
@@ -550,6 +613,53 @@ namespace ProjectsManageServer.DataBases
                 }
             }
             return dtRet;
+        }
+
+        internal static DataTable GetUserSysInfo(string userName)
+        {
+            string sql = string.Format("select t2.* from T_USER_SYS_INFO t1, T_SYS_INFO t2 where t1.SYS_ID = t2.SYS_ID and t1.USER_NAME = '{0}'", userName);
+            return dataBaseTool.SelectFunc(sql);
+        }
+
+        internal static DataTable GetProRateInfo(string proId)
+        {
+            string sql = string.Format("select t1.*,t2.* from T_PRO_RATE t1, T_SYS_INFO t2 where t1.SYS_ID = t2.SYS_ID and t1.DEMAND_ID = '{0}'", proId);
+            sql += " order by t1.DATE desc";
+            return dataBaseTool.SelectFunc(sql);
+        }
+
+        internal static bool EntryProRate(string proId, string sysId, string date, string rate,
+            string explain, string problem)
+        {
+            string selectSql = string.Format("select count(*) from T_PRO_RATE where DEMAND_ID = '{0}' and SYS_ID = '{1}' and DATE = '{2}'", 
+                proId, sysId, date);
+            DataTable selectDt = dataBaseTool.SelectFunc(selectSql);
+            if (selectDt == null)
+            {
+                return false;
+            }
+            string sql = "";
+            List<string> values = new List<string>() { proId, sysId, date, rate, explain, problem };
+            if (selectDt.Rows[0][0].ToString() == "0")
+            {
+                if (!dataBaseTool.AddInfo(T_PRO_RATE.TABLE_NAME, T_PRO_RATE.DIC_TABLE_COLUMS.Keys.ToList(),
+                    values, ref sql))
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (!dataBaseTool.ModInfo(T_PRO_RATE.TABLE_NAME, T_PRO_RATE.DIC_TABLE_COLUMS.Keys.ToList(),
+                    values, ref sql, new Dictionary<string, string>() 
+                    {
+                        {"DEMAND_ID", proId }, {"SYS_ID", sysId }, {"DATE", date }
+                    }))
+                {
+                    return false;
+                }
+            }
+            return dataBaseTool.ActionFunc(sql);
         }
     }
 }

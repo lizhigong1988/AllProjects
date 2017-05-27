@@ -18,41 +18,39 @@ using 项目管理.Connect;
 namespace 项目管理.Pages
 {
     /// <summary>
-    /// UserMange.xaml 的交互逻辑
+    /// UserManage.xaml 的交互逻辑
     /// </summary>
-    public partial class UserMange : UserControl
+    public partial class UserManage : UserControl
     {
-        public UserMange()
+        public UserManage()
         {
             InitializeComponent();
 
+            cbRole.ItemsSource = new List<string>() { "部门领导", "项目经理", "开发人员" };
+            cbRole.SelectedIndex = 0;
+
             Dictionary<string,string> dicSysInfo = CommunicationHelper.GetAllSysDic();
-            dicSysInfo.Add("", "无");
             cbSystem.ItemsSource = dicSysInfo;
             cbSystem.SelectedValuePath = "Key";
             cbSystem.DisplayMemberPath = "Value";
-            if (GlobalFuns.LoginSysId != "")
-            {
-                cbSystem.SelectedValue = GlobalFuns.LoginSysId;
-                cbSystem.IsEnabled = false;
-            }
+            cbSystem.SelectedIndex = 0;
             RefreshTable();
-            tbSelectKey.Text = GlobalFuns.LoginSysName;
         }
 
         private void dgUserInfo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
             DataRowView drv = dgUserInfo.SelectedItem as DataRowView;
             if (drv == null)
             {
                 return;
             }
             tbUserName.Text = drv.Row["USER_NAME"].ToString();
-            cbSystem.Text = drv.Row["SYS_NAME"].ToString();
+            tbEmail.Text = drv.Row["EMAIL"].ToString();
             cbRole.Text = drv.Row["USER_ROLE"].ToString();
             tbUserCompany.Text = drv.Row["COMPANY"].ToString();
             tbRemark.Text = drv.Row["REMARK"].ToString();
+            DataTable dtSys = CommunicationHelper.GetUserSysInfo(tbUserName.Text);
+            dgUserSys.DataContext = dtSys;
         }
 
         private void btnAddNew_Click(object sender, RoutedEventArgs e)
@@ -62,19 +60,27 @@ namespace 项目管理.Pages
                 MessageBox.Show("请输入人员名称");
                 return;
             }
-            string selectSys = cbSystem.SelectedValue.ToString();
-            if (GlobalFuns.LoginSysId != "")
+            string userSysInfo = "";
+            DataTable dt = dgUserSys.DataContext as DataTable;
+            if(cbRole.Text != "部门领导")
             {
-                if (GlobalFuns.LoginSysId != selectSys)
+                if(dt == null)
                 {
-                    MessageBox.Show("只能添加本系统的人员！");
-                    cbSystem.SelectedValue = GlobalFuns.LoginSysId;
+                    MessageBox.Show("请添加人员所属系统");
                     return;
                 }
-                selectSys = GlobalFuns.LoginSysId;
+                if(dt.Rows.Count == 0)
+                {
+                    MessageBox.Show("请添加人员所属系统");
+                    return;
+                }
+                foreach(DataRow dr in dt.Rows)
+                {
+                    userSysInfo += dr["SYS_ID"].ToString() + "\r";
+                }
             }
-            if (!CommunicationHelper.AddNewUser(tbUserName.Text.Trim(), selectSys,
-                cbRole.Text.Trim(), tbUserCompany.Text.Trim(), tbRemark.Text.Trim()))
+            if (!CommunicationHelper.AddNewUser(tbUserName.Text.Trim(), tbEmail.Text,
+                cbRole.Text.Trim(), tbUserCompany.Text.Trim(), tbRemark.Text.Trim(), userSysInfo))
             {
                 MessageBox.Show("添加人员信息失败！");
                 return;
@@ -88,26 +94,6 @@ namespace 项目管理.Pages
         {
             allDt = CommunicationHelper.GetUserInfo();
             btnQuery_Click(null, null);
-        }
-
-        private void cbSystem_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (cbSystem.SelectedValue == null)
-            {
-                cbRole.ItemsSource = new List<string>() { "项目经理", "开发人员" };
-                cbRole.SelectedIndex = 0;
-                return;
-            }
-            string sysId = cbSystem.SelectedValue.ToString();
-            if (sysId == "")
-            {
-                cbRole.ItemsSource = new List<string>() { "部门领导" };
-            }
-            else
-            {
-                cbRole.ItemsSource = new List<string>() { "项目经理", "开发人员" };
-            }
-            cbRole.SelectedIndex = 0;
         }
 
         private void cbRole_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -137,21 +123,33 @@ namespace 项目管理.Pages
                 MessageBox.Show("请选择要修改的人员");
                 return;
             }
-            if (GlobalFuns.LoginSysId != "")
-            {
-                if (GlobalFuns.LoginSysId != drv.Row["SYS_ID"].ToString())
-                {
-                    MessageBox.Show("只能修改本系统的人员信息");
-                    return;
-                }
-            }
             if (tbUserName.Text.Trim() != drv.Row["USER_NAME"].ToString())
             {
                 MessageBox.Show("用户名不能修改");
                 return;
             }
-            if (!CommunicationHelper.ModUserInfo(tbUserName.Text.Trim(), drv.Row["SYS_ID"].ToString(), drv.Row["USER_PSW"].ToString(), cbSystem.SelectedValue.ToString(),
-                cbRole.Text.Trim(), tbUserCompany.Text.Trim(), tbRemark.Text.Trim()))
+            string userSysInfo = "";
+            DataTable dt = dgUserSys.DataContext as DataTable;
+            if (cbRole.Text != "部门领导")
+            {
+                if (dt == null)
+                {
+                    MessageBox.Show("请添加人员所属系统");
+                    return;
+                }
+                if (dt.Rows.Count == 0)
+                {
+                    MessageBox.Show("请添加人员所属系统");
+                    return;
+                }
+                foreach (DataRow dr in dt.Rows)
+                {
+                    userSysInfo += dr["SYS_ID"].ToString() + "\r";
+                }
+            }
+            if (!CommunicationHelper.ModUserInfo(tbUserName.Text.Trim(), tbEmail.Text, 
+                drv.Row["USER_PSW"].ToString(),
+                cbRole.Text.Trim(), tbUserCompany.Text.Trim(), tbRemark.Text.Trim(), userSysInfo))
             {
                 MessageBox.Show("修改人员信息失败！");
                 return;
@@ -167,19 +165,11 @@ namespace 项目管理.Pages
                 MessageBox.Show("请选择要删除的人员");
                 return;
             }
-            if (GlobalFuns.LoginSysId != "")
-            {
-                if (GlobalFuns.LoginSysId != drv.Row["SYS_ID"].ToString())
-                {
-                    MessageBox.Show("只能删除本系统的人员信息");
-                    return;
-                }
-            }
             if (MessageBox.Show("确定要删除所选人员？", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
             {
                 return;
             }
-            if (!CommunicationHelper.DelUserInfo(drv.Row["USER_NAME"].ToString(), drv.Row["SYS_ID"].ToString()))
+            if (!CommunicationHelper.DelUserInfo(drv.Row["USER_NAME"].ToString()))
             {
                 MessageBox.Show("删除人员信息失败！");
                 return;
@@ -211,6 +201,54 @@ namespace 项目管理.Pages
                 }
             }
             dgUserInfo.DataContext = queryDt;
+        }
+
+        private void btnAddSys_Click(object sender, RoutedEventArgs e)
+        {
+            DataTable dt = dgUserSys.DataContext as DataTable;
+            if (dt == null)
+            {
+                dt = new DataTable();
+                dt.Columns.Add("SYS_ID");
+                dt.Columns.Add("SYS_NAME");
+                dt.Columns.Add("USER_NAME1");
+                dt.Columns.Add("USER_NAME2");
+                dt.Columns.Add("REMARK");
+            }
+            string selectSys = cbSystem.Text;
+            foreach (DataRow dr in dt.Rows)
+            {
+                if (dr["SYS_NAME"].ToString() == selectSys)
+                {
+                    MessageBox.Show("不能重复添加");
+                    return;
+                }
+            }
+            string sysId = cbSystem.SelectedValue.ToString();
+            DataTable dtSysInfo = CommunicationHelper.GetSystemInfo(sysId);
+            if (dtSysInfo == null)
+            {
+                MessageBox.Show("获取系统信息失败");
+                return;
+            }
+            DataRow sysDr = dtSysInfo.Rows[0];
+            dt.Rows.Add(new string[] { 
+                sysDr[0].ToString(),
+                sysDr[1].ToString(), 
+                sysDr[2].ToString(), 
+                sysDr[3].ToString(), 
+                sysDr[4].ToString()});
+        }
+
+        private void btnDelSys_Click(object sender, RoutedEventArgs e)
+        {
+            DataRowView drv = dgUserSys.SelectedItem as DataRowView;
+            if (drv == null)
+            {
+                MessageBox.Show("请先选择所要删除的系统");
+                return;
+            }
+            drv.Row.Table.Rows.Remove(drv.Row);
         }
     }
 }

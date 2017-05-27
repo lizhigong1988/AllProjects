@@ -82,14 +82,20 @@
     <Compile Include="Pages\QueryWorkDays.xaml.cs">
       <DependentUpon>QueryWorkDays.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\SystemMange.xaml.cs">
-      <DependentUpon>SystemMange.xaml</DependentUpon>
+    <Compile Include="Pages\SystemManage.xaml.cs">
+      <DependentUpon>SystemManage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\UserMange.xaml.cs">
-      <DependentUpon>UserMange.xaml</DependentUpon>
+    <Compile Include="Pages\UserManage.xaml.cs">
+      <DependentUpon>UserManage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ModPassword.xaml.cs">
       <DependentUpon>ModPassword.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ProRateEntry.xaml.cs">
+      <DependentUpon>ProRateEntry.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SysConfig.xaml.cs">
+      <DependentUpon>SysConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tools\InputCheck.cs" />
     <Compile Include="Tools\InputTypeControl.cs" />
@@ -130,15 +136,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\SystemMange.xaml">
+    <Page Include="Pages\SystemManage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\UserMange.xaml">
+    <Page Include="Pages\UserManage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ModPassword.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\ProRateEntry.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\SysConfig.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
