@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C3C830CF-524F-453B-B880-36BDF60E835C}</ProjectGuid>
+    <ProjectGuid>{2110D8DC-5BA0-423E-8DB4-BCC85D3881CB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>项目管理</RootNamespace>
@@ -35,18 +35,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>logo.ico</ApplicationIcon>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Office.Interop.Excel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\CommonLib\Microsoft.Office.Interop.Excel.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -64,106 +55,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Connects\CommunicationHelper.cs" />
     <Compile Include="Connects\Connection.cs" />
     <Compile Include="Connects\LoadingWorker.xaml.cs">
       <DependentUpon>LoadingWorker.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ExcelOperation2010.cs" />
-    <Compile Include="LoginWindow.xaml.cs">
-      <DependentUpon>LoginWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\ModProject.xaml.cs">
-      <DependentUpon>ModProject.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\QueryProject.xaml.cs">
-      <DependentUpon>QueryProject.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\QueryWorkDays.xaml.cs">
-      <DependentUpon>QueryWorkDays.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\SystemManage.xaml.cs">
-      <DependentUpon>SystemManage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\UserManage.xaml.cs">
-      <DependentUpon>UserManage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\ModPassword.xaml.cs">
-      <DependentUpon>ModPassword.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\ProRateEntry.xaml.cs">
-      <DependentUpon>ProRateEntry.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\SysConfig.xaml.cs">
-      <DependentUpon>SysConfig.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Tools\InputCheck.cs" />
-    <Compile Include="Tools\InputTypeControl.cs" />
-    <Compile Include="Tools\GlobalFuns.cs" />
-    <Page Include="Connects\LoadingWorker.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="LoginWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Pages\AddProject.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\ModProject.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\QueryProject.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\QueryWorkDays.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\SystemManage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\UserManage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\ModPassword.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\ProRateEntry.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\SysConfig.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="StyleSource\CommonSource.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Pages\AddProject.xaml.cs">
-      <DependentUpon>AddProject.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -189,13 +94,14 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="logo.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CommonLib\CommonLib.csproj">
-      <Project>{1E55588C-86A0-4AB8-B14A-6E95855C86EF}</Project>
-      <Name>CommonLib</Name>
-    </ProjectReference>
+    <Page Include="Connects\LoadingWorker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
