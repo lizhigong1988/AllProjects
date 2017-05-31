@@ -18,7 +18,7 @@ namespace 项目管理.Connect
     /// <summary>
     /// LoadingWorker.xaml 的交互逻辑
     /// </summary>
-    public partial class LoadingWorker 
+    public partial class LoadingWorker
     {
         public static Window MainWind;
 

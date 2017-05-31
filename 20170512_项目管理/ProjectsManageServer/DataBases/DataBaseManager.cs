@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using System.IO;
+using CommonLib;
 
 namespace ProjectsManageServer.DataBases
 {
@@ -660,6 +661,49 @@ namespace ProjectsManageServer.DataBases
                 }
             }
             return dataBaseTool.ActionFunc(sql);
+        }
+
+        internal static bool SaveSysConfig(string senderName, string senderEmail, string senderPasword,
+            string sendServer, string sendPMTime, string sendAllTime)
+        {
+            string sql = "select * from T_CONFIG_INFO";
+            DataTable dt = dataBaseTool.SelectFunc(sql);
+            if (dt == null)
+            {
+                return false;
+            }
+            sql = "";
+            if (!T_CONFIG_INFO.SaveConfig(dt, CommonDef.CONFIG_KEYS.SEND_EMAIL_NAME, senderName, ref sql))
+            {
+                return false;
+            }
+            if (!T_CONFIG_INFO.SaveConfig(dt, CommonDef.CONFIG_KEYS.SEND_EMAIL_ADDR, senderEmail, ref sql))
+            {
+                return false;
+            }
+            if (!T_CONFIG_INFO.SaveConfig(dt, CommonDef.CONFIG_KEYS.SEND_EMAIL_PASSWORD, senderPasword, ref sql))
+            {
+                return false;
+            }
+            if (!T_CONFIG_INFO.SaveConfig(dt, CommonDef.CONFIG_KEYS.SEND_EMAIL_HOST, sendServer, ref sql))
+            {
+                return false;
+            }
+            if (!T_CONFIG_INFO.SaveConfig(dt, CommonDef.CONFIG_KEYS.SEND_PM_TIME, sendPMTime, ref sql))
+            {
+                return false;
+            }
+            if (!T_CONFIG_INFO.SaveConfig(dt, CommonDef.CONFIG_KEYS.SEND_ALL_TIME, sendAllTime, ref sql))
+            {
+                return false;
+            }
+            return dataBaseTool.ActionFunc(sql);
+        }
+
+        internal static DataTable GetSysConfig()
+        {
+            string sql = "select * from T_CONFIG_INFO";
+            return dataBaseTool.SelectFunc(sql);
         }
     }
 }

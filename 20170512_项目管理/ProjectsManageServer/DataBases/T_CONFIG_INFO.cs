@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Data;
+using CommonLib;
 
 namespace ProjectsManageServer.DataBases
 {
     class T_CONFIG_INFO
-    { 
+    {
         /// <summary>
         /// 定义表名
         /// </summary>
@@ -46,6 +48,19 @@ namespace ProjectsManageServer.DataBases
             return true;
         }
 
-
+        internal static bool SaveConfig(DataTable dt, CommonDef.CONFIG_KEYS key, string value, ref string sql)
+        {
+            string keyIndex = ((int)key).ToString();
+            foreach (DataRow dr in dt.Rows)
+            {
+                if (keyIndex == dr["KEY"].ToString())
+                {
+                    sql += string.Format("update T_CONFIG_INFO set VALUE = '{0}' where KEY = '{1}';", value, keyIndex);
+                    return true;
+                }
+            }
+            sql += string.Format("insert into T_CONFIG_INFO values('{0}','{1}');", keyIndex, value);
+            return true;
+        }
     }
 }

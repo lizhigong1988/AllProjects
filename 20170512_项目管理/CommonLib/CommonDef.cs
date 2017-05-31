@@ -15,8 +15,14 @@ namespace CommonLib
         /// </summary>
         public static string VERSION_NUM = "2.1";
 
+        /// <summary>
+        /// 约定报文长度，此值发生变化需要同时修改“项目管理.Connects.CommunicationHelper.cs”中对应的定义
+        /// </summary>
         public static int MAX_MSG_LENGTH = 2048;
 
+        /// <summary>
+        /// 通信超时设置，此值发生变化需要同时修改“项目管理.Connects.CommunicationHelper.cs”中对应的定义
+        /// </summary>
         public static int TIME_OUT = 10000;
 
         public static int ERROR = -1;
@@ -25,39 +31,49 @@ namespace CommonLib
 
         public enum FUN_NO
         {
-            GET_HIS_DEPARTS,
+            GET_PROGRAM_FILES = -1,
+
+            GET_HIS_DEPARTS,//0
             ADD_NEW_PROJECT,
             GET_CUR_PRO_NAMES,
             GET_PRO_INFO,
             GET_TRADES_INFO,
-            MOD_PROJECT,
+
+            MOD_PROJECT,//5
             QUERY_PRO_INFO,
             DIFF_TRADE,
             GET_HIS_WORKERS,
             QUERY_PRO_DAYS_INFO,
-            GET_WORK_DAYS,
+
+            GET_WORK_DAYS,//10
             SAVE_ADJUST_WORK_DAYS,
             GET_WORKER_MONTH_DAYS,
             GET_ALL_SYS_DIC,
             ADD_NEW_SYSTEM,
-            GET_SYSTEM_INFO,
+
+            GET_SYSTEM_INFO,//15
             MOD_SYSTEM,
             DEL_SYSTEM,
             GET_USER_INFO,
             MOD_PASSWORD,
-            ADD_NEW_USER,
+            
+            ADD_NEW_USER,//20
             MOD_USER_INFO,
             DEL_USER_INFO,
             GET_PRO_SYS_INFO,
             GET_PRO_FILE_INFO,
-            DOWNLOAD_FILE,
+            
+            DOWNLOAD_FILE,//25
             UPLOAD_FILE,
             DEL_FILE,
-            GET_SERVER_VERSION,
             GET_USER_SYS_INFO,
             GET_PRO_RATE_INFO,
-            ENTRY_PRO_RATE,
+
+            ENTRY_PRO_RATE,//30
+            SAVE_SYS_CONFIG,
+            GET_SYS_CONFIG,
         };
+
 
         public enum CONFIG_KEYS
         {
@@ -65,8 +81,16 @@ namespace CommonLib
             SEND_EMAIL_ADDR,
             SEND_EMAIL_PASSWORD,
             SEND_EMAIL_HOST,//smtp.hkcts.com
+            SEND_PM_TIME,
+            SEND_ALL_TIME,
+            LAST_SEND_PM,
+            LAST_SEND_ALL,
         };
-
+        /// <summary>
+        /// 方法更新需要更改：项目管理.Connects.CommunicationHelper.cs中对应方法
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
         public static DataTable GetDataTable(string str)
         {
             if (str == "")

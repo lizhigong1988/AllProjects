@@ -8,5 +8,39 @@
     <UserControl.Resources>
         <ResourceDictionary Source="/WindowLib;component/StyleSource/CommonSource.xaml" />
     </UserControl.Resources>
-    <StackPanel />
+    <StackPanel>
+        <GroupBox Header="电子邮件设置">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="发件人邮箱" />
+                    <TextBox Name="tbSenderEmail" />
+                    <TextBlock Text="发件人名称" />
+                    <TextBox Name="tbSenderName" />
+                    <TextBlock Text="发件密码" />
+                    <PasswordBox Name="pbSenderPsw" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="发件服务器" />
+                    <TextBox Name="tbSenderServer" />
+                    <TextBlock Text="测试收件人" />
+                    <TextBox Name="tbTestRcv" />
+                    <Button Name="btnTest"
+                            Click="btnTest_Click"
+                            Content="检测" />
+                    <TextBlock Name="tbTestAlert" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="发送项目经理时间" />
+                    <TextBox Name="tbSendPMTime" />
+                    <TextBlock Text="发送汇总时间" />
+                    <TextBox Name="tbSendAllTime" />
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button Name="btnSave"
+                    Click="btnSave_Click"
+                    Content="保存" />
+        </StackPanel>
+    </StackPanel>
 </UserControl>

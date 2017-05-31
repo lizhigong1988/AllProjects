@@ -36,6 +36,9 @@ namespace ProjectsManageServer.Connect
             string ret = "";
             switch ((CommonDef.FUN_NO)int.Parse(elem[0]))
             {
+                case CommonDef.FUN_NO.GET_PROGRAM_FILES:
+                    ret = GetProgramFiles();
+                    break;
                 case CommonDef.FUN_NO.GET_HIS_DEPARTS:
                     ret = GetHisDeparts(elem);
                     break;
@@ -120,9 +123,6 @@ namespace ProjectsManageServer.Connect
                 case CommonDef.FUN_NO.DEL_FILE:
                     ret = DelFile(elem);
                     break;
-                case CommonDef.FUN_NO.GET_SERVER_VERSION:
-                    ret = CommonDef.VERSION_NUM;
-                    break;
                 case CommonDef.FUN_NO.GET_USER_SYS_INFO:
                     ret = GetUserSysInfo(elem);
                     break;
@@ -131,6 +131,12 @@ namespace ProjectsManageServer.Connect
                     break;
                 case CommonDef.FUN_NO.ENTRY_PRO_RATE:
                     ret = EntryProRate(elem);
+                    break;
+                case CommonDef.FUN_NO.SAVE_SYS_CONFIG:
+                    ret = SaveSysConfig(elem);
+                    break;
+                case CommonDef.FUN_NO.GET_SYS_CONFIG:
+                    ret = GetSysConfig(elem);
                     break;
             }
             if (ret.Length > LOG_LENGH)
@@ -143,6 +149,44 @@ namespace ProjectsManageServer.Connect
             }
             File.AppendAllText(logPath, log);
             return Encoding.Default.GetBytes(ret);
+        }
+
+        private static string GetSysConfig(string[] elem)
+        {
+            DataTable dt = DataBaseManager.GetSysConfig();
+            return "0\n" + CommonDef.GetDataTableStr(dt);
+        }
+
+        private static string SaveSysConfig(string[] elem)
+        {
+            bool sec = DataBaseManager.SaveSysConfig(elem[1], elem[2], elem[3],
+                elem[4], elem[5], elem[6]);
+            return sec ? "0" : "-1";
+        }
+
+        private static string PROGRAM_FILE_PATH = "program";
+        private static string GetProgramFiles()
+        {
+            if (Directory.Exists(PROGRAM_FILE_PATH))
+            {
+                string[] programFiles = Directory.GetFiles(PROGRAM_FILE_PATH);
+                DataTable dtFilesInfo = new DataTable();
+                dtFilesInfo.Columns.Add("FILE_NAME");
+                dtFilesInfo.Columns.Add("FILE_DATE");
+                foreach (string file in programFiles)
+                {
+                    dtFilesInfo.Rows.Add(
+                        new string[]{
+                            System.IO.Path.GetFileName(file),
+                            File.GetLastWriteTime(file).ToString("yyyyMMddHHmmss")
+                        });
+                }
+                return "0\n" + CommonDef.GetDataTableStr(dtFilesInfo);
+            }
+            else
+            { 
+                return "0\n";
+            }
         }
 
         private static string EntryProRate(string[] elem)

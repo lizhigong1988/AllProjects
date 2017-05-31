@@ -49,6 +49,15 @@ namespace 项目管理.Connect
             socket.BeginReceive(temp, 0, 0, SocketFlags.None, new AsyncCallback(Read), socket);  //建立异步读取  
             return true;
         }
+
+        internal static void CloseConnect()
+        {
+            socket.Shutdown(SocketShutdown.Both);
+            //socket.Close();
+            socket = null;
+            ipendpoint = null;
+            ReadBytes = null;
+        }
         static IPEndPoint ipendpoint;
         /// <summary>  
         /// 发送数据  

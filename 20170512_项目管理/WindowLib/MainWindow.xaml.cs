@@ -28,21 +28,7 @@ namespace WindowLib
         public MainWindow()
         {
             InitializeComponent();
-            tbVersionClient.Text = "客户端版本：" + CommonDef.VERSION_NUM;
-            string serverVersion = CommunicationHelper.GetServerVersion();
-            tbVersionServer.Text = "服务端版本：" + serverVersion;
-            if (CommonDef.VERSION_NUM.Split('.')[0] != serverVersion.Split('.')[0])
-            {
-                MessageBox.Show("版本过旧！");
-                this.Close();
-                return;
-            }
             Tools.GlobalFuns.MainWind = this;
-            if (Directory.Exists("TEMP"))
-            {
-                Directory.Delete("TEMP", true);
-            }
-
             if (GlobalFuns.LoginUser != "")
             {
                 if (GlobalFuns.LoginSysName != "")
@@ -73,6 +59,7 @@ namespace WindowLib
                     listMenu.Items.Add(new ListBoxItem() { Content = "工作量统计" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "系统信息管理" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "人员管理" });
+                    //listMenu.Items.Add(new ListBoxItem() { Content = "修改密码" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "系统设置" });
                     break;
                 case "部门领导":
@@ -92,8 +79,10 @@ namespace WindowLib
                     listMenu.Items.Add(new ListBoxItem() { Content = "进度录入" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "项目统计" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "工作量统计" });
+                    //listMenu.Items.Add(new ListBoxItem() { Content = "系统信息管理" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "人员管理" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "修改密码" });
+                    //listMenu.Items.Add(new ListBoxItem() { Content = "系统设置" });
                     break;
                 case "开发人员":
                     listMenu.Items.Add(new ListBoxItem() { Content = "项目维护" });
@@ -156,13 +145,16 @@ namespace WindowLib
                     scrl.Content = new QueryWorkDays();
                     break;
                 case "系统信息管理":
-                    scrl.Content = new SysConfig();
+                    scrl.Content = new SystemManage();
                     break;
                 case "人员管理":
                     scrl.Content = new UserManage();
                     break;
                 case "修改密码":
                     scrl.Content = new ModPassword();
+                    break;
+                case "系统设置":
+                    scrl.Content = new SysConfig();
                     break;
                 default:
                     return;

@@ -1,7 +1,7 @@
 ﻿<Window x:Class="WindowLib.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="WindowLib"
+        Title="项目管理窗口"
         Width="1000"
         Height="600"
         WindowStartupLocation="CenterScreen"
@@ -31,21 +31,11 @@
                        FontFamily="华文行楷"
                        FontSize="20"
                        Foreground="White"
-                       Text="欢迎使用WindowLib系统" />
+                       Text="欢迎使用项目管理系统" />
             <TextBlock Name="tbAlert"
                        Canvas.Left="40"
                        Canvas.Top="40"
                        Text="焦作中旅银行-&gt;信息技术部" />
-            <TextBlock Name="tbVersionClient"
-                       Canvas.Top="26"
-                       Canvas.Right="26"
-                       Foreground="White"
-                       Text="客户端版本:" />
-            <TextBlock Name="tbVersionServer"
-                       Canvas.Top="6"
-                       Canvas.Right="26"
-                       Foreground="White"
-                       Text="服务端版本:" />
         </Canvas>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>

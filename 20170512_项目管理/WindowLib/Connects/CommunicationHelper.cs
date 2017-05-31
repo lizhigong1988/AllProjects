@@ -636,17 +636,6 @@ namespace WindowLib.Connect
             return revMsg == "0";
         }
 
-        internal static string GetServerVersion()
-        {
-            string Msg = ((int)CommonDef.FUN_NO.GET_SERVER_VERSION).ToString() + "\n";
-            string revMsg = "";
-            bool ret = SendAndRcvWorker(Msg, out revMsg);
-            if (!ret)
-            {
-                return "";
-            }
-            return revMsg;
-        }
 
         internal static DataTable GetUserSysInfo(string userName)
         {
@@ -691,6 +680,37 @@ namespace WindowLib.Connect
                 return false;
             }
             return revMsg == "0";
+        }
+
+        internal static bool SaveSysConfig(string senderName, string senderEmail, string senderPasword,
+            string sendServer, string sendPMTime, string sendAllTime)
+        {
+            string Msg = ((int)CommonDef.FUN_NO.SAVE_SYS_CONFIG).ToString() + "\n";
+            Msg += senderName + "\n";
+            Msg += senderEmail + "\n";
+            Msg += senderPasword + "\n";
+            Msg += sendServer + "\n";
+            Msg += sendPMTime + "\n";
+            Msg += sendAllTime + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
+            if (!ret)
+            {
+                return false;
+            }
+            return revMsg == "0";
+        }
+
+        internal static DataTable GetSysConfig()
+        {
+            string Msg = ((int)CommonDef.FUN_NO.GET_SYS_CONFIG).ToString() + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
+            if (!ret)
+            {
+                return null;
+            }
+            return CommonDef.GetDataTable(revMsg.Split('\n')[1]);
         }
     }
 }
