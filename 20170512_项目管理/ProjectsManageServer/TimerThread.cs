@@ -23,7 +23,7 @@ namespace ProjectsManageServer
         {
             timer.Elapsed += new ElapsedEventHandler(TimerRefresh);
             //1分钟
-            timer.Interval = 1000;
+            timer.Interval = 1000 * 60;
             timer.Start();
         }
 
@@ -40,6 +40,7 @@ namespace ProjectsManageServer
             string lastSendAllDate = GetConfig(dt, CommonDef.CONFIG_KEYS.LAST_SEND_ALL);
             string date = DateTime.Now.ToString("yyyyMMdd");
             string time = DateTime.Now.ToString("HHmmss");
+            string ERRORLOG = MiddleService.LOG_PATH + "\\" + "ERROR_LOG";
             if (sendPMTime != "")
             {
                 if (time.CompareTo(sendPMTime) > 0)//超过发送项目经理的时间点
@@ -49,13 +50,26 @@ namespace ProjectsManageServer
                         if (date.CompareTo(lastSendPmDate) > 0)//超过最后一次发送的日期
                         {
                             //给个系统项目经理发送项目日报
+                            DataTable dtUserInfo = DataBaseManager.GetUserInfo();
+                            if (dtUserInfo == null)
+                            {
+                                //获取系统信息失败，终止任务
+                                File.AppendAllText(ERRORLOG, "SEND_PM_EMAIL:读取用户信息失败\r\n");
+                                return;
+                            }
+                            DataTable dtUserSysInfo = DataBaseManager.GetUserSysInfo();
+                            if (dtUserSysInfo == null)
+                            {
+                                //获取系统信息失败，终止任务
+                                File.AppendAllText(ERRORLOG, "SEND_PM_EMAIL:读取用户信息失败\r\n");
+                                return;
+                            }
 
                             //1、查出全部系统
                             DataTable dtSystems = DataBaseManager.GetSystemInfo();
                             if(dtSystems == null)
                             {
                                 //获取系统信息失败，终止任务
-                                string ERRORLOG = MiddleService.LOG_PATH + "\\" + "ERROR_LOG";
                                 File.AppendAllText(ERRORLOG, "SEND_PM_EMAIL:读取系统信息失败\r\n");
                                 return;
                             }
@@ -64,17 +78,16 @@ namespace ProjectsManageServer
                              * 项目名称、性质
                              * 系统名称、预估工作量、系统开发进度、进度说明
                              */
-                            foreach (DataRow dr in dtSystems.Rows)
+                            foreach (DataRow drSys in dtSystems.Rows)
                             {
                                 //组项目邮件信息 html格式
                                 string msg = "";
-                                string sysId = dr["SYS_ID"].ToString();
+                                string sysId = drSys["SYS_ID"].ToString();
                                 DataTable dtProInfo = DataBaseManager.QueryProInfo("全部", "全部未完成", "",
                                     sysId);
                                 if (dtProInfo == null)
                                 {
                                     //获取系统信息失败，终止任务
-                                    string ERRORLOG = MiddleService.LOG_PATH + "\\" + "ERROR_LOG";
                                     File.AppendAllText(ERRORLOG, "SEND_PM_EMAIL:读取项目信息失败\r\n");
                                     return;
                                 }
@@ -84,13 +97,13 @@ namespace ProjectsManageServer
                                     string proId = drPro["DEMAND_ID"].ToString();
                                     msg += HtmAddRow("项目名称：" + drPro["DEMAND_NAME"].ToString());
                                     msg += HtmAddRow("项目性质：" + drPro["PRO_KIND"].ToString());
+                                    msg += HtmAddRow("项目阶段：" + drPro["PRO_STAGE"].ToString());
                                     msg += HtmAddRow("进度信息：");
 
                                     DataTable dtProSysInfo = DataBaseManager.GetProSystemInfo(proId);
                                     if (dtProSysInfo == null)
                                     {
                                         //获取系统信息失败，终止任务
-                                        string ERRORLOG = MiddleService.LOG_PATH + "\\" + "ERROR_LOG";
                                         File.AppendAllText(ERRORLOG, "SEND_PM_EMAIL:读取项目系统信息失败\r\n");
                                         return;
                                     }
@@ -98,7 +111,6 @@ namespace ProjectsManageServer
                                     if (dtRateInfo == null)
                                     {
                                         //获取系统信息失败，终止任务
-                                        string ERRORLOG = MiddleService.LOG_PATH + "\\" + "ERROR_LOG";
                                         File.AppendAllText(ERRORLOG, "SEND_PM_EMAIL:读取项目进度信息失败\r\n");
                                         return;
                                     }
@@ -109,13 +121,13 @@ namespace ProjectsManageServer
                                     dtProSysRateInfo.Columns.Add("DATE");
                                     dtProSysRateInfo.Columns.Add("EXPLAIN");
                                     dtProSysRateInfo.Columns.Add("PROBLEM");
-                                    foreach (DataRow drSys in dtProSysInfo.Rows)
+                                    foreach (DataRow drProSys in dtProSysInfo.Rows)
                                     {
                                         dtProSysRateInfo.Rows.Add(new string[]
                                             {
-                                                drSys["SYS_ID"].ToString(),
-                                                drSys["SYS_NAME"].ToString(),
-                                                drSys["ESTIMATE_DAYS"].ToString(),
+                                                drProSys["SYS_ID"].ToString(),
+                                                drProSys["SYS_NAME"].ToString(),
+                                                drProSys["ESTIMATE_DAYS"].ToString(),
                                                 "",
                                                 "",
                                                 "",
@@ -123,21 +135,21 @@ namespace ProjectsManageServer
                                     }
                                     foreach (DataRow drRate in dtRateInfo.Rows)
                                     {
-                                        foreach (DataRow drSys in dtProSysRateInfo.Rows)
+                                        foreach (DataRow drProSys in dtProSysRateInfo.Rows)
                                         {
-                                            if (drRate["SYS_ID"].ToString() == drSys["SYS_ID"].ToString())
+                                            if (drRate["SYS_ID"].ToString() == drProSys["SYS_ID"].ToString())
                                             {
-                                                if (drSys["DATE"].ToString() == "")
+                                                if (drProSys["DATE"].ToString() == "")
                                                 {
-                                                    drSys["DATE"] = drRate["DATE"].ToString();
-                                                    drSys["EXPLAIN"] = drRate["EXPLAIN"].ToString();
-                                                    drSys["PROBLEM"] = drRate["PROBLEM"].ToString(); 
+                                                    drProSys["DATE"] = drRate["DATE"].ToString();
+                                                    drProSys["EXPLAIN"] = drRate["EXPLAIN"].ToString();
+                                                    drProSys["PROBLEM"] = drRate["PROBLEM"].ToString(); 
                                                 }
-                                                else if (drSys["DATE"].ToString().CompareTo(drRate["DATE"].ToString()) < 0)
+                                                else if (drProSys["DATE"].ToString().CompareTo(drRate["DATE"].ToString()) < 0)
                                                 {
-                                                    drSys["DATE"] = drRate["DATE"].ToString();
-                                                    drSys["EXPLAIN"] = drRate["EXPLAIN"].ToString();
-                                                    drSys["PROBLEM"] = drRate["PROBLEM"].ToString(); 
+                                                    drProSys["DATE"] = drRate["DATE"].ToString();
+                                                    drProSys["EXPLAIN"] = drRate["EXPLAIN"].ToString();
+                                                    drProSys["PROBLEM"] = drRate["PROBLEM"].ToString(); 
                                                 }
                                                 break;
                                             }
@@ -154,11 +166,44 @@ namespace ProjectsManageServer
                                     msg += HtmAddRow("");
                                 }
                                 #endregion
-                                //DataTable dtUsers = DataBaseManager.GetUserSysInfo
                                 #region 发送
+                                string recvUsers = "";
+                                foreach (DataRow drUser in dtUserInfo.Rows)
+                                {
+                                    if (drUser["EMAIL"].ToString() == "")
+                                    {
+                                        continue;
+                                    }
+                                    if (drUser["USER_ROLE"].ToString() != "项目经理")
+                                    {
+                                        continue;
+                                    }
+                                    foreach (DataRow drUserSys in dtUserSysInfo.Rows)
+                                    {
+                                        if (drUser["USER_NAME"].ToString() == drUserSys["USER_NAME"].ToString())
+                                        {
+                                            if (drUserSys["SYS_ID"].ToString() == sysId)
+                                            {
+                                                recvUsers += drUser["USER_NAME"].ToString() + "<" + drUser["EMAIL"].ToString() + ">;";
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (recvUsers == "")
+                                {
+                                    continue;
+                                }
+                                string sendTitle = drSys["SYS_NAME"].ToString() + "项目日报";
+                                if (!SendEmail(recvUsers, sendEmail, sendName, sendEmail, sendPsw, sendHost, sendTitle, msg, true))
+                                {
+                                    File.AppendAllText(ERRORLOG, "SEND_PM_EMAIL:发送项目系统邮件失败\r\n");
+                                    continue;
+                                }
                                 #endregion
                             }
                             //3、更新lastSendPmDate
+                            DataBaseManager.SaveSysConfig(dt, CommonDef.CONFIG_KEYS.LAST_SEND_PM, date);
                         }
                     }
                 }
@@ -173,6 +218,30 @@ namespace ProjectsManageServer
                         {
                             //发送项目汇总日报
                             //1、汇总需求总数、新需求数目、维护升级数目
+                            DataTable dtProInfo = DataBaseManager.QueryProInfo("全部", "全部未完成", "", "");
+                            if (dtProInfo == null)
+                            {
+                                //获取系统信息失败，终止任务
+                                File.AppendAllText(ERRORLOG, "SEND_ALL_EMAIL:读取项目信息失败\r\n");
+                                return;
+                            }
+                            int totalCount = dtProInfo.Rows.Count;
+                            int newCount = 0;
+                            int updateCount = 0;
+                            foreach (DataRow dr in dtProInfo.Rows)
+                            {
+                                if (dr["PRO_KIND"].ToString() == "新项目")
+                                {
+                                    newCount++;
+                                }
+                                else
+                                {
+                                    updateCount++;
+                                }
+                            }
+                            string msg = "";
+                            msg += HtmAddRow("信息技术部全部在建需求数：" + totalCount.ToString() + "个，其中:");
+                            msg += HtmAddRow("新建项目：" + newCount.ToString() + "个，系统升级类需求:" + updateCount.ToString() + "个。");
                             //2、按照部门汇总需求总数、新需求数目、维护升级数目
                             //3、汇总新需求（重点项目）详情
                             /*
@@ -192,7 +261,7 @@ namespace ProjectsManageServer
             }
         }
 
-        private bool SendEmail(string recv, string send, string sendName, string cc, 
+        private static bool SendEmail(string recv, string send, string sendName, string cc, 
             string sendPsw, string server, string title, string content, bool htm)
         {
             System.Net.Mail.MailMessage msg = new System.Net.Mail.MailMessage();
@@ -224,7 +293,7 @@ namespace ProjectsManageServer
         private static string HtmAddTable(DataTable dtRateInfo, Dictionary<string, string> dictionary)
         {
             string tableInfo = "";
-            tableInfo += "<table style=\"width:100%;\" cellpadding=\"2\" cellspacing=\"0\" border=\"1\" bordercolor=\"#000000\">"
+            tableInfo += "<table style=\"width:100%;\" cellpadding=\"2\" cellspacing=\"0\" border=\"1\" bordercolor=\"#000000\">";
             tableInfo += "<tbody>";
             tableInfo += "<tr>";
             foreach(DataColumn dc in dtRateInfo.Columns)

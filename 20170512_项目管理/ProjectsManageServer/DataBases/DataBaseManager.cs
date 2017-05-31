@@ -616,9 +616,13 @@ namespace ProjectsManageServer.DataBases
             return dtRet;
         }
 
-        internal static DataTable GetUserSysInfo(string userName)
+        internal static DataTable GetUserSysInfo(string userName = "")
         {
-            string sql = string.Format("select t2.* from T_USER_SYS_INFO t1, T_SYS_INFO t2 where t1.SYS_ID = t2.SYS_ID and t1.USER_NAME = '{0}'", userName);
+            string sql = string.Format("select t1.*, t2.* from T_USER_SYS_INFO t1, T_SYS_INFO t2 where t1.SYS_ID = t2.SYS_ID");
+            if (userName != "")
+            {
+                sql += string.Format(" and t1.USER_NAME = '{0}'", userName);
+            }
             return dataBaseTool.SelectFunc(sql);
         }
 
@@ -700,10 +704,21 @@ namespace ProjectsManageServer.DataBases
             return dataBaseTool.ActionFunc(sql);
         }
 
+        internal static bool SaveSysConfig(DataTable dt, CommonDef.CONFIG_KEYS key, string date)
+        {
+            string sql = "";
+            if (!T_CONFIG_INFO.SaveConfig(dt, key, date, ref sql))
+            {
+                return false;
+            }
+            return dataBaseTool.ActionFunc(sql);
+        }
+
         internal static DataTable GetSysConfig()
         {
             string sql = "select * from T_CONFIG_INFO";
             return dataBaseTool.SelectFunc(sql);
         }
+
     }
 }
