@@ -83,8 +83,6 @@ namespace 项目管理
             //Object obj = Activator.CreateInstance(tp);
             //Window wind = obj as Window;
             //wind.Show();
-            //this.Close();
-
 
             new WindowLib.LoginWindow().Show();
 

@@ -37,11 +37,19 @@ namespace ProjectsManageServer.Connect
             while (true)
             {
                 i++;
-                Thread.Sleep(5000);
+                Thread.Sleep(6000);
                 Console.Write(".");
                 if (i % 10 == 0)
                 {
                     Console.Write("\n");
+                    try
+                    {
+                        TimerThread.TimerRefresh();
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.Write("\n异常：" + ex.Message);
+                    }
                 }
                 if (i == 100)
                 {

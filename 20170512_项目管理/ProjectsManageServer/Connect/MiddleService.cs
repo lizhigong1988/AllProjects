@@ -12,13 +12,12 @@ namespace ProjectsManageServer.Connect
     class MiddleService
     {
         public static string LOG_PATH = "LOG";
-        private static string curDate = DateTime.Now.ToString("yyyyMMdd");
         static int LOG_LENGH = 256;
 
         public static byte[] AnalysisFile(string connectFlag, string msgData)
         {
             string[] elem = msgData.Split('\n');
-            string logPath = LOG_PATH + "\\" + curDate;
+            string logPath = LOG_PATH + "\\" + DateTime.Now.ToString("yyyyMMdd");
             if (!Directory.Exists(logPath))
             {
                 Directory.CreateDirectory(logPath);
@@ -138,6 +137,9 @@ namespace ProjectsManageServer.Connect
                 case CommonDef.FUN_NO.GET_SYS_CONFIG:
                     ret = GetSysConfig(elem);
                     break;
+                case CommonDef.FUN_NO.TEST_EMAIL:
+                    ret = TestEmail(elem);
+                    break;
             }
             if (ret.Length > LOG_LENGH)
             {
@@ -151,6 +153,12 @@ namespace ProjectsManageServer.Connect
             return Encoding.Default.GetBytes(ret);
         }
 
+        private static string TestEmail(string[] elem)
+        {
+            bool sec = TimerThread.TestEmail(elem[1], elem[2], elem[3], elem[4]);
+            return sec ? "0" : "-1";
+        }
+
         private static string GetSysConfig(string[] elem)
         {
             DataTable dt = DataBaseManager.GetSysConfig();
@@ -160,7 +168,7 @@ namespace ProjectsManageServer.Connect
         private static string SaveSysConfig(string[] elem)
         {
             bool sec = DataBaseManager.SaveSysConfig(elem[1], elem[2], elem[3],
-                elem[4], elem[5], elem[6]);
+                elem[4], elem[5], elem[6], elem[7], elem[8], elem[9]);
             return sec ? "0" : "-1";
         }
 
@@ -276,7 +284,7 @@ namespace ProjectsManageServer.Connect
 
         private static string GetUserInfo(string[] elem)
         {
-            DataTable dt = DataBaseManager.GetUserInfo(elem[1]);
+            DataTable dt = DataBaseManager.GetUserInfo(elem[1], elem[2]);
             return "0\n" + CommonDef.GetDataTableStr(dt);
         }
 

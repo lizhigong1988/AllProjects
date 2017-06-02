@@ -12,10 +12,14 @@
         <GroupBox Header="人员信息表">
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="按系统查询" />
+                    <ComboBox Name="cbQuerySystem" SelectionChanged="cbQuerySystem_SelectionChanged"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Text="筛选条件" />
                     <TextBox Name="tbSelectKey" />
-                    <Button Name="btnQuery"
-                            Click="btnQuery_Click"
+                    <Button Name="btnSelectQuery"
+                            Click="btnSelectQuery_Click"
                             Content="筛选" />
                 </StackPanel>
                 <DataGrid Name="dgUserInfo"

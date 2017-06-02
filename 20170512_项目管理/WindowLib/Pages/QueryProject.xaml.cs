@@ -43,7 +43,7 @@ namespace WindowLib.Pages
             (cbSystem.ItemsSource as Dictionary<string, string>).Add("", "全部");
             cbSystem.SelectedValuePath = "Key";
             cbSystem.DisplayMemberPath = "Value";
-            cbSystem.SelectedIndex = 0;
+            cbSystem.SelectedIndex = (cbSystem.ItemsSource as Dictionary<string, string>).Count - 1;
             if (GlobalFuns.LoginSysId != "")
             {
                 cbSystem.SelectedValue = GlobalFuns.LoginSysId;

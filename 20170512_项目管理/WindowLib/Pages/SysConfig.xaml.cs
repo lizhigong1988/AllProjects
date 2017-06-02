@@ -44,6 +44,9 @@ namespace WindowLib.Pages
             tbSenderServer.Text = GetConfig(dt, CommonDef.CONFIG_KEYS.SEND_EMAIL_HOST);
             tbSendPMTime.Text = GetConfig(dt, CommonDef.CONFIG_KEYS.SEND_PM_TIME);
             tbSendAllTime.Text = GetConfig(dt, CommonDef.CONFIG_KEYS.SEND_ALL_TIME);
+            tbLastSendPMDate.Text = GetConfig(dt, CommonDef.CONFIG_KEYS.LAST_SEND_PM);
+            tbLastSendAllDate.Text = GetConfig(dt, CommonDef.CONFIG_KEYS.LAST_SEND_ALL);
+            cbAutoSend.IsChecked = GetConfig(dt, CommonDef.CONFIG_KEYS.SEND_FLAG) == "1";
         }
 
         private string GetConfig(DataTable dt, CommonDef.CONFIG_KEYS key)
@@ -62,8 +65,8 @@ namespace WindowLib.Pages
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             if (!CommunicationHelper.SaveSysConfig(tbSenderName.Text, tbSenderEmail.Text,
-                pbSenderPsw.Password, tbSenderServer.Text,
-                tbSendPMTime.Text, tbSendAllTime.Text))
+                pbSenderPsw.Password, tbSenderServer.Text, tbLastSendPMDate.Text, tbLastSendAllDate.Text,
+                tbSendPMTime.Text, tbSendAllTime.Text, (bool)cbAutoSend.IsChecked ? "1":"0"))
             {
                 MessageBox.Show("保存失败");
                 return;
@@ -73,33 +76,13 @@ namespace WindowLib.Pages
 
         private void btnTest_Click(object sender, RoutedEventArgs e)
         {
-            System.Net.Mail.MailMessage msg = new System.Net.Mail.MailMessage();
-            msg.To.Add(tbTestRcv.Text);//收件人邮箱   
-            msg.From = new MailAddress(tbSenderEmail.Text, tbSenderName.Text, System.Text.Encoding.UTF8);
-            /* 上面3个参数分别是发件人地址（可以随便写），发件人姓名，编码*/
-            msg.Subject = "[测试邮件]";//邮件标题    
-            msg.SubjectEncoding = System.Text.Encoding.UTF8;//邮件标题编码    
-            msg.Body = "TEST";//邮件内容    
-            msg.BodyEncoding = System.Text.Encoding.UTF8;//邮件内容编码    
-            msg.IsBodyHtml = false;//是否是HTML邮件    
-            //msg.Priority = MailPriority.High;//邮件优先级    
-            msg.CC.Add(tbSenderEmail.Text);//李志功<lizhigong@hkcts.com>
-            SmtpClient client = new SmtpClient();
-            client.Credentials = new System.Net.NetworkCredential(tbSenderEmail.Text, pbSenderPsw.Password);
-            client.Host = tbSenderServer.Text;//smtp.hkcts.com
-            object userState = msg;
-            try
+            if (!CommunicationHelper.TestEmail(tbSenderName.Text, tbSenderEmail.Text,
+                pbSenderPsw.Password, tbSenderServer.Text))
             {
-                client.SendAsync(msg, userState);
-                //简单一点儿可以client.Send(msg);    
-                tbTestAlert.Text = "发送成功";
-                MessageBox.Show("发送成功");
+                MessageBox.Show("测试失败");
+                return;
             }
-            catch (System.Net.Mail.SmtpException ex)
-            {
-                tbTestAlert.Text = "发送邮件出错";
-                MessageBox.Show("发送邮件出错");
-            }
+            MessageBox.Show("测试成功，请查收邮件！");
         }
 
     }

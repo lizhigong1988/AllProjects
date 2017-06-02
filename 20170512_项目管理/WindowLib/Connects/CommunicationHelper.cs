@@ -475,10 +475,11 @@ namespace WindowLib.Connect
             return revMsg == "0";
         }
 
-        internal static DataTable GetUserInfo(string userName = "")
+        internal static DataTable GetUserInfo(string userName = "", string userSys = "")
         {
             string Msg = ((int)CommonDef.FUN_NO.GET_USER_INFO).ToString() + "\n";
             Msg += userName + "\n";
+            Msg += userSys + "\n";
             string revMsg = "";
             bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
@@ -683,15 +684,19 @@ namespace WindowLib.Connect
         }
 
         internal static bool SaveSysConfig(string senderName, string senderEmail, string senderPasword,
-            string sendServer, string sendPMTime, string sendAllTime)
+            string sendServer, string sendPMDate, string sendAllDate, 
+            string sendPMTime, string sendAllTime, string autoSendFlag)
         {
             string Msg = ((int)CommonDef.FUN_NO.SAVE_SYS_CONFIG).ToString() + "\n";
             Msg += senderName + "\n";
             Msg += senderEmail + "\n";
             Msg += senderPasword + "\n";
             Msg += sendServer + "\n";
+            Msg += sendPMDate + "\n";
+            Msg += sendAllDate + "\n";
             Msg += sendPMTime + "\n";
             Msg += sendAllTime + "\n";
+            Msg += autoSendFlag + "\n";
             string revMsg = "";
             bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
@@ -711,6 +716,23 @@ namespace WindowLib.Connect
                 return null;
             }
             return CommonDef.GetDataTable(revMsg.Split('\n')[1]);
+        }
+
+        internal static bool TestEmail(string senderName, string senderEmail,
+            string senderPsw, string senderServer)
+        {
+            string Msg = ((int)CommonDef.FUN_NO.TEST_EMAIL).ToString() + "\n";
+            Msg += senderName + "\n";
+            Msg += senderEmail + "\n";
+            Msg += senderPsw + "\n";
+            Msg += senderServer + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
+            if (!ret)
+            {
+                return false;
+            }
+            return revMsg == "0";
         }
     }
 }

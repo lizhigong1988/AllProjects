@@ -34,7 +34,18 @@ namespace WindowLib.Pages
             cbSystem.SelectedValuePath = "Key";
             cbSystem.DisplayMemberPath = "Value";
             cbSystem.SelectedIndex = 0;
-            RefreshTable();
+            Dictionary<string, string> dicQuerySysInfo = new Dictionary<string, string>() 
+            {
+                {"0", "全部"}
+            };
+            foreach (var dic in dicSysInfo)
+            {
+                dicQuerySysInfo.Add(dic.Key, dic.Value);
+            }
+            cbQuerySystem.ItemsSource = dicQuerySysInfo;
+            cbQuerySystem.SelectedValuePath = "Key";
+            cbQuerySystem.DisplayMemberPath = "Value";
+            cbQuerySystem.SelectedIndex = 0;
         }
 
         private void dgUserInfo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -92,8 +103,8 @@ namespace WindowLib.Pages
 
         private void RefreshTable()
         {
-            allDt = CommunicationHelper.GetUserInfo();
-            btnQuery_Click(null, null);
+            allDt = CommunicationHelper.GetUserInfo("", cbQuerySystem.SelectedValue.ToString());
+            btnSelectQuery_Click(null, null);
         }
 
         private void cbRole_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -177,7 +188,7 @@ namespace WindowLib.Pages
             RefreshTable();
         }
 
-        private void btnQuery_Click(object sender, RoutedEventArgs e)
+        private void btnSelectQuery_Click(object sender, RoutedEventArgs e)
         {
             if (allDt == null)
             {
@@ -249,6 +260,11 @@ namespace WindowLib.Pages
                 return;
             }
             drv.Row.Table.Rows.Remove(drv.Row);
+        }
+
+        private void cbQuerySystem_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            RefreshTable();
         }
     }
 }

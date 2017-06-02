@@ -120,7 +120,7 @@ namespace WindowLib.Pages
                 }
             }
             if (!CommunicationHelper.EntryProRate(drvPro.Row["DEMAND_ID"].ToString(), sysId,
-                tbEntryDate.Text, tbRate.Text, tbExplain.Text.Replace('\n', '\t'), tbProblem.Text.Replace('\n', '\t')))
+                tbEntryDate.Text, tbRate.Text, tbExplain.Text.Replace('\n', '\r'), tbProblem.Text.Replace('\n', '\r')))
             {
                 MessageBox.Show("保存进度失败！");
                 return;

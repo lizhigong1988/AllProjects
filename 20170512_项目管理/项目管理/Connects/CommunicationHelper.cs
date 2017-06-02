@@ -24,7 +24,7 @@ namespace 项目管理.Connect
         /// <summary>
         /// 约定报文长度，此值发生变化需要同时修改“CommonLib.CommonDef.cs”中对应的定义
         /// </summary>
-        public static int MAX_MSG_LENGTH = 2048;
+        public static int MAX_MSG_LENGTH = 1024 * 100;
 
         /// <summary>
         /// 通信超时设置，此值发生变化需要同时修改“CommonLib.CommonDef.cs”中对应的定义

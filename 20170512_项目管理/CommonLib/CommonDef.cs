@@ -18,7 +18,7 @@ namespace CommonLib
         /// <summary>
         /// 约定报文长度，此值发生变化需要同时修改“项目管理.Connects.CommunicationHelper.cs”中对应的定义
         /// </summary>
-        public static int MAX_MSG_LENGTH = 2048;
+        public static int MAX_MSG_LENGTH = 1024 * 100;
 
         /// <summary>
         /// 通信超时设置，此值发生变化需要同时修改“项目管理.Connects.CommunicationHelper.cs”中对应的定义
@@ -72,6 +72,7 @@ namespace CommonLib
             ENTRY_PRO_RATE,//30
             SAVE_SYS_CONFIG,
             GET_SYS_CONFIG,
+            TEST_EMAIL,
         };
 
 
@@ -85,6 +86,7 @@ namespace CommonLib
             SEND_ALL_TIME,
             LAST_SEND_PM,
             LAST_SEND_ALL,
+            SEND_FLAG, // 发送标志 0不允许发送邮件 1 允许发送邮件
         };
         /// <summary>
         /// 方法更新需要更改：项目管理.Connects.CommunicationHelper.cs中对应方法

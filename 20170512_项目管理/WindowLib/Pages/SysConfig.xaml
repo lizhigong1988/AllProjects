@@ -22,18 +22,24 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="发件服务器" />
                     <TextBox Name="tbSenderServer" />
-                    <TextBlock Text="测试收件人" />
-                    <TextBox Name="tbTestRcv" />
                     <Button Name="btnTest"
                             Click="btnTest_Click"
-                            Content="检测" />
-                    <TextBlock Name="tbTestAlert" />
+                            Content="测试" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="末次发送项目日期" />
+                    <TextBox Name="tbLastSendPMDate" />
+                    <TextBlock Text="末次发送汇总日期" />
+                    <TextBox Name="tbLastSendAllDate" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="发送项目经理时间" />
                     <TextBox Name="tbSendPMTime" />
                     <TextBlock Text="发送汇总时间" />
                     <TextBox Name="tbSendAllTime" />
+                    <CheckBox Name="cbAutoSend"
+                              Margin="5"
+                              Content="自动邮件标志" />
                 </StackPanel>
             </StackPanel>
         </GroupBox>

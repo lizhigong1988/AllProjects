@@ -15,6 +15,10 @@ namespace ProjectsManageServer.Connect
         static Dictionary<string, string> dicUnFinishData = new Dictionary<string, string>();
 
         /// <summary>
+        /// 记录最近一次接收报文时间
+        /// </summary>
+        static DateTime lastRecvTime;
+        /// <summary>
         /// 服务器服务
         /// </summary>
         /// <param name="RecievedData"></param>
@@ -34,6 +38,17 @@ namespace ProjectsManageServer.Connect
         {
             try
             {
+                if (lastRecvTime != null)
+                {
+                    TimeSpan ts = DateTime.Now - lastRecvTime;
+                    if (ts.TotalMilliseconds > CommonDef.TIME_OUT)
+                    { 
+                        //超时，清理内存。
+                        dicReciveData.Clear();
+                        dicUnFinishData.Clear();
+                    }
+                }
+                lastRecvTime = DateTime.Now;
                 #region 完整性传输
                 //检查包是否完整
                 if (dicReciveData.ContainsKey(connectFlag))
@@ -71,7 +86,7 @@ namespace ProjectsManageServer.Connect
                 //是否为未完成的传输报文
                 if (dicUnFinishData.ContainsKey(recvElem[0]))//已知长报文
                 {
-                    if (int.Parse(recvElem[1]) < 0)//<0发送长报文 >=0接收长报文
+                    if (int.Parse(recvElem[1]) < 0)//<0服务端发送长报文 >=0服务端接收长报文
                     { 
                         //未完成的发送报文
                         List<byte> unsendData = Encoding.Default.GetBytes(dicUnFinishData[recvElem[0]]).ToList();

@@ -481,12 +481,16 @@ namespace ProjectsManageServer.DataBases
             return dataBaseTool.ActionFunc(sql);
         }
 
-        internal static DataTable GetUserInfo(string userName = "")
+        internal static DataTable GetUserInfo(string userName = "", string userSys = "")
         {
             string sql = "select * from T_USER_INFO where 1=1";
             if (userName != "")
             {
                 sql += string.Format(" and USER_NAME = '{0}'", userName);
+            }
+            if (userSys != "" && userSys != "0")
+            {
+                sql += string.Format(" and USER_NAME in (select USER_NAME from T_USER_SYS_INFO where SYS_ID = '{0}')", userSys);
             }
             return dataBaseTool.SelectFunc(sql);
         }
@@ -668,7 +672,8 @@ namespace ProjectsManageServer.DataBases
         }
 
         internal static bool SaveSysConfig(string senderName, string senderEmail, string senderPasword,
-            string sendServer, string sendPMTime, string sendAllTime)
+            string sendServer, string sendPMDate, string sendAllDate,
+            string sendPMTime, string sendAllTime, string autoSendFlag)
         {
             string sql = "select * from T_CONFIG_INFO";
             DataTable dt = dataBaseTool.SelectFunc(sql);
@@ -693,11 +698,23 @@ namespace ProjectsManageServer.DataBases
             {
                 return false;
             }
+            if (!T_CONFIG_INFO.SaveConfig(dt, CommonDef.CONFIG_KEYS.LAST_SEND_PM, sendPMDate, ref sql))
+            {
+                return false;
+            }
+            if (!T_CONFIG_INFO.SaveConfig(dt, CommonDef.CONFIG_KEYS.LAST_SEND_ALL, sendAllDate, ref sql))
+            {
+                return false;
+            }
             if (!T_CONFIG_INFO.SaveConfig(dt, CommonDef.CONFIG_KEYS.SEND_PM_TIME, sendPMTime, ref sql))
             {
                 return false;
             }
             if (!T_CONFIG_INFO.SaveConfig(dt, CommonDef.CONFIG_KEYS.SEND_ALL_TIME, sendAllTime, ref sql))
+            {
+                return false;
+            }
+            if (!T_CONFIG_INFO.SaveConfig(dt, CommonDef.CONFIG_KEYS.SEND_FLAG, autoSendFlag, ref sql))
             {
                 return false;
             }
