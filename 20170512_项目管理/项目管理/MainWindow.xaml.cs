@@ -48,14 +48,24 @@ namespace 项目管理
             }
 
             DataTable dtProgramFiles = CommunicationHelper.GetProgramFiles();
-
-            foreach (DataRow dr in dtProgramFiles.Rows)
+            if (dtProgramFiles != null)
             {
-                string file = dr["FILE_NAME"].ToString();
-                if (File.Exists(file))
+                foreach (DataRow dr in dtProgramFiles.Rows)
                 {
-                    string time = File.GetLastWriteTime(file).ToString("yyyyMMddHHmmss");
-                    if (time.CompareTo(dr["FILE_DATE"].ToString()) < 0)//本地较早
+                    string file = dr["FILE_NAME"].ToString();
+                    if (File.Exists(file))
+                    {
+                        string time = File.GetLastWriteTime(file).ToString("yyyyMMddHHmmss");
+                        if (time.CompareTo(dr["FILE_DATE"].ToString()) < 0)//本地较早
+                        {
+                            if (!CommunicationHelper.DownloadFile("program/" + file, file))
+                            {
+                                MessageBox.Show("更新文件失败！");
+                                return;
+                            }
+                        }
+                    }
+                    else
                     {
                         if (!CommunicationHelper.DownloadFile("program/" + file, file))
                         {
@@ -64,16 +74,7 @@ namespace 项目管理
                         }
                     }
                 }
-                else
-                {
-                    if (!CommunicationHelper.DownloadFile("program/" + file, file))
-                    {
-                        MessageBox.Show("更新文件失败！");
-                        return;
-                    }
-                }
             }
-
             File.WriteAllText(IP_CONFIG_FILE, tbIPAddr.Text + "\n" + curUser);
 
             //string dllFile = System.Environment.CurrentDirectory + "\\WindowLib.dll";
