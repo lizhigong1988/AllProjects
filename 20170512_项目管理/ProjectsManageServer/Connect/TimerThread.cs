@@ -261,7 +261,7 @@ namespace ProjectsManageServer.Connect
             msg += HtmAddRow("    新建项目：" + newCount.ToString() + "个，系统升级类需求:" + updateCount.ToString() + "个。");
             msg += HtmAddRow("");
             //2、按照部门汇总需求总数、新需求数目、维护升级数目
-            msg += HtmAddRow("二、各业务部在建门需求汇总：");
+            msg += HtmAddRow("二、各业务部门在建需求汇总：");
             msg += HtmAddTable(dtDepartProInfo, new Dictionary<string, string>() 
                                     {
                                         {"DEMAND_DEPART","部门名称"},
@@ -292,7 +292,7 @@ namespace ProjectsManageServer.Connect
              * 项目名称
              * 系统名称、预估工作量、系统开发进度、进度说明
              */
-            msg += HtmAddRow("三、汇总升级维护需求详情：");
+            msg += HtmAddRow("四、汇总升级维护需求详情：");
             foreach (DataRow drPro in dtProInfo.Rows)
             {
                 if (drPro["PRO_KIND"].ToString() != "新项目")
@@ -322,6 +322,11 @@ namespace ProjectsManageServer.Connect
                     continue;
                 }
                 if (drUser["USER_ROLE"].ToString() == "项目经理")
+                {
+                    ccUsers += drUser["USER_NAME"].ToString() + "<" + drUser["EMAIL"].ToString() + ">;";
+                    continue;
+                }
+                if (drUser["USER_ROLE"].ToString() == "PMO")
                 {
                     ccUsers += drUser["USER_NAME"].ToString() + "<" + drUser["EMAIL"].ToString() + ">;";
                     continue;
@@ -425,7 +430,7 @@ namespace ProjectsManageServer.Connect
                     continue;
                 }
                 string sendTitle = drSys["SYS_NAME"].ToString() + "项目日报";
-                if (!SendEmail(recvUsers, sendEmail, sendName, sendEmail, sendPsw, sendHost, sendTitle, msg, true))
+                if (!SendEmail(recvUsers, sendEmail, sendName, "", sendPsw, sendHost, sendTitle, msg, true))
                 {
                     File.AppendAllText(ERRORLOG, "SEND_PM_EMAIL:发送项目系统邮件失败\r\n");
                     continue;
@@ -471,7 +476,7 @@ namespace ProjectsManageServer.Connect
             msg.SubjectEncoding = System.Text.Encoding.UTF8;//邮件标题编码    
             msg.Body = content;//邮件内容    
             msg.BodyEncoding = System.Text.Encoding.UTF8;//邮件内容编码    
-            msg.IsBodyHtml = htm;//是否是HTML邮件    
+            msg.IsBodyHtml = htm;//是否是HTML邮件   
             //msg.Priority = MailPriority.High;//邮件优先级    
             SmtpClient client = new SmtpClient();
             client.Credentials = new System.Net.NetworkCredential(send, sendPsw);
@@ -527,28 +532,23 @@ namespace ProjectsManageServer.Connect
             return tableInfo;
         }
 
-        private static Dictionary<string, string> dicChangeHtm = new Dictionary<string, string>()
-        {
-            {"\"","&quot;"},
-            {"&","&amp;"},
-            {"<","&lt;"},
-            {">","&gt;"},
-            {" ","&nbsp;"},
-            {"\r","<br/>"},
-        };
+        //private static Dictionary<string, string> dicChangeHtm = new Dictionary<string, string>()
+        //{
+        //    {"<br/>","\r\n"},
+        //};
 
         private static string ChangeHtmStr(string str)
         {
-            foreach (var dic in dicChangeHtm)
-            {
-                str = str.Replace(dic.Key, dic.Value);
-            }
+            //foreach (var dic in dicChangeHtm)
+            //{
+            //    str = str.Replace(dic.Key, dic.Value);
+            //}
             return str;
         }
 
         private static string HtmAddRow(string row)
         {
-            return "<p>" + ChangeHtmStr(row) + "</p>";
+            return "<p>" + row + "</p>";
         }
 
         private static string GetConfig(DataTable dt, CommonDef.CONFIG_KEYS key)

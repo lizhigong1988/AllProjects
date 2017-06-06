@@ -26,7 +26,7 @@ namespace WindowLib.Pages
         {
             InitializeComponent();
 
-            cbRole.ItemsSource = new List<string>() { "部门领导", "项目经理", "开发人员" };
+            cbRole.ItemsSource = new List<string>() { "部门领导", "PMO", "项目经理", "开发人员" };
             cbRole.SelectedIndex = 0;
 
             Dictionary<string,string> dicSysInfo = CommunicationHelper.GetAllSysDic();
@@ -36,7 +36,8 @@ namespace WindowLib.Pages
             cbSystem.SelectedIndex = 0;
             Dictionary<string, string> dicQuerySysInfo = new Dictionary<string, string>() 
             {
-                {"0", "全部"}
+                {"0", "全部"},
+                {"-1", "无"}
             };
             foreach (var dic in dicSysInfo)
             {
@@ -80,7 +81,7 @@ namespace WindowLib.Pages
             }
             string userSysInfo = "";
             DataTable dt = dgUserSys.DataContext as DataTable;
-            if(cbRole.Text != "部门领导")
+            if (cbRole.Text != "部门领导" && cbRole.Text != "PMO")
             {
                 if(dt == null)
                 {
@@ -127,6 +128,7 @@ namespace WindowLib.Pages
             switch (cbRole.SelectedItem.ToString())
             {
                 case "部门领导":
+                case "PMO":
                 case "项目经理":
                     tbUserCompany.Text = "焦作中旅银行股份有限公司";
                     tbUserCompany.IsEnabled = false;
@@ -152,7 +154,7 @@ namespace WindowLib.Pages
             }
             string userSysInfo = "";
             DataTable dt = dgUserSys.DataContext as DataTable;
-            if (cbRole.Text != "部门领导")
+            if (cbRole.Text != "部门领导" && cbRole.Text != "PMO")
             {
                 if (dt == null)
                 {
@@ -203,7 +205,7 @@ namespace WindowLib.Pages
         {
             if (allDt == null)
             {
-                RefreshTable();
+                //RefreshTable();
                 return;
             }
             if (tbSelectKey.Text.Trim() == "")
@@ -232,7 +234,9 @@ namespace WindowLib.Pages
             if (dt == null)
             {
                 dt = new DataTable();
+                dt.Columns.Add("USER_NAME");
                 dt.Columns.Add("SYS_ID");
+                dt.Columns.Add("SYS_ID1");
                 dt.Columns.Add("SYS_NAME");
                 dt.Columns.Add("USER_NAME1");
                 dt.Columns.Add("USER_NAME2");
@@ -256,6 +260,8 @@ namespace WindowLib.Pages
             }
             DataRow sysDr = dtSysInfo.Rows[0];
             dt.Rows.Add(new string[] { 
+                tbUserName.Text,
+                sysDr[0].ToString(),
                 sysDr[0].ToString(),
                 sysDr[1].ToString(), 
                 sysDr[2].ToString(), 

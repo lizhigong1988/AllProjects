@@ -48,6 +48,7 @@ namespace WindowLib
 
             if (tbUserName.Text == GlobalFuns.ADMIN_USER && tbUserPsw.Password == GlobalFuns.ADMIN_PASSWORD)
             {
+                GlobalFuns.DtLoginUserSysInfo = new DataTable();
                 new MainWindow().Show();
                 this.Close();
                 File.WriteAllText(IP_CONFIG_FILE, curIpAddr + "\n" + tbUserName.Text);
@@ -75,14 +76,14 @@ namespace WindowLib
             GlobalFuns.LoginUser = tbUserName.Text;
             GlobalFuns.LoginRole = dr["USER_ROLE"].ToString();
 
-            DataTable dtUserSys = CommunicationHelper.GetUserSysInfo(tbUserName.Text);
+            GlobalFuns.DtLoginUserSysInfo = CommunicationHelper.GetUserSysInfo(tbUserName.Text);
 
-            if (dtUserSys == null)
+            if (GlobalFuns.DtLoginUserSysInfo == null)
             {
                 MessageBox.Show("数据查询错误");
                 return;
             }
-            if (dtUserSys.Rows.Count == 0)
+            if (GlobalFuns.LoginRole == "部门领导" || GlobalFuns.LoginRole == "PMO")
             {
                 GlobalFuns.LoginSysId = "";
                 GlobalFuns.LoginSysName = "";
@@ -90,36 +91,41 @@ namespace WindowLib
                 this.Close();
                 return;
             }
-            if (dtUserSys.Rows.Count == 1)
+            if (GlobalFuns.DtLoginUserSysInfo.Rows.Count == 0)
             {
-                GlobalFuns.LoginSysId = dtUserSys.Rows[0]["SYS_ID"].ToString();
-                GlobalFuns.LoginSysName = dtUserSys.Rows[0]["SYS_NAME"].ToString();
+                MessageBox.Show("请联系管理员添加所属系统");
+                return;
+            }
+            if (GlobalFuns.DtLoginUserSysInfo.Rows.Count >= 1)
+            {
+                GlobalFuns.LoginSysId = GlobalFuns.DtLoginUserSysInfo.Rows[0]["SYS_ID"].ToString();
+                GlobalFuns.LoginSysName = GlobalFuns.DtLoginUserSysInfo.Rows[0]["SYS_NAME"].ToString();
                 new MainWindow().Show();
                 this.Close();
                 return;
             }
-            if (dtUserSys.Rows.Count > 1)
-            {
-                Dictionary<string, string> manageDic = new Dictionary<string, string>();
-                foreach (DataRow dic in dtUserSys.Rows)
-                {
-                    string sysId = dic["SYS_ID"].ToString();
-                    if (sysId == "")
-                    {
-                        continue;
-                    }
-                    if (!manageDic.ContainsKey(sysId))
-                    {
-                        manageDic.Add(sysId, dic["SYS_NAME"].ToString());
-                    }
-                }
-                cbSelectSys.ItemsSource = manageDic;
-                cbSelectSys.SelectedValuePath = "Key";
-                cbSelectSys.DisplayMemberPath = "Value";
-                cbSelectSys.SelectedIndex = 0;
-                spLogin.Visibility = Visibility.Collapsed;
-                spSelectSys.Visibility = Visibility.Visible;
-            }
+            //if (dtUserSys.Rows.Count > 1)
+            //{
+            //    Dictionary<string, string> manageDic = new Dictionary<string, string>();
+            //    foreach (DataRow dic in dtUserSys.Rows)
+            //    {
+            //        string sysId = dic["SYS_ID"].ToString();
+            //        if (sysId == "")
+            //        {
+            //            continue;
+            //        }
+            //        if (!manageDic.ContainsKey(sysId))
+            //        {
+            //            manageDic.Add(sysId, dic["SYS_NAME"].ToString());
+            //        }
+            //    }
+            //    cbSelectSys.ItemsSource = manageDic;
+            //    cbSelectSys.SelectedValuePath = "Key";
+            //    cbSelectSys.DisplayMemberPath = "Value";
+            //    cbSelectSys.SelectedIndex = 0;
+            //    spLogin.Visibility = Visibility.Collapsed;
+            //    spSelectSys.Visibility = Visibility.Visible;
+            //}
         }
 
         DataTable dt;
@@ -136,12 +142,12 @@ namespace WindowLib
             }
         }
 
-        private void btnSelectSys_Click(object sender, RoutedEventArgs e)
-        {
-            GlobalFuns.LoginSysId = cbSelectSys.SelectedValue.ToString();
-            GlobalFuns.LoginSysName = cbSelectSys.Text;
-            new MainWindow().Show();
-            this.Close();
-        }
+        //private void btnSelectSys_Click(object sender, RoutedEventArgs e)
+        //{
+        //    GlobalFuns.LoginSysId = cbSelectSys.SelectedValue.ToString();
+        //    GlobalFuns.LoginSysName = cbSelectSys.Text;
+        //    new MainWindow().Show();
+        //    this.Close();
+        //}
     }
 }

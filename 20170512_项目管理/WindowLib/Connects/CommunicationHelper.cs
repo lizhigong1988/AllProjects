@@ -49,7 +49,10 @@ namespace WindowLib.Connect
                 isRecived = false;
                 retBuf.Clear();
                 resetEvent = new AutoResetEvent(false);
-                Connection.SendMessage(sendOnce.ToArray());
+                if (!Connection.SendMessage(sendOnce.ToArray()))
+                {
+                    return false;
+                }
                 resetEvent.WaitOne(CommonDef.TIME_OUT, true);//阻塞 等待服务端回复.
                 if (!isRecived)
                 {
@@ -69,7 +72,10 @@ namespace WindowLib.Connect
             isRecived = false;
             retBuf.Clear();
             resetEvent = new AutoResetEvent(false);
-            Connection.SendMessage(sendOnce.ToArray());
+            if (!Connection.SendMessage(sendOnce.ToArray()))
+            {
+                return false;
+            }
             resetEvent.WaitOne(CommonDef.TIME_OUT, true);//阻塞 等待服务端回复.
             if (!isRecived)
             {
@@ -88,7 +94,10 @@ namespace WindowLib.Connect
                 isRecived = false;
                 retBuf.Clear();
                 resetEvent = new AutoResetEvent(false);
-                Connection.SendMessage(sendOnce.ToArray());
+                if (!Connection.SendMessage(sendOnce.ToArray()))
+                {
+                    return false;
+                }
                 resetEvent.WaitOne(CommonDef.TIME_OUT, true);//阻塞 等待服务端回复.
                 if (!isRecived)
                 {

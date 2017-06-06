@@ -29,8 +29,39 @@ namespace WindowLib
         {
             InitializeComponent();
             Tools.GlobalFuns.MainWind = this;
+            if (GlobalFuns.DtLoginUserSysInfo.Rows.Count > 1)
+            {
+                Dictionary<string, string> manageDic = new Dictionary<string, string>();
+                foreach (DataRow dic in GlobalFuns.DtLoginUserSysInfo.Rows)
+                {
+                    string sysId = dic["SYS_ID"].ToString();
+                    if (sysId == "")
+                    {
+                        continue;
+                    }
+                    if (!manageDic.ContainsKey(sysId))
+                    {
+                        manageDic.Add(sysId, dic["SYS_NAME"].ToString());
+                    }
+                }
+                cbSelectSys.ItemsSource = manageDic;
+                cbSelectSys.SelectedValuePath = "Key";
+                cbSelectSys.DisplayMemberPath = "Value";
+                cbSelectSys.SelectedIndex = 0;
+                spSelectSys.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                spSelectSys.Visibility = Visibility.Collapsed;
+            }
+            RefreshMenu();
+        }
+
+        private void RefreshMenu()
+        {
             if (GlobalFuns.LoginUser != "")
             {
+                tbAlert.Text = "焦作中旅银行->信息技术部";
                 if (GlobalFuns.LoginSysName != "")
                 {
                     tbAlert.Text += "->" + GlobalFuns.LoginSysName;
@@ -50,7 +81,7 @@ namespace WindowLib
             }
             listMenu.Items.Clear();
             switch (GlobalFuns.LoginRole)
-            { 
+            {
                 case ""://系统管理员
                     listMenu.Items.Add(new ListBoxItem() { Content = "新增项目" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "项目维护" });
@@ -63,6 +94,7 @@ namespace WindowLib
                     listMenu.Items.Add(new ListBoxItem() { Content = "系统设置" });
                     break;
                 case "部门领导":
+                case "PMO":
                     listMenu.Items.Add(new ListBoxItem() { Content = "新增项目" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "项目维护" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "进度录入" });
@@ -173,6 +205,17 @@ namespace WindowLib
                     return;
                 }
             }
+        }
+
+        private void cbSelectSys_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbSelectSys.SelectedValue == null)
+            {
+                return;
+            }
+            GlobalFuns.LoginSysId = cbSelectSys.SelectedValue.ToString();
+            GlobalFuns.LoginSysName = (cbSelectSys.ItemsSource as Dictionary<string, string>)[GlobalFuns.LoginSysId];
+            RefreshMenu();
         }
     }
 }

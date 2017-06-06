@@ -23,13 +23,10 @@ namespace WindowLib.Pages
     /// </summary>
     public partial class AddProject : UserControl
     {
-        string CurDirectory = "";
-
         public AddProject()
         {
             InitializeComponent();
             Refresh();
-            CurDirectory = Guid.NewGuid().ToString().Replace("-","");
             if (GlobalFuns.LoginSysId != "")
             {
                 cbIsMain.Visibility = Visibility.Collapsed;
@@ -45,12 +42,12 @@ namespace WindowLib.Pages
             cbProKinds.SelectedIndex = 0;
 
             cbProStage.ItemsSource = new List<string>() { 
-                "软需编写及评审", "系统开发/单元测试" , "集成测试", "SIT测试", "UAT测试"
+                "软需编写及评审", "系统开发/单元测试" , "集成测试", "SIT测试", "UAT测试" , "投产实施" , "已上线"
             };
             cbProStage.SelectedIndex = 1;
 
             cbProState.ItemsSource = new List<string>() { 
-                "正常", "延迟" , "关闭", "暂停"
+                "正常", "延迟" , "关闭", "暂停", "完成"
             };
             cbProState.SelectedIndex = 0;
 
@@ -73,6 +70,11 @@ namespace WindowLib.Pages
                 return;
             }
             DataTable dt = dgProSysInfo.DataContext as DataTable;
+            if (dt == null)
+            {
+                MessageBox.Show("请添加所涉及的开发系统！");
+                return;
+            }
             bool hasMain = false;
             foreach (DataRow dr in dt.Rows)
             {

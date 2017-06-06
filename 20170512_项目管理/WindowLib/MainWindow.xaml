@@ -36,6 +36,16 @@
                        Canvas.Left="40"
                        Canvas.Top="40"
                        Text="焦作中旅银行-&gt;信息技术部" />
+            <StackPanel Name="spSelectSys"
+                        Canvas.Top="34"
+                        Canvas.Right="50"
+                        Orientation="Horizontal"
+                        Visibility="Collapsed">
+                <TextBlock Margin="3" Text="选择系统" />
+                <ComboBox Name="cbSelectSys"
+                          Width="120"
+                          SelectionChanged="cbSelectSys_SelectionChanged" />
+            </StackPanel>
         </Canvas>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>

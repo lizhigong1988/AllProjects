@@ -200,29 +200,29 @@ namespace WindowLib.Pages
 
             DataTable dtSystems = CommunicationHelper.GetProSystemInfo(curProId);
             dgProSysInfo.DataContext = dtSystems;
-            spProBaseInfo.IsEnabled = false;
-            spProSysInfo.IsEnabled = false;
-            if (GlobalFuns.LoginSysId != "")//项目经理
-            {
-                if (GlobalFuns.LoginRole != "开发人员")//开发人员无权修改基础信息
-                {
-                    foreach (DataRow drSys in dtSystems.Rows)
-                    {
-                        if (drSys["IS_MAIN"].ToString() == "是" &&
-                            drSys["SYS_ID"].ToString() == GlobalFuns.LoginSysId)
-                        {
-                            spProBaseInfo.IsEnabled = true;
-                            spProSysInfo.IsEnabled = true;
-                            break;
-                        }
-                    }
-                }
-            }
-            else//管理人员
-            {
-                spProBaseInfo.IsEnabled = true;
-                spProSysInfo.IsEnabled = true;
-            }
+            //spProBaseInfo.IsEnabled = false;
+            //spProSysInfo.IsEnabled = false;
+            //if (GlobalFuns.LoginSysId != "")//项目经理
+            //{
+            //    if (GlobalFuns.LoginRole != "开发人员")//开发人员无权修改基础信息
+            //    {
+            //        foreach (DataRow drSys in dtSystems.Rows)
+            //        {
+            //            if (drSys["IS_MAIN"].ToString() == "是" &&
+            //                drSys["SYS_ID"].ToString() == GlobalFuns.LoginSysId)
+            //            {
+            //                spProBaseInfo.IsEnabled = true;
+            //                spProSysInfo.IsEnabled = true;
+            //                break;
+            //            }
+            //        }
+            //    }
+            //}
+            //else//管理人员
+            //{
+            //    spProBaseInfo.IsEnabled = true;
+            //    spProSysInfo.IsEnabled = true;
+            //}
 
             DataTable dtTrades = CommunicationHelper.GetTradesInfo(curProId, GlobalFuns.LoginSysId);
             dtTrades.Columns.Add("DIFF");

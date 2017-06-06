@@ -18,6 +18,8 @@ namespace WindowLib.Connect
         /// </summary>  
         public delegate void ReadByte(Byte[] ReadByte);
         public static event ReadByte ReadBytes;
+
+        private static string lastConnectIp = "";
         /// <summary>  
         /// 初始化连接  
         /// </summary>  
@@ -46,23 +48,29 @@ namespace WindowLib.Connect
                 return false;
             }
             byte[] temp = new byte[1]; //建立个临时的发送数据  
-            socket.BeginReceive(temp, 0, 0, SocketFlags.None, new AsyncCallback(Read), socket);  //建立异步读取  
+            socket.BeginReceive(temp, 0, 0, SocketFlags.None, new AsyncCallback(Read), socket);  //建立异步读取
+            lastConnectIp = ipAddr;
             return true;
         }
         static IPEndPoint ipendpoint;
         /// <summary>  
         /// 发送数据  
         /// </summary>  
-        public static void SendMessage(Byte[] SendByte)
+        public static bool SendMessage(Byte[] SendByte)
         {
             List<byte> listSendData = new List<byte>(Encoding.Default.GetBytes("[BIGEN]"));
             listSendData.AddRange(SendByte);
             listSendData.AddRange(Encoding.Default.GetBytes("[END]"));
-            if (!socket.Connected)
+            try
             {
-                socket.Connect(ipendpoint);//连接 
+                socket.BeginSend(listSendData.ToArray(), 0, listSendData.Count, SocketFlags.None, null, socket); //发送数据  
             }
-            socket.BeginSend(listSendData.ToArray(), 0, listSendData.Count, SocketFlags.None, null, socket); //发送数据  
+            catch
+            {
+                AppConnectInit(lastConnectIp);
+                return false;
+            }
+            return true;
         }
 
         private static void Read(IAsyncResult iar)

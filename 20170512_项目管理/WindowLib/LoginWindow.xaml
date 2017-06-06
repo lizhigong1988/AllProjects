@@ -28,16 +28,18 @@
                             Content="取消" />
                 </StackPanel>
             </StackPanel>
-            <StackPanel Name="spSelectSys" Visibility="Collapsed">
+            <!--
+                <StackPanel Name="spSelectSys" Visibility="Collapsed">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="选择系统" />
-                    <ComboBox Name="cbSelectSys" />
+                <TextBlock Text="选择系统" />
+                <ComboBox Name="cbSelectSys" />
                 </StackPanel>
                 <Button Name="btnSelectSys"
-                        Width="80"
-                        Click="btnSelectSys_Click"
-                        Content="确定" />
-            </StackPanel>
+                Width="80"
+                Click="btnSelectSys_Click"
+                Content="确定" />
+                </StackPanel>
+            -->
         </StackPanel>
     </Canvas>
 </Window>

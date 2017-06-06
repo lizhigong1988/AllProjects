@@ -429,8 +429,8 @@ namespace ProjectsManageServer.DataBases
             }
             if (manage2 != "")
             {
-                string selectSql = string.Format("select count(*) from T_USER_INFO where USER_NAME = '{0}' and SYS_ID = '{1}'",
-                    manage2, sysId);
+                string selectSql = string.Format("select count(*) from T_USER_INFO where USER_NAME = '{0}'",
+                    manage2);
                 DataTable dt = dataBaseTool.SelectFunc(selectSql);
                 if (dt == null)
                 {
@@ -490,7 +490,14 @@ namespace ProjectsManageServer.DataBases
             }
             if (userSys != "" && userSys != "0")
             {
-                sql += string.Format(" and USER_NAME in (select USER_NAME from T_USER_SYS_INFO where SYS_ID = '{0}')", userSys);
+                if (userSys == "-1")
+                {
+                    sql += string.Format(" and USER_NAME not in (select distinct USER_NAME from T_USER_SYS_INFO)");
+                }
+                else
+                {
+                    sql += string.Format(" and USER_NAME in (select USER_NAME from T_USER_SYS_INFO where SYS_ID = '{0}')", userSys);
+                }
             }
             return dataBaseTool.SelectFunc(sql);
         }
