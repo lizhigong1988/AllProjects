@@ -60,6 +60,11 @@ namespace WindowLib.Pages
                 return;
             }
             selectProRateDt = CommunicationHelper.GetProRateInfo(drv.Row["DEMAND_ID"].ToString());
+            foreach (DataRow dr in selectProRateDt.Rows)
+            {
+                dr["EXPLAIN"] = dr["EXPLAIN"].ToString().Replace("<br/>", "\r\n");
+                dr["PROBLEM"] = dr["PROBLEM"].ToString().Replace("<br/>", "\r\n");
+            }
             if (drv.Row["PRO_KIND"].ToString() == "新项目")
             {
                 tbEntryDate.Text = DateTime.Now.ToString("yyyyMMdd");
@@ -120,7 +125,9 @@ namespace WindowLib.Pages
                 }
             }
             if (!CommunicationHelper.EntryProRate(drvPro.Row["DEMAND_ID"].ToString(), sysId,
-                tbEntryDate.Text, tbRate.Text, tbExplain.Text.Replace('\n', '\r'), tbProblem.Text.Replace('\n', '\r')))
+                tbEntryDate.Text, tbRate.Text, 
+                tbExplain.Text.Replace('\'', '\"').Replace("\r\n", "<br/>").Replace("\n", ""), 
+                tbProblem.Text.Replace('\'', '\"').Replace("\r\n", "<br/>").Replace("\n", "")))
             {
                 MessageBox.Show("保存进度失败！");
                 return;

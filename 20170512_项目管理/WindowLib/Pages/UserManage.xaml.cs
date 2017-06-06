@@ -45,7 +45,14 @@ namespace WindowLib.Pages
             cbQuerySystem.ItemsSource = dicQuerySysInfo;
             cbQuerySystem.SelectedValuePath = "Key";
             cbQuerySystem.DisplayMemberPath = "Value";
-            cbQuerySystem.SelectedIndex = 0;
+            if (GlobalFuns.LoginSysId != "")
+            {
+                cbQuerySystem.SelectedValue = GlobalFuns.LoginSysId;
+            }
+            else
+            {
+                cbQuerySystem.SelectedIndex = 0;
+            }
         }
 
         private void dgUserInfo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -103,6 +110,10 @@ namespace WindowLib.Pages
 
         private void RefreshTable()
         {
+            if (cbQuerySystem.SelectedValue == null)
+            {
+                return;
+            }
             allDt = CommunicationHelper.GetUserInfo("", cbQuerySystem.SelectedValue.ToString());
             btnSelectQuery_Click(null, null);
         }
@@ -192,6 +203,7 @@ namespace WindowLib.Pages
         {
             if (allDt == null)
             {
+                RefreshTable();
                 return;
             }
             if (tbSelectKey.Text.Trim() == "")

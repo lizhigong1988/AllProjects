@@ -140,6 +140,9 @@ namespace ProjectsManageServer.Connect
                 case CommonDef.FUN_NO.TEST_EMAIL:
                     ret = TestEmail(elem);
                     break;
+                case CommonDef.FUN_NO.DEL_PRO_INFO:
+                    ret = DelProject(elem);
+                    break;
             }
             if (ret.Length > LOG_LENGH)
             {
@@ -151,6 +154,12 @@ namespace ProjectsManageServer.Connect
             }
             File.AppendAllText(logPath, log);
             return Encoding.Default.GetBytes(ret);
+        }
+
+        private static string DelProject(string[] elem)
+        {
+            bool sec = DataBaseManager.DelProject(elem[1]);
+            return sec ? "0" : "-1";
         }
 
         private static string TestEmail(string[] elem)

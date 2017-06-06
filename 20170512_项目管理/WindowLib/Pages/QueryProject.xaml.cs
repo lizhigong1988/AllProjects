@@ -48,6 +48,10 @@ namespace WindowLib.Pages
             {
                 cbSystem.SelectedValue = GlobalFuns.LoginSysId;
             }
+            else
+            {
+                btnDelete.Visibility = Visibility.Visible;
+            }
         }
 
         private void btnQuery_Click(object sender, RoutedEventArgs e)
@@ -192,6 +196,27 @@ namespace WindowLib.Pages
                 MessageBox.Show("下载失败！");
                 return;
             }
+        }
+
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            DataRowView drv = dgProInfo.SelectedItem as DataRowView;
+            if (drv == null)
+            {
+                MessageBox.Show("请选择需要删除的项目！");
+                return;
+            }
+            if (MessageBox.Show("确定删除所选项目？", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+            {
+                return;
+            }
+
+            if (!CommunicationHelper.DelProject(drv.Row["DEMAND_ID"].ToString()))
+            {
+                MessageBox.Show("删除项目失败！");
+                return;
+            }
+            btnQuery_Click(null, null);
         }
 
     }

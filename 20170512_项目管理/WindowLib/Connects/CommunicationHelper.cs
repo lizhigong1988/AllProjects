@@ -734,5 +734,18 @@ namespace WindowLib.Connect
             }
             return revMsg == "0";
         }
+
+        internal static bool DelProject(string proId)
+        {
+            string Msg = ((int)CommonDef.FUN_NO.DEL_PRO_INFO).ToString() + "\n";
+            Msg += proId + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
+            if (!ret)
+            {
+                return false;
+            }
+            return revMsg == "0";
+        }
     }
 }

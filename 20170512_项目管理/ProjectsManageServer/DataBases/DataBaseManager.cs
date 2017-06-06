@@ -737,5 +737,24 @@ namespace ProjectsManageServer.DataBases
             return dataBaseTool.SelectFunc(sql);
         }
 
+
+        internal static bool DelProject(string proId)
+        {
+            DataTable dt = GetProInfo(proId);
+            if (dt == null)
+            {
+                return false;
+            }
+            string curFilePath = PRO_FILE_PATH + dt.Rows[0]["DEMAND_DATE"].ToString() + "_" + dt.Rows[0]["DEMAND_NAME"].ToString();
+            if (Directory.Exists(curFilePath))
+            {
+                Directory.Delete(curFilePath, true);
+            }
+            string sql = string.Format("delete from T_PRO_INFO where DEMAND_ID = '{0}';", proId);
+            sql += string.Format("delete from T_PRO_RATE where DEMAND_ID = '{0}';", proId);
+            sql += string.Format("delete from T_PRO_SYS_INFO where DEMAND_ID = '{0}';", proId);
+            sql += string.Format("delete from T_DAYS_INFO where DEMAND_ID = '{0}';", proId);
+            return dataBaseTool.ActionFunc(sql);
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace CommonLib
         /// <summary>
         /// 约定报文长度，此值发生变化需要同时修改“项目管理.Connects.CommunicationHelper.cs”中对应的定义
         /// </summary>
-        public static int MAX_MSG_LENGTH = 1024 * 100;
+        public static int MAX_MSG_LENGTH = 1024 * 50;
 
         /// <summary>
         /// 通信超时设置，此值发生变化需要同时修改“项目管理.Connects.CommunicationHelper.cs”中对应的定义
@@ -73,6 +73,7 @@ namespace CommonLib
             SAVE_SYS_CONFIG,
             GET_SYS_CONFIG,
             TEST_EMAIL,
+            DEL_PRO_INFO,
         };
 
 

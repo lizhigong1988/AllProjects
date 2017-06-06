@@ -26,13 +26,15 @@
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                     <Button Name="btnQuery"
-                            Width="0"
                             Click="btnQuery_Click"
                             Content="查询" />
                     <Button Name="btnExportMain"
-                            Width="0"
                             Click="btnExportMain_Click"
                             Content="导出" />
+                    <Button Name="btnDelete"
+                            Click="btnDelete_Click"
+                            Content="删除"
+                            Visibility="Collapsed" />
                 </StackPanel>
             </StackPanel>
         </GroupBox>
