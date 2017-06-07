@@ -1,0 +1,31 @@
+﻿<Window x:Class="WindowLib.PopWindows.CalendarPop"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        AllowsTransparency="True"
+        d:DesignHeight="245"
+        d:DesignWidth="204"
+        SizeToContent="WidthAndHeight"
+        WindowStyle="None"
+        mc:Ignorable="d">
+    <Border BorderBrush="Black" BorderThickness="1">
+        <Grid d:DesignHeight="206" d:DesignWidth="204">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Calendar Name="calendar"
+                      Width="180"
+                      Height="170"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Top"
+                      PreviewMouseUp="calendar_PreviewMouseUp" />
+            <Button Name="btnClear"
+                    Grid.Row="1"
+                    Margin="5"
+                    Click="btnClear_Click"
+                    Content="取消" />
+        </Grid>
+    </Border>
+</Window>

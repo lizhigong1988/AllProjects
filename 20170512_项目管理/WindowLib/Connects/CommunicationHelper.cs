@@ -171,7 +171,7 @@ namespace WindowLib.Connect
         }
 
         internal static bool AddNewProject(string demandName, string depart, string date, string expectDate,
-            string kinds, string stage, string state, string note, string testPersion, string businessPersion,
+            string kinds, string stage, string state, string note, string finishDate, string testPersion, string businessPersion,
             string remark, DataTable dtSysInfo)
         {
             string Msg = ((int)CommonDef.FUN_NO.ADD_NEW_PROJECT).ToString() + "\n";
@@ -183,6 +183,7 @@ namespace WindowLib.Connect
             Msg += stage + "\n";
             Msg += state + "\n";
             Msg += note + "\n";
+            Msg += finishDate + "\n";
             Msg += testPersion + "\n";
             Msg += businessPersion + "\n";
             Msg += remark + "\n";
@@ -250,7 +251,7 @@ namespace WindowLib.Connect
         internal static bool ModProject(string curProId, string sysId, string demandName, 
             string depart, string date, string expectDate,
             string kinds, string stage, string state, string finish, string note, string testPersion, string businessPersion,
-            string remark, DataTable dtSysInfo, DataTable dtTrades)
+            string remark, DataTable dtSysInfo)
         {
             string Msg = ((int)CommonDef.FUN_NO.MOD_PROJECT).ToString() + "\n";
             Msg += curProId + "\n";
@@ -268,7 +269,6 @@ namespace WindowLib.Connect
             Msg += businessPersion + "\n";
             Msg += remark + "\n";
             Msg += CommonDef.GetDataTableStr(dtSysInfo) + "\n";
-            Msg += CommonDef.GetDataTableStr(dtTrades) + "\n";
             string revMsg = "";
             bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
@@ -748,6 +748,21 @@ namespace WindowLib.Connect
         {
             string Msg = ((int)CommonDef.FUN_NO.DEL_PRO_INFO).ToString() + "\n";
             Msg += proId + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
+            if (!ret)
+            {
+                return false;
+            }
+            return revMsg == "0";
+        }
+
+        internal static bool ModDevelopment(string curProId, string sysId, DataTable dataTable)
+        {
+            string Msg = ((int)CommonDef.FUN_NO.MOD_DEVELOPMENT).ToString() + "\n";
+            Msg += curProId + "\n";
+            Msg += sysId + "\n";
+            Msg += CommonDef.GetDataTableStr(dataTable) + "\n";
             string revMsg = "";
             bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)

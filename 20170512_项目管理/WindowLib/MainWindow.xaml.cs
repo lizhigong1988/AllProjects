@@ -85,6 +85,7 @@ namespace WindowLib
                 case ""://系统管理员
                     listMenu.Items.Add(new ListBoxItem() { Content = "新增项目" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "项目维护" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "开发信息维护" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "进度录入" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "项目统计" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "工作量统计" });
@@ -97,6 +98,7 @@ namespace WindowLib
                 case "PMO":
                     listMenu.Items.Add(new ListBoxItem() { Content = "新增项目" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "项目维护" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "开发信息维护" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "进度录入" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "项目统计" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "工作量统计" });
@@ -108,6 +110,7 @@ namespace WindowLib
                 case "项目经理":
                     listMenu.Items.Add(new ListBoxItem() { Content = "新增项目" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "项目维护" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "开发信息维护" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "进度录入" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "项目统计" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "工作量统计" });
@@ -117,7 +120,7 @@ namespace WindowLib
                     //listMenu.Items.Add(new ListBoxItem() { Content = "系统设置" });
                     break;
                 case "开发人员":
-                    listMenu.Items.Add(new ListBoxItem() { Content = "项目维护" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "开发信息维护" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "修改密码" });
                     break;
             }
@@ -167,6 +170,9 @@ namespace WindowLib
                 case "项目维护":
                     scrl.Content = new ModProject();
                     break;
+                case "开发信息维护":
+                    scrl.Content = new ModDevelopment();
+                    break;
                 case "进度录入":
                     scrl.Content = new ProRateEntry();
                     break;
@@ -212,6 +218,14 @@ namespace WindowLib
             if (cbSelectSys.SelectedValue == null)
             {
                 return;
+            }
+            if (tabPageBox.Items.Count != 0)
+            {
+                if (MessageBox.Show("切换系统后将关闭已打开页面，前请先保存当前内容，确认切换？", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                {
+                    return;
+                }
+                tabPageBox.Items.Clear();
             }
             GlobalFuns.LoginSysId = cbSelectSys.SelectedValue.ToString();
             GlobalFuns.LoginSysName = (cbSelectSys.ItemsSource as Dictionary<string, string>)[GlobalFuns.LoginSysId];

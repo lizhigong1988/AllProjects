@@ -74,6 +74,8 @@ namespace CommonLib
             GET_SYS_CONFIG,
             TEST_EMAIL,
             DEL_PRO_INFO,
+
+            MOD_DEVELOPMENT, //31
         };
 
 

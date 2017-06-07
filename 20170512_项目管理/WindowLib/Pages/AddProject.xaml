@@ -20,21 +20,29 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="提出日期" />
-                    <TextBox Name="tbDemandDate" />
+                    <TextBox Name="tbDemandDate"
+                             IsReadOnly="True"
+                             PreviewMouseDown="tbDemandDate_PreviewMouseDown" />
                     <TextBlock Text="期望上线日期" />
-                    <TextBox Name="tbExpectDate" />
+                    <TextBox Name="tbExpectDate"
+                             IsReadOnly="True"
+                             PreviewMouseDown="tbExpectDate_PreviewMouseDown" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="项目阶段" />
                     <ComboBox Name="cbProStage" />
                     <TextBlock Text="项目状态" />
-                    <ComboBox Name="cbProState" />
+                    <ComboBox Name="cbProState" SelectionChanged="cbProState_SelectionChanged" />
                     <TextBlock Text="项目类型" />
                     <ComboBox Name="cbProKinds" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="项目进展说明" />
                     <TextBox Name="tbProgressNote" Width="414" />
+                    <TextBlock Text="实际完成日期" />
+                    <TextBox Name="tbFinishDate"
+                             IsReadOnly="True"
+                             PreviewMouseDown="tbFinishDate_PreviewMouseDown" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="测试经理" />
@@ -55,8 +63,8 @@
                           IsReadOnly="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding SYS_NAME}" Header="系统名称" />
-                        <DataGridTextColumn Binding="{Binding MANAGER1}" Header="第一负责人" />
-                        <DataGridTextColumn Binding="{Binding MANAGER2}" Header="第二负责人" />
+                        <DataGridTextColumn Binding="{Binding USER_NAME1}" Header="第一负责人" />
+                        <DataGridTextColumn Binding="{Binding USER_NAME2}" Header="第二负责人" />
                         <DataGridTextColumn Binding="{Binding IS_MAIN}" Header="是否主导" />
                         <DataGridTextColumn Binding="{Binding ESTIMATE_DAYS}" Header="预计工作量" />
                         <DataGridTextColumn Binding="{Binding REMARK}" Header="备注" />

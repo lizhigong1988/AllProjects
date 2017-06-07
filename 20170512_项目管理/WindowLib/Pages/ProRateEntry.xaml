@@ -36,7 +36,8 @@
             <StackPanel>
                 <DataGrid Name="dgProRateInfo"
                           Height="200"
-                          IsReadOnly="True">
+                          IsReadOnly="True"
+                          SelectionChanged="dgProRateInfo_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding SYS_NAME}" Header="录入系统" />
                         <DataGridTextColumn Binding="{Binding DATE}" Header="录入日期" />
@@ -71,8 +72,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="录入日期" />
-                    <TextBox Name="tbEntryDate" />
-                    <TextBlock Text="注：新建项目只能更新当天进度，维护项目能更新本周进度，相同日期的会覆盖。" />
+                    <TextBox Name="tbEntryDate" IsEnabled="False" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="进度比例" />

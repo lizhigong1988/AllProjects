@@ -185,7 +185,7 @@ namespace ProjectsManageServer.Connect
             msg += HtmAddTable(dtProSysRateInfo, new Dictionary<string, string>() 
                                     {
                                         {"SYS_NAME","录入系统"},
-                                        {"ESTIMATE_DAYS", "预计工作量"},
+                                        {"ESTIMATE_DAYS", "预计工作量(人天)"},
                                         {"RATE","最新录入进度"},
                                         {"DATE","最新录入日期"},
                                         {"EXPLAIN","进度说明"},
@@ -270,7 +270,13 @@ namespace ProjectsManageServer.Connect
                                         {"UPDATE_PRO","升级需求个数"},
                                     });
             msg += HtmAddRow("");
-            //3、汇总新需求（重点项目）详情
+            //3、在建需求汇总表
+            /*
+             * 
+             */
+
+
+            //4、汇总新需求（重点项目）详情
             /*
              * 项目名称
              * 系统名称、预估工作量、系统开发进度、进度说明
@@ -287,7 +293,7 @@ namespace ProjectsManageServer.Connect
                     }
                 }
             }
-            //4、汇总维护需求详情
+            //5、汇总维护需求详情
             /*
              * 项目名称
              * 系统名称、预估工作量、系统开发进度、进度说明

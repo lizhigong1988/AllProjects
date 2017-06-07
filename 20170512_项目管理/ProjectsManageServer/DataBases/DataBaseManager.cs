@@ -53,14 +53,14 @@ namespace ProjectsManageServer.DataBases
         static string PRO_FILE_PATH = "projects/";
 
         internal static bool AddNewProject(string demandName, string depart, string date, string expectDate,
-            string kinds, string stage, string state, string note, string testPersion, string businessPersion, 
+            string kinds, string stage, string state, string note, string finishDate, string testPersion, string businessPersion,
             string remark, DataTable dtSysInfo)
         {
             string sql = "";
             string proId = Guid.NewGuid().ToString();
             List<string> values = new List<string>()
             {
-                proId, demandName, depart, date, expectDate, "", kinds, stage, state, note, 
+                proId, demandName, depart, date, expectDate, finishDate, kinds, stage, state, note, 
                 testPersion, businessPersion, remark,
                 DateTime.Now.ToString("yyyyMMddHHmmss")
             };
@@ -134,7 +134,7 @@ namespace ProjectsManageServer.DataBases
 
         internal static bool ModProject(string curProId, string sysId, string demandName, string depart, string date, string expectDate,
             string kinds, string stage, string state, string finish, string note, string testPersion, string businessPersion,
-            string remark, DataTable dtSysInfo, DataTable dtTrades)
+            string remark, DataTable dtSysInfo)
         {
             string sql = "";
             List<string> values = new List<string>()
@@ -159,25 +159,6 @@ namespace ProjectsManageServer.DataBases
                     values, ref sql))
                 {
                     return false;
-                }
-            }
-            if (sysId != "")
-            {
-                sql += string.Format("delete from T_TRADE_INFO where DEMAND_ID = '{0}' and SYS_ID = '{1}';", curProId, sysId);
-                foreach (DataRow dr in dtTrades.Rows)
-                {
-                    values = new List<string>() 
-                    {
-                        curProId, sysId, dr["TRADE_CODE"].ToString(), dr["TRADE_NAME"].ToString(),
-                        dr["IS_NEW"].ToString(), dr["FILE_NAME"].ToString(),
-                        dr["WORKER"].ToString(), dr["WORKLOAD"].ToString(),
-                        dr["REMARK"].ToString()
-                    };
-                    if (!dataBaseTool.AddInfo(T_TRADE_INFO.TABLE_NAME, T_TRADE_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
-                        values, ref sql))
-                    {
-                        return false;
-                    }
                 }
             }
             string curFilePath = PRO_FILE_PATH + date + "_" + demandName;
@@ -366,7 +347,7 @@ namespace ProjectsManageServer.DataBases
                 }
                 if (dt.Rows[0][0].ToString() == "0")
                 {
-                    values = new List<string>() { manage2, "111111", guid, "焦作中旅银行股份有限公司", "项目经理", "" };
+                    values = new List<string>() { manage2, "111111", "", "焦作中旅银行股份有限公司", "项目经理", "" };
                     if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
                         values, ref sql))
                     {
@@ -438,7 +419,7 @@ namespace ProjectsManageServer.DataBases
                 }
                 if (dt.Rows[0][0].ToString() == "0")
                 {
-                    values = new List<string>() { manage2, "111111", sysId, "焦作中旅银行股份有限公司", "项目经理", "" };
+                    values = new List<string>() { manage2, "111111", "", "焦作中旅银行股份有限公司", "项目经理", "" };
                     if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
                         values, ref sql))
                     {
@@ -761,6 +742,28 @@ namespace ProjectsManageServer.DataBases
             sql += string.Format("delete from T_PRO_RATE where DEMAND_ID = '{0}';", proId);
             sql += string.Format("delete from T_PRO_SYS_INFO where DEMAND_ID = '{0}';", proId);
             sql += string.Format("delete from T_DAYS_INFO where DEMAND_ID = '{0}';", proId);
+            return dataBaseTool.ActionFunc(sql);
+        }
+
+        internal static bool ModDevelopment(string curProId, string sysId, DataTable dtTrades)
+        {
+            string sql = string.Format("delete from T_TRADE_INFO where DEMAND_ID = '{0}' and SYS_ID = '{1}';",
+                curProId, sysId);
+            foreach (DataRow dr in dtTrades.Rows)
+            {
+                List<string> values = new List<string>() 
+                {
+                    curProId, sysId, dr["TRADE_CODE"].ToString(), dr["TRADE_NAME"].ToString(),
+                    dr["IS_NEW"].ToString(), dr["FILE_NAME"].ToString(),
+                    dr["WORKER"].ToString(), dr["WORKLOAD"].ToString(),
+                    dr["REMARK"].ToString()
+                };
+                if (!dataBaseTool.AddInfo(T_TRADE_INFO.TABLE_NAME, T_TRADE_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                    values, ref sql))
+                {
+                    return false;
+                }
+            }
             return dataBaseTool.ActionFunc(sql);
         }
     }

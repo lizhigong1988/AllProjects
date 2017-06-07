@@ -26,6 +26,7 @@ namespace WindowLib.Pages
         public ProRateEntry()
         {
             InitializeComponent();
+            tbEntryDate.Text = DateTime.Now.ToString("yyyyMMdd");
             Refresh();
         }
 
@@ -64,11 +65,6 @@ namespace WindowLib.Pages
             {
                 dr["EXPLAIN"] = dr["EXPLAIN"].ToString().Replace("<br/>", "\r\n");
                 dr["PROBLEM"] = dr["PROBLEM"].ToString().Replace("<br/>", "\r\n");
-            }
-            if (drv.Row["PRO_KIND"].ToString() == "新项目")
-            {
-                tbEntryDate.Text = DateTime.Now.ToString("yyyyMMdd");
-                tbEntryDate.IsEnabled = false;
             }
             tbProName.Text = drv.Row["DEMAND_NAME"].ToString();
             btnRefreshRate_Click(null, null);
@@ -190,6 +186,18 @@ namespace WindowLib.Pages
                 showDt = dtShowNew;
             }
             dgProRateInfo.DataContext = showDt;
+        }
+
+        private void dgProRateInfo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataRowView drv = dgProRateInfo.SelectedItem as DataRowView;
+            if (drv == null)
+            {
+                return;
+            }
+            tbRate.Text = drv.Row["RATE"].ToString();
+            tbExplain.Text = drv.Row["EXPLAIN"].ToString();
+            tbProblem.Text = drv.Row["PROBLEM"].ToString();
         }
 
     }

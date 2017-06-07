@@ -15,6 +15,7 @@ using System.Data;
 using WindowLib.Tools;
 using System.IO;
 using WindowLib.Connect;
+using WindowLib.PopWindows;
 
 namespace WindowLib.Pages
 {
@@ -64,15 +65,30 @@ namespace WindowLib.Pages
                 MessageBox.Show("请输入项目名称！");
                 return;
             }
+            if (cbDemandDepart.Text == "")
+            {
+                MessageBox.Show("请输入项目提出部门！");
+                return;
+            }
             if (tbDemandDate.Text == "")
             {
                 MessageBox.Show("请输入项目提出日期！");
+                return;
+            }
+            if (tbExpectDate.Text == "")
+            {
+                MessageBox.Show("请输入项目期望上线日期！");
                 return;
             }
             DataTable dt = dgProSysInfo.DataContext as DataTable;
             if (dt == null)
             {
                 MessageBox.Show("请添加所涉及的开发系统！");
+                return;
+            }
+            if (cbProState.Text == "完成" &&  tbFinishDate.Text == "")
+            {
+                MessageBox.Show("请输入完成日期！");
                 return;
             }
             bool hasMain = false;
@@ -90,8 +106,8 @@ namespace WindowLib.Pages
                 return;
             }
             if (!CommunicationHelper.AddNewProject(tbDemandName.Text, cbDemandDepart.Text, tbDemandDate.Text,
-                tbExpectDate.Text, cbProKinds.Text, cbProStage.Text, cbProState.Text,
-                tbProgressNote.Text, tbTestPerson.Text, tbBusinessPerson.Text, tbRemark.Text, dt))
+                tbExpectDate.Text, cbProKinds.Text, cbProStage.Text, cbProState.Text, tbProgressNote.Text,
+                tbFinishDate.Text, tbTestPerson.Text, tbBusinessPerson.Text, tbRemark.Text, dt))
             {
                 MessageBox.Show("保存项目失败！");
                 return;
@@ -106,7 +122,12 @@ namespace WindowLib.Pages
             if (!float.TryParse(tbSysEstimatedDays.Text, out days))
             {
                 MessageBox.Show("请输入正确的预计工作量，单位天！");
-                tbSysEstimatedDays.Text = "0";
+                tbSysEstimatedDays.Text = "1";
+                return;
+            }
+            if (days == 0)
+            {
+                MessageBox.Show("预计工作量不为0！");
                 return;
             }
             DataTable dt = CommunicationHelper.GetSystemInfo(cbSystem.SelectedValue.ToString());
@@ -121,8 +142,8 @@ namespace WindowLib.Pages
                 dtSysInfo = new DataTable();
                 dtSysInfo.Columns.Add("SYS_ID");
                 dtSysInfo.Columns.Add("SYS_NAME");
-                dtSysInfo.Columns.Add("MANAGER1");
-                dtSysInfo.Columns.Add("MANAGER2");
+                dtSysInfo.Columns.Add("USER_NAME1");
+                dtSysInfo.Columns.Add("USER_NAME2");
                 dtSysInfo.Columns.Add("IS_MAIN");
                 dtSysInfo.Columns.Add("ESTIMATE_DAYS");
                 dtSysInfo.Columns.Add("REMARK");
@@ -203,7 +224,12 @@ namespace WindowLib.Pages
             if (!float.TryParse(tbSysEstimatedDays.Text, out days))
             {
                 MessageBox.Show("请输入正确的预计工作量，单位天！");
-                tbSysEstimatedDays.Text = "0";
+                tbSysEstimatedDays.Text = "1";
+                return;
+            }
+            if (days == 0)
+            {
+                MessageBox.Show("预计工作量不为0！");
                 return;
             }
             DataTable dt = CommunicationHelper.GetSystemInfo(cbSystem.SelectedValue.ToString());
@@ -272,6 +298,61 @@ namespace WindowLib.Pages
                 return;
             }
             drv.Row.Table.Rows.Remove(drv.Row);
+            UpdateDays();
+        }
+
+        private void tbDemandDate_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Window window = Window.GetWindow(this);
+            Point point = tbDemandDate.TransformToAncestor(window).Transform(new Point(0, 0));
+            CalendarPop calendar = new CalendarPop();
+            calendar.Left = point.X + window.Left;
+            calendar.Top = point.Y + window.Top;
+            calendar.ShowDialog();
+            tbDemandDate.Text = calendar.date;
+        }
+
+        private void tbExpectDate_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Window window = Window.GetWindow(this);
+            Point point = tbExpectDate.TransformToAncestor(window).Transform(new Point(0, 0));
+            CalendarPop calendar = new CalendarPop();
+            calendar.Left = point.X + window.Left;
+            calendar.Top = point.Y + window.Top;
+            calendar.ShowDialog();
+            tbExpectDate.Text = calendar.date;
+        }
+
+        private void tbFinishDate_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Window window = Window.GetWindow(this);
+            Point point = tbFinishDate.TransformToAncestor(window).Transform(new Point(0, 0));
+            CalendarPop calendar = new CalendarPop();
+            calendar.Left = point.X + window.Left;
+            calendar.Top = point.Y + window.Top;
+            calendar.ShowDialog();
+            tbFinishDate.Text = calendar.date;
+        }
+
+        private void cbProState_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbProState.SelectedItem == null)
+            {
+                return;
+            }
+            string select = cbProState.SelectedItem.ToString();
+            if (select == "完成")
+            {
+                cbProStage.Text = "已上线";
+                cbProStage.IsEnabled = false;
+                tbFinishDate.IsEnabled = true;
+            }
+            else
+            {
+                cbProStage.IsEnabled = true;
+                tbFinishDate.Text = "";
+                tbFinishDate.IsEnabled = false;
+            }
         }
 
     }

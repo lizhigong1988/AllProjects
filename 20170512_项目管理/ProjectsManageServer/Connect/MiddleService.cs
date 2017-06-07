@@ -143,6 +143,9 @@ namespace ProjectsManageServer.Connect
                 case CommonDef.FUN_NO.DEL_PRO_INFO:
                     ret = DelProject(elem);
                     break;
+                case CommonDef.FUN_NO.MOD_DEVELOPMENT:
+                    ret = ModDevelopment(elem);
+                    break;
             }
             if (ret.Length > LOG_LENGH)
             {
@@ -154,6 +157,13 @@ namespace ProjectsManageServer.Connect
             }
             File.AppendAllText(logPath, log);
             return Encoding.Default.GetBytes(ret);
+        }
+
+        private static string ModDevelopment(string[] elem)
+        {
+            DataTable dt = CommonDef.GetDataTable(elem[3]);
+            bool sec = DataBaseManager.ModDevelopment(elem[1], elem[2], dt);
+            return sec ? "0" : "-1";
         }
 
         private static string DelProject(string[] elem)
@@ -390,10 +400,9 @@ namespace ProjectsManageServer.Connect
         private static string ModProject(string[] elem)
         {
             DataTable dtSysInfo = CommonDef.GetDataTable(elem[15]);
-            DataTable dtTradesInfo = CommonDef.GetDataTable(elem[16]);
             bool sec = DataBaseManager.ModProject(elem[1], elem[2], elem[3], elem[4], elem[5],
                 elem[6], elem[7], elem[8], elem[9], elem[10], elem[11], elem[12], elem[13], elem[14],
-                dtSysInfo, dtTradesInfo);
+                dtSysInfo);
             return sec ? "0" : "-1";
         }
 
@@ -422,9 +431,9 @@ namespace ProjectsManageServer.Connect
 
         private static string AddNewProject(string[] elem)
         {
-            DataTable dt = CommonDef.GetDataTable(elem[12]);
+            DataTable dt = CommonDef.GetDataTable(elem[13]);
             bool sec = DataBaseManager.AddNewProject(elem[1], elem[2], elem[3], elem[4], elem[5],
-                elem[6], elem[7], elem[8], elem[9], elem[10], elem[11], dt);
+                elem[6], elem[7], elem[8], elem[9], elem[10], elem[11], elem[12], dt);
 
             return sec ? "0" : "-1";
         }

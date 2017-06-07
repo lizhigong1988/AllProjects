@@ -103,6 +103,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Pages\ModDevelopment.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PopWindows\CalendarPop.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="StyleSource\CommonSource.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -145,6 +153,12 @@
     </Compile>
     <Compile Include="Pages\UserManage.xaml.cs">
       <DependentUpon>UserManage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ModDevelopment.xaml.cs">
+      <DependentUpon>ModDevelopment.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PopWindows\CalendarPop.xaml.cs">
+      <DependentUpon>CalendarPop.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tools\GlobalFuns.cs" />
     <Compile Include="Tools\InputCheck.cs" />
