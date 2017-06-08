@@ -156,7 +156,7 @@ namespace WindowLib.Connect
             bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
-                return retList;
+                return null;
             }
             string[] departs = revMsg.Split('\n')[1].Split('\r');
             foreach (string depart in departs)
@@ -207,7 +207,7 @@ namespace WindowLib.Connect
             bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
-                return retList;
+                return null;
             }
             string[] departs = revMsg.Split('\n')[1].Split('\r');
             foreach (string depart in departs)
@@ -305,7 +305,7 @@ namespace WindowLib.Connect
             bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
-                return retList;
+                return null;
             }
             string[] departs = revMsg.Split('\n')[1].Split('\r');
             foreach (string depart in departs)
@@ -328,7 +328,7 @@ namespace WindowLib.Connect
             bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
-                return retList;
+                return null;
             }
             string[] departs = revMsg.Split('\n')[1].Split('\r');
             foreach (string depart in departs)
@@ -410,7 +410,7 @@ namespace WindowLib.Connect
             bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)
             {
-                return retList;
+                return null;
             }
             string[] departs = revMsg.Split('\n')[1].Split('\r');
             foreach (string depart in departs)
@@ -673,13 +673,14 @@ namespace WindowLib.Connect
             return CommonDef.GetDataTable(revMsg.Split('\n')[1]);
         }
 
-        internal static bool EntryProRate(string proId, string sysId, string date, string rate, 
+        internal static bool EntryProRate(string proId, string sysId, string date, string note, string rate, 
             string explain, string problem)
         {
             string Msg = ((int)CommonDef.FUN_NO.ENTRY_PRO_RATE).ToString() + "\n";
             Msg += proId + "\n";
             Msg += sysId + "\n";
             Msg += date + "\n";
+            Msg += note + "\n";
             Msg += rate + "\n";
             Msg += explain + "\n";
             Msg += problem + "\n";

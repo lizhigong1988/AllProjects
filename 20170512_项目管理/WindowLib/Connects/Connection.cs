@@ -67,7 +67,18 @@ namespace WindowLib.Connect
             }
             catch
             {
-                AppConnectInit(lastConnectIp);
+                if (AppConnectInit(lastConnectIp))
+                {
+                    try
+                    {
+                        socket.BeginSend(listSendData.ToArray(), 0, listSendData.Count, SocketFlags.None, null, socket); //发送数据  
+                        return true;
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                }
                 return false;
             }
             return true;

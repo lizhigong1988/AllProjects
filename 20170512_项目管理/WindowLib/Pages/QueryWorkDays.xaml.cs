@@ -30,6 +30,11 @@ namespace WindowLib.Pages
             tbYearMonth.Text = DateTime.Now.ToString("yyyyMM");
 
             cbSystem.ItemsSource = CommunicationHelper.GetAllSysDic();
+            if (cbSystem.ItemsSource == null)
+            {
+                MessageBox.Show("获取系统信息失败");
+                return;
+            }
             cbSystem.SelectedValuePath = "Key";
             cbSystem.DisplayMemberPath = "Value";
             if (GlobalFuns.LoginSysId != "")
@@ -60,6 +65,11 @@ namespace WindowLib.Pages
             curQueryWorker = cbPerson.Text;
             curQueryDate = tbYearMonth.Text;
             DataTable dt = CommunicationHelper.QueryProDaysInfo(curQuerySys, cbPerson.Text, tbYearMonth.Text);
+            if (dt == null)
+            {
+                MessageBox.Show("获取工作量信息失败");
+                return;
+            }
             dgProInfo.DataContext = dt;
             RefreshMonthDays();
         }
@@ -75,6 +85,7 @@ namespace WindowLib.Pages
                 curQuerySys, curQueryWorker, drv.Row["DEMAND_ID"].ToString());
             if (dtWorkDays == null)
             {
+                MessageBox.Show("获取工作量信息失败");
                 return;
             }
             int startMonth = int.Parse(drv.Row["DEMAND_DATE"].ToString().Substring(0, 6));
@@ -176,9 +187,15 @@ namespace WindowLib.Pages
         private void cbSystem_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             List<string> listWorkers;
+
             if (cbSystem.SelectedValue == null)
             {
                 listWorkers = CommunicationHelper.GetHisWorkers(GlobalFuns.LoginSysId);
+                if (listWorkers == null)
+                {
+                    MessageBox.Show("获取开发者信息失败");
+                    return;
+                }
                 cbPerson.ItemsSource = listWorkers;
                 if (listWorkers.Count != 0)
                 {
@@ -188,6 +205,11 @@ namespace WindowLib.Pages
             }
             string selectSys = cbSystem.SelectedValue.ToString();
             listWorkers = CommunicationHelper.GetHisWorkers(selectSys);
+            if (listWorkers == null)
+            {
+                MessageBox.Show("获取开发者信息失败");
+                return;
+            }
             cbPerson.ItemsSource = listWorkers;
             if (listWorkers.Count != 0)
             {

@@ -39,6 +39,11 @@ namespace WindowLib.Pages
         private void Refresh()
         {
             Dictionary<string, string> proNames = CommunicationHelper.GetCurProNames(GlobalFuns.LoginSysId, false);
+            if (proNames == null)
+            {
+                MessageBox.Show("获取项目信息失败！");
+                return;
+            } 
             cbDemandName.ItemsSource = proNames;
             if (proNames.Count == 0)
             {
@@ -165,12 +170,27 @@ namespace WindowLib.Pages
             string demandDate = dr["DEMAND_DATE"].ToString();
 
             DataTable dtSystems = CommunicationHelper.GetProSystemInfo(curProId);
+            if (dtSystems == null)
+            {
+                MessageBox.Show("获取项目子单信息失败！");
+                return;
+            }
             dgProSysInfo.DataContext = dtSystems;
 
             DataTable dtTrades = CommunicationHelper.GetTradesInfo(curProId, GlobalFuns.LoginSysId);
+            if (dtTrades == null)
+            {
+                MessageBox.Show("获取开发信息失败！");
+                return;
+            }
             dgDevelopmentInfo.DataContext = dtTrades;
 
             DataTable dtFiles = CommunicationHelper.GetProFileInfo(curProId);
+            if (dtFiles == null)
+            {
+                MessageBox.Show("获取项目文件信息失败！");
+                return;
+            }
             curFilePath = "projects/" + demandDate + "_" +
                 (cbDemandName.ItemsSource as Dictionary<string, string>).ElementAt(cbDemandName.SelectedIndex).Value;
             DataTable dtFile = new DataTable();
@@ -217,6 +237,11 @@ namespace WindowLib.Pages
         private void btnShowAll_Click(object sender, RoutedEventArgs e)
         {
             Dictionary<string, string> proNames = CommunicationHelper.GetCurProNames(GlobalFuns.LoginSysId, true);
+            if (proNames == null)
+            {
+                MessageBox.Show("获取项目信息失败！");
+                return;
+            }
             cbDemandName.ItemsSource = proNames;
             if (proNames.Count == 0)
             {

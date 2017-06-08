@@ -30,6 +30,11 @@ namespace WindowLib.Pages
             cbRole.SelectedIndex = 0;
 
             Dictionary<string,string> dicSysInfo = CommunicationHelper.GetAllSysDic();
+            if (dicSysInfo == null)
+            {
+                MessageBox.Show("获取系统信息失败");
+                return;
+            }
             cbSystem.ItemsSource = dicSysInfo;
             cbSystem.SelectedValuePath = "Key";
             cbSystem.DisplayMemberPath = "Value";
@@ -69,6 +74,11 @@ namespace WindowLib.Pages
             tbUserCompany.Text = drv.Row["COMPANY"].ToString();
             tbRemark.Text = drv.Row["REMARK"].ToString();
             DataTable dtSys = CommunicationHelper.GetUserSysInfo(tbUserName.Text);
+            if (dtSys == null)
+            {
+                MessageBox.Show("获取用户系统信息失败！");
+                return;
+            }
             dgUserSys.DataContext = dtSys;
         }
 
@@ -116,6 +126,11 @@ namespace WindowLib.Pages
                 return;
             }
             allDt = CommunicationHelper.GetUserInfo("", cbQuerySystem.SelectedValue.ToString());
+            if (allDt == null)
+            {
+                MessageBox.Show("数据查询错误");
+                return;
+            }
             btnSelectQuery_Click(null, null);
         }
 

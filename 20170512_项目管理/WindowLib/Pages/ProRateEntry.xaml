@@ -75,6 +75,12 @@
                     <TextBox Name="tbEntryDate" IsEnabled="False" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="整体进度比例" />
+                    <TextBox Name="tbTotalRate" IsEnabled="False" />
+                    <TextBlock Text="项目进展说明" />
+                    <TextBox Name="tbProgressNote" Width="380" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Text="进度比例" />
                     <TextBox Name="tbRate" />
                     <TextBlock MinWidth="0" Text="%" />
@@ -82,16 +88,16 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="进度说明" />
                     <TextBox Name="tbExplain"
-                             Width="600"
-                             Height="80"
+                             Width="655"
+                             Height="40"
                              AcceptsReturn="True"
                              TextWrapping="Wrap" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="当前问题" />
                     <TextBox Name="tbProblem"
-                             Width="600"
-                             Height="80"
+                             Width="655"
+                             Height="40"
                              AcceptsReturn="True"
                              TextWrapping="Wrap" />
                 </StackPanel>

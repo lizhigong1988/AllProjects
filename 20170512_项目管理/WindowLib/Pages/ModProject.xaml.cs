@@ -37,7 +37,11 @@ namespace WindowLib.Pages
         private void Refresh()
         {
             cbDemandDepart.ItemsSource = CommunicationHelper.GetHisDeparts();
-
+            if (cbDemandDepart.ItemsSource == null)
+            {
+                MessageBox.Show("获取部门信息失败");
+                return;
+            }
             cbProKinds.ItemsSource = new List<string>() { "新项目", "功能优化" };
 
             cbProStage.ItemsSource = new List<string>() { 
@@ -50,11 +54,21 @@ namespace WindowLib.Pages
             };
 
             cbSystem.ItemsSource = CommunicationHelper.GetAllSysDic();
+            if (cbSystem.ItemsSource == null)
+            {
+                MessageBox.Show("获取系统信息失败");
+                return;
+            }
             cbSystem.SelectedValuePath = "Key";
             cbSystem.DisplayMemberPath = "Value";
             cbSystem.SelectedIndex = 0;
 
             Dictionary<string, string> proNames = CommunicationHelper.GetCurProNames(GlobalFuns.LoginSysId, false);
+            if (proNames == null)
+            {
+                MessageBox.Show("获取项目信息失败！");
+                return;
+            }
             cbDemandName.ItemsSource = proNames;
             if (proNames.Count == 0)
             {
@@ -214,10 +228,42 @@ namespace WindowLib.Pages
             tbFinishDate.Text = dr["FINISH_DATE"].ToString();
             tbLastTime.Text = dr["LAST_MOD_TIME"].ToString();
 
-            DataTable dtSystems = CommunicationHelper.GetProSystemInfo(curProId);
+            DataTable dtSystems = CommunicationHelper.GetProSystemInfo(curProId); 
+            if (dtSystems == null)
+            {
+                MessageBox.Show("获取项目子单信息失败！");
+                return;
+            }
             dgProSysInfo.DataContext = dtSystems;
+            if(GlobalFuns.LoginSysId != "")
+            {
+                btnAddNewSys.IsEnabled = false;
+                btnModSys.IsEnabled = false;
+                btnDelSys.IsEnabled = false;
+                btnSave.IsEnabled = false;
+                btnDelFile.IsEnabled = false;
+                foreach (DataRow drSys in dtSystems.Rows)
+                {
+                    if (drSys["IS_MAIN"].ToString() == "是")
+                    {
+                        if (drSys["SYS_ID"].ToString() == GlobalFuns.LoginSysId)
+                        {
+                            btnAddNewSys.IsEnabled = true;
+                            btnModSys.IsEnabled = true;
+                            btnDelSys.IsEnabled = true;
+                            btnSave.IsEnabled = true;
+                            btnDelFile.IsEnabled = true;
+                        }
+                    }
+                }
+            }
 
             DataTable dtFiles = CommunicationHelper.GetProFileInfo(curProId);
+            if (dtFiles == null)
+            {
+                MessageBox.Show("获取项目文件信息失败！");
+                return;
+            }
             curFilePath = "projects/" + tbDemandDate.Text + "_" +
                 (cbDemandName.ItemsSource as Dictionary<string, string>).ElementAt(cbDemandName.SelectedIndex).Value;
             DataTable dtFile = new DataTable();
@@ -264,6 +310,11 @@ namespace WindowLib.Pages
         private void btnShowAll_Click(object sender, RoutedEventArgs e)
         {
             Dictionary<string, string> proNames = CommunicationHelper.GetCurProNames(GlobalFuns.LoginSysId, true);
+            if (proNames == null)
+            {
+                MessageBox.Show("获取项目信息失败！");
+                return;
+            }
             cbDemandName.ItemsSource = proNames;
             if (proNames.Count == 0)
             {

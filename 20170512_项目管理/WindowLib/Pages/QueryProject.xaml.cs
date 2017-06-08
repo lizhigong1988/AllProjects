@@ -40,6 +40,11 @@ namespace WindowLib.Pages
             cbProState.SelectedIndex = 0;
 
             cbSystem.ItemsSource = CommunicationHelper.GetAllSysDic();
+            if (cbSystem.ItemsSource == null)
+            {
+                MessageBox.Show("获取系统信息失败");
+                return;
+            }
             (cbSystem.ItemsSource as Dictionary<string, string>).Add("", "全部");
             cbSystem.SelectedValuePath = "Key";
             cbSystem.DisplayMemberPath = "Value";
@@ -58,6 +63,11 @@ namespace WindowLib.Pages
         {
             DataTable dt = CommunicationHelper.QueryProInfo(cbProStage.Text, cbProState.Text, tbProDate.Text,
                 cbSystem.SelectedValue.ToString());
+            if (dt == null)
+            {
+                MessageBox.Show("获取项目信息失败");
+                return;
+            }
             dgProInfo.DataContext = dt;
         }
 
@@ -70,13 +80,28 @@ namespace WindowLib.Pages
                 return;
             }
             DataTable dtSystems = CommunicationHelper.GetProSystemInfo(drv.Row["DEMAND_ID"].ToString());
+            if (dtSystems == null)
+            {
+                MessageBox.Show("获取项目子单信息失败！");
+                return;
+            }
             dgProSysInfo.DataContext = dtSystems;
             DataTable dtTrades = CommunicationHelper.GetTradesInfo(drv.Row["DEMAND_ID"].ToString(), GlobalFuns.LoginSysId);
+            if (dtTrades == null)
+            {
+                MessageBox.Show("获取开发信息失败！");
+                return;
+            }
             dtTrades.Columns.Add("DIFF");
             dgDevelopmentInfo.DataContext = dtTrades;
             curFilePath = "projects/" + drv.Row["DEMAND_DATE"].ToString() + "_" + drv.Row["DEMAND_NAME"].ToString();
 
             DataTable dtFiles = CommunicationHelper.GetProFileInfo(drv.Row["DEMAND_ID"].ToString());
+            if (dtFiles == null)
+            {
+                MessageBox.Show("获取项目文件信息失败！");
+                return;
+            }
             DataTable dtFile = new DataTable();
             dtFile.Columns.Add("FILE_ALL_NAME");
             dtFile.Columns.Add("FILE_NAME");

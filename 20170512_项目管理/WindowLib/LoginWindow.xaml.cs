@@ -66,7 +66,7 @@ namespace WindowLib
                 return;
             }
             DataRow dr = dt.Rows[0];
-            if (dr["USER_PSW"].ToString() != tbUserPsw.Password)
+            if (dr["USER_PSW"].ToString() != InputCheck.MD5(tbUserPsw.Password))
             {
                 MessageBox.Show("密码错误");
                 return;
@@ -77,7 +77,6 @@ namespace WindowLib
             GlobalFuns.LoginRole = dr["USER_ROLE"].ToString();
 
             GlobalFuns.DtLoginUserSysInfo = CommunicationHelper.GetUserSysInfo(tbUserName.Text);
-
             if (GlobalFuns.DtLoginUserSysInfo == null)
             {
                 MessageBox.Show("数据查询错误");

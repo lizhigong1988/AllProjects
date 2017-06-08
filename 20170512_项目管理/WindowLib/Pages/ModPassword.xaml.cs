@@ -47,12 +47,12 @@ namespace WindowLib.Pages
                 return;
             }
             DataRow dr = dt.Rows[0];
-            if (dr["USER_PSW"].ToString() != pbCurPsw.Password)
+            if (dr["USER_PSW"].ToString() != InputCheck.MD5(pbCurPsw.Password))
             {
                 MessageBox.Show("密码不正确");
                 return;
             }
-            if (!CommunicationHelper.ModPassword(GlobalFuns.LoginUser, pbNewPsw.Password))
+            if (!CommunicationHelper.ModPassword(GlobalFuns.LoginUser, InputCheck.MD5(pbNewPsw.Password)))
             {
                 MessageBox.Show("修改密码失败！");
                 return;

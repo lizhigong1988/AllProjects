@@ -34,9 +34,19 @@ namespace WindowLib.Pages
         {
             DataTable dt = CommunicationHelper.QueryProInfo("全部", "全部未完成", "",
                 GlobalFuns.LoginSysId);
+            if (dt == null)
+            {
+                MessageBox.Show("获取项目信息失败");
+                return;
+            }
             dgProInfo.DataContext = dt;
 
             cbSystem.ItemsSource = CommunicationHelper.GetAllSysDic();
+            if (cbSystem.ItemsSource == null)
+            {
+                MessageBox.Show("获取系统信息失败");
+                return;
+            }
             cbSystem.SelectedValuePath = "Key";
             cbSystem.DisplayMemberPath = "Value";
             if (GlobalFuns.LoginSysId == "")
@@ -60,13 +70,103 @@ namespace WindowLib.Pages
             {
                 return;
             }
+            DataTable newInfo = CommunicationHelper.GetProInfo(drv.Row["DEMAND_ID"].ToString());
+            if (newInfo == null)
+            {
+                MessageBox.Show("获取项目信息失败");
+                return;
+            }
+            DataRow selectDr = newInfo.Rows[0];
             selectProRateDt = CommunicationHelper.GetProRateInfo(drv.Row["DEMAND_ID"].ToString());
+            if (selectProRateDt == null)
+            {
+                MessageBox.Show("获取进度信息失败");
+                return;
+            }
             foreach (DataRow dr in selectProRateDt.Rows)
             {
                 dr["EXPLAIN"] = dr["EXPLAIN"].ToString().Replace("<br/>", "\r\n");
                 dr["PROBLEM"] = dr["PROBLEM"].ToString().Replace("<br/>", "\r\n");
             }
             tbProName.Text = drv.Row["DEMAND_NAME"].ToString();
+            //计算总体进度
+            DataTable dtShowNew = selectProRateDt.Clone();
+            //整理最新比例
+            foreach (DataRow dr in selectProRateDt.Rows)
+            {
+                bool has = false;
+                foreach (DataRow drNew in dtShowNew.Rows)
+                {
+                    if (dr["SYS_ID"].ToString() == drNew["SYS_ID"].ToString())
+                    {
+                        if (int.Parse(dr["DATE"].ToString()) > int.Parse(drNew["DATE"].ToString()))
+                        {
+                            drNew["DATE"] = dr["DATE"].ToString();
+                            drNew["RATE"] = dr["RATE"].ToString();
+                            drNew["EXPLAIN"] = dr["EXPLAIN"].ToString();
+                            drNew["PROBLEM"] = dr["PROBLEM"].ToString();
+                        }
+                        has = true;
+                        break;
+                    }
+                }
+                if (!has)
+                {
+                    dtShowNew.Rows.Add(dr.ItemArray);
+                }
+            }
+            DataTable dtProSysInfo = CommunicationHelper.GetProSystemInfo(drv.Row["DEMAND_ID"].ToString());
+            if (dtProSysInfo == null)
+            {
+                MessageBox.Show("获取项目系统信息失败");
+                return;
+            }
+            //总体进度 =（求和） 子单进度 * 子单预计工作量 / 总共工作量
+            double totalChildrenRate = 0;
+            double totalEstimate = 0;
+            tbProgressNote.IsEnabled = false;
+            foreach (DataRow dr in dtProSysInfo.Rows)
+            {
+                if (dr["IS_MAIN"].ToString() == "是")
+                {
+                    if (dr["SYS_ID"].ToString() == GlobalFuns.LoginSysId)
+                    {
+                        tbProgressNote.IsEnabled = true;
+                    }
+                }
+                double estimate = 0;
+                if (!double.TryParse(dr["ESTIMATE_DAYS"].ToString(), out estimate))
+                {
+                    continue;
+                }
+                if (estimate == 0)
+                {
+                    continue;
+                }
+                foreach (DataRow drSysRate in dtShowNew.Rows)
+                {
+                    if (drSysRate["SYS_ID"].ToString() == dr["SYS_ID"].ToString())
+                    {
+                        totalChildrenRate += double.Parse(drSysRate["RATE"].ToString()) * estimate / 100;
+                        break;
+                    }
+                }
+                totalEstimate += estimate;
+            }
+
+            if (totalEstimate != 0)
+            {
+                tbTotalRate.Text = (totalChildrenRate / totalEstimate * 100).ToString("N2") + "%";
+            }
+            else
+            { 
+                tbTotalRate.Text = "0%";
+            }
+            tbProgressNote.Text = selectDr["PRO_NOTE"].ToString();
+            if (GlobalFuns.LoginSysId == "")
+            {
+                tbProgressNote.IsEnabled = true;
+            }
             btnRefreshRate_Click(null, null);
         }
 
@@ -121,7 +221,7 @@ namespace WindowLib.Pages
                 }
             }
             if (!CommunicationHelper.EntryProRate(drvPro.Row["DEMAND_ID"].ToString(), sysId,
-                tbEntryDate.Text, tbRate.Text, 
+                tbEntryDate.Text, tbProgressNote.Text, tbRate.Text, 
                 tbExplain.Text.Replace('\'', '\"').Replace("\r\n", "<br/>").Replace("\n", ""), 
                 tbProblem.Text.Replace('\'', '\"').Replace("\r\n", "<br/>").Replace("\n", "")))
             {

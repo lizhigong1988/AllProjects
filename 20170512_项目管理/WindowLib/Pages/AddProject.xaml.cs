@@ -37,6 +37,11 @@ namespace WindowLib.Pages
         private void Refresh()
         {
             cbDemandDepart.ItemsSource = CommunicationHelper.GetHisDeparts();
+            if (cbDemandDepart.ItemsSource == null)
+            {
+                MessageBox.Show("获取部门信息失败");
+                return;
+            }
             tbDemandDate.Text = DateTime.Now.ToString("yyyyMMdd");
 
             cbProKinds.ItemsSource = new List<string>() { "新项目", "功能优化" };
@@ -53,6 +58,11 @@ namespace WindowLib.Pages
             cbProState.SelectedIndex = 0;
 
             cbSystem.ItemsSource = CommunicationHelper.GetAllSysDic();
+            if (cbSystem.ItemsSource == null)
+            {
+                MessageBox.Show("获取系统信息失败");
+                return;
+            }
             cbSystem.SelectedValuePath = "Key";
             cbSystem.DisplayMemberPath = "Value";
             cbSystem.SelectedIndex = 0;

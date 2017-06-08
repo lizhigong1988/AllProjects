@@ -140,6 +140,7 @@ namespace ProjectsManageServer.Connect
             DataTable dtProSysRateInfo = new DataTable();
             dtProSysRateInfo.Columns.Add("SYS_ID");
             dtProSysRateInfo.Columns.Add("SYS_NAME");
+            dtProSysRateInfo.Columns.Add("MANAGERS");
             dtProSysRateInfo.Columns.Add("ESTIMATE_DAYS");
             dtProSysRateInfo.Columns.Add("RATE");
             dtProSysRateInfo.Columns.Add("DATE");
@@ -148,15 +149,16 @@ namespace ProjectsManageServer.Connect
             foreach (DataRow drProSys in dtProSysInfo.Rows)
             {
                 dtProSysRateInfo.Rows.Add(new string[]
-                                            {
-                                                drProSys["SYS_ID"].ToString(),
-                                                drProSys["SYS_NAME"].ToString(),
-                                                drProSys["ESTIMATE_DAYS"].ToString(),
-                                                "",
-                                                "",
-                                                "",
-                                                "",
-                                            });
+                {
+                    drProSys["SYS_ID"].ToString(),
+                    drProSys["SYS_NAME"].ToString(),
+                    drProSys["USER_NAME1"].ToString() + "<br/>" + drProSys["USER_NAME2"].ToString(),
+                    drProSys["ESTIMATE_DAYS"].ToString(),
+                    "",
+                    "",
+                    "",
+                    "",
+                });
             }
             foreach (DataRow drRate in dtRateInfo.Rows)
             {
@@ -185,13 +187,53 @@ namespace ProjectsManageServer.Connect
             msg += HtmAddTable(dtProSysRateInfo, new Dictionary<string, string>() 
                                     {
                                         {"SYS_NAME","录入系统"},
+                                        {"MANAGERS","负责人"},
                                         {"ESTIMATE_DAYS", "预计工作量(人天)"},
-                                        {"RATE","最新录入进度"},
-                                        {"DATE","最新录入日期"},
+                                        {"RATE","进度"},
+                                        {"DATE","录入日期"},
                                         {"EXPLAIN","进度说明"},
                                         {"PROBLEM","面临问题"},
                                     });
             msg += HtmAddRow("");
+
+            double totalChildrenRate = 0;
+            double totalEstimate = 0;
+            foreach (DataRow dr in dtProSysInfo.Rows)
+            {
+                double estimate = 0;
+                if (!double.TryParse(dr["ESTIMATE_DAYS"].ToString(), out estimate))
+                {
+                    continue;
+                }
+                if (estimate == 0)
+                {
+                    continue;
+                }
+                foreach (DataRow drSysRate in dtProSysRateInfo.Rows)
+                {
+                    if (drSysRate["RATE"].ToString() == "")
+                    {
+                        continue;
+                    }
+                    if (drSysRate["SYS_ID"].ToString() == dr["SYS_ID"].ToString())
+                    {
+                        string rate = drSysRate["RATE"].ToString();//去掉百分号
+                        totalChildrenRate += double.Parse(rate.Substring(0, rate.Length - 1)) * estimate / 100;
+                        break;
+                    }
+                }
+                totalEstimate += estimate;
+            }
+
+            if (totalEstimate != 0)
+            {
+                drPro["TOTAL_RATE"] = (totalChildrenRate / totalEstimate * 100).ToString("N2") + "%";
+            }
+            else
+            {
+                drPro["TOTAL_RATE"] = "0.00%";
+            }
+
             return true;
         }
 
@@ -204,6 +246,14 @@ namespace ProjectsManageServer.Connect
             {
                 //获取系统信息失败，终止任务
                 File.AppendAllText(ERRORLOG, "SEND_ALL_EMAIL:读取项目信息失败\r\n");
+                return;
+            }
+            //新增数目、子单数目、上线、子单数目
+            List<string> listProCount = DataBaseManager.ProInfoCount(DateTime.Now.Year);
+            if (listProCount == null)
+            {
+                //获取系统信息失败，终止任务
+                File.AppendAllText(ERRORLOG, "SEND_ALL_EMAIL:读取项目统计数信息失败\r\n");
                 return;
             }
             int totalCount = dtProInfo.Rows.Count;
@@ -257,8 +307,11 @@ namespace ProjectsManageServer.Connect
                 }
             }
             string msg = "";
-            msg += HtmAddRow("一、信息技术部全部在建需求数：" + totalCount.ToString() + "个，其中:");
-            msg += HtmAddRow("    新建项目：" + newCount.ToString() + "个，系统升级类需求:" + updateCount.ToString() + "个。");
+            msg += HtmAddRow("一、信息技术部项目汇总：");
+            msg += HtmAddRow("    今年新增需求" + listProCount[0] + "个，涉及子单" + listProCount[1] + "个。");
+            msg += HtmAddRow("    今年上线需求" + listProCount[2] + "个，涉及子单" + listProCount[3] + "个。");
+            msg += HtmAddRow("    全部在建需求" + totalCount.ToString() + "个，其中新建项目需求" +
+                newCount.ToString() + "个，系统升级类需求" + updateCount.ToString() + "个。");
             msg += HtmAddRow("");
             //2、按照部门汇总需求总数、新需求数目、维护升级数目
             msg += HtmAddRow("二、各业务部门在建需求汇总：");
@@ -274,41 +327,57 @@ namespace ProjectsManageServer.Connect
             /*
              * 
              */
-
+            string newProMsg = "";
+            dtProInfo.Columns.Add("TOTAL_RATE");
+            foreach (DataRow drPro in dtProInfo.Rows)
+            {
+                if (drPro["PRO_KIND"].ToString() == "新项目")
+                {
+                    if (!AddProMsgInfo(drPro, ref newProMsg))
+                    {
+                        return;
+                    }
+                }
+            }
+            string updateProMsg = "";
+            foreach (DataRow drPro in dtProInfo.Rows)
+            {
+                if (drPro["PRO_KIND"].ToString() != "新项目")
+                {
+                    if (!AddProMsgInfo(drPro, ref updateProMsg))
+                    {
+                        return;
+                    }
+                }
+            }
+            msg += HtmAddRow("三、在建需求信息表：");
+            msg += HtmAddTable(dtProInfo, new Dictionary<string, string>() 
+                                    {
+                                        {"DEMAND_NAME","需求名称"},
+                                        {"DEMAND_DEPART","提出部门"},
+                                        {"DEMAND_DATE", "提出日期"},
+                                        {"EXPECT_DATE","期望完成日期"},
+                                        {"PRO_KIND","需求种类"},
+                                        {"PRO_STAGE","阶段"},
+                                        {"TOTAL_RATE","总体进度"},
+                                        {"PRO_NOTE","项目进展说明"},
+                                        {"BUSINESS_PERSON","业务经理"},
+                                    });
 
             //4、汇总新需求（重点项目）详情
             /*
              * 项目名称
              * 系统名称、预估工作量、系统开发进度、进度说明
              */
-            msg += HtmAddRow("三、汇总新需求（重点项目）详情：");
-
-            foreach (DataRow drPro in dtProInfo.Rows)
-            {
-                if (drPro["PRO_KIND"].ToString() == "新项目")
-                {
-                    if (!AddProMsgInfo(drPro, ref msg))
-                    {
-                        return;
-                    }
-                }
-            }
+            msg += HtmAddRow("四、汇总新需求（重点项目）详情：");
+            msg += newProMsg;
             //5、汇总维护需求详情
             /*
              * 项目名称
              * 系统名称、预估工作量、系统开发进度、进度说明
              */
-            msg += HtmAddRow("四、汇总升级维护需求详情：");
-            foreach (DataRow drPro in dtProInfo.Rows)
-            {
-                if (drPro["PRO_KIND"].ToString() != "新项目")
-                {
-                    if (!AddProMsgInfo(drPro, ref msg))
-                    {
-                        return;
-                    }
-                }
-            }
+            msg += HtmAddRow("五、汇总升级维护需求详情：");
+            msg += updateProMsg;
             //5、发送日报
             #region 发送
             //给个系统项目经理发送项目日报
@@ -399,6 +468,7 @@ namespace ProjectsManageServer.Connect
                     return;
                 }
                 #region 汇总当前系统关联的每个项目
+                dtProInfo.Columns.Add("TOTAL_RATE");
                 foreach (DataRow drPro in dtProInfo.Rows)
                 {
                     if (!AddProMsgInfo(drPro, ref msg))
@@ -511,25 +581,17 @@ namespace ProjectsManageServer.Connect
             tableInfo += "<table style=\"width:100%;\" cellpadding=\"2\" cellspacing=\"0\" border=\"1\" bordercolor=\"#000000\">";
             tableInfo += "<tbody>";
             tableInfo += "<tr>";
-            foreach(DataColumn dc in dtRateInfo.Columns)
+            foreach (var dic in dictionary)
             {
-                if(!dictionary.ContainsKey(dc.ColumnName))
-                {
-                    continue;
-                }
-                tableInfo += "<td>" + ChangeHtmStr(dictionary[dc.ColumnName]) + "</td>";
+                tableInfo += "<td>" + ChangeHtmStr(dic.Value) + "</td>";
             }
             tableInfo += "</tr>";
             foreach(DataRow dr in dtRateInfo.Rows)
             {
                 tableInfo += "<tr>";
-                foreach(DataColumn dc in dtRateInfo.Columns)
+                foreach (var dic in dictionary)
                 {
-                    if(!dictionary.ContainsKey(dc.ColumnName))
-                    {
-                        continue;
-                    }
-                    tableInfo += "<td>" + ChangeHtmStr(dr[dc.ColumnName].ToString()) + "</td>";
+                    tableInfo += "<td>" + ChangeHtmStr(dr[dic.Key].ToString()) + "</td>";
                 }
                 tableInfo += "</tr>";
             }
@@ -538,23 +600,30 @@ namespace ProjectsManageServer.Connect
             return tableInfo;
         }
 
-        //private static Dictionary<string, string> dicChangeHtm = new Dictionary<string, string>()
-        //{
-        //    {"<br/>","\r\n"},
-        //};
+        private static Dictionary<string, string> dicChangeHtm = new Dictionary<string, string>()
+        {
+            {"&","&amp;"},
+            {"\"","&quot;"},
+            {"<","&lt;"},
+            {">","&gt;"},
+            {" ","&nbsp;"},
+            {"\r","<br/>"},
+        };
+
 
         private static string ChangeHtmStr(string str)
         {
-            //foreach (var dic in dicChangeHtm)
-            //{
-            //    str = str.Replace(dic.Key, dic.Value);
-            //}
+            str = str.Replace("<br/>", "\r");
+            foreach (var dic in dicChangeHtm)
+            {
+                str = str.Replace(dic.Key, dic.Value);
+            }
             return str;
         }
 
         private static string HtmAddRow(string row)
         {
-            return "<p>" + row + "</p>";
+            return "<p>" + ChangeHtmStr(row) + "</p>";
         }
 
         private static string GetConfig(DataTable dt, CommonDef.CONFIG_KEYS key)

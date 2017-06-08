@@ -625,7 +625,7 @@ namespace ProjectsManageServer.DataBases
             return dataBaseTool.SelectFunc(sql);
         }
 
-        internal static bool EntryProRate(string proId, string sysId, string date, string rate,
+        internal static bool EntryProRate(string proId, string sysId, string date, string note, string rate,
             string explain, string problem)
         {
             string selectSql = string.Format("select count(*) from T_PRO_RATE where DEMAND_ID = '{0}' and SYS_ID = '{1}' and DATE = '{2}'", 
@@ -656,6 +656,7 @@ namespace ProjectsManageServer.DataBases
                     return false;
                 }
             }
+            sql += string.Format("update T_PRO_INFO set PRO_NOTE = '{0}' where DEMAND_ID = '{1}';", note, proId);
             return dataBaseTool.ActionFunc(sql);
         }
 
@@ -765,6 +766,48 @@ namespace ProjectsManageServer.DataBases
                 }
             }
             return dataBaseTool.ActionFunc(sql);
+        }
+
+        /// <summary>
+        /// 统计今年：新增数目、子单数目、上线、子单数目
+        /// </summary>
+        /// <returns></returns>
+        internal static List<string> ProInfoCount(int year)
+        {
+            List<string> listData = new List<string>();
+            string sql = string.Format("select count(*) from T_PRO_INFO where DEMAND_DATE like '{0}%'", year.ToString());
+            DataTable dt = dataBaseTool.SelectFunc(sql);
+            if (dt == null)
+            {
+                return null;
+            }
+            listData.Add(dt.Rows[0][0].ToString()); //新增
+            sql = "select count(*) from T_PRO_SYS_INFO where DEMAND_ID in ";
+            sql += "(select DEMAND_ID from T_PRO_INFO where DEMAND_DATE like '{0}%')";
+            sql = string.Format(sql, year.ToString());
+            dt = dataBaseTool.SelectFunc(sql);
+            if (dt == null)
+            {
+                return null;
+            }
+            listData.Add(dt.Rows[0][0].ToString()); //新增子单数目
+            sql = string.Format("select count(*) from T_PRO_INFO where FINISH_DATE like '{0}%'", year.ToString());
+            dt = dataBaseTool.SelectFunc(sql);
+            if (dt == null)
+            {
+                return null;
+            }
+            listData.Add(dt.Rows[0][0].ToString()); //上线数目
+            sql = "select count(*) from T_PRO_SYS_INFO where DEMAND_ID in ";
+            sql += "(select DEMAND_ID from T_PRO_INFO where FINISH_DATE like '{0}%')";
+            sql = string.Format(sql, year.ToString());
+            dt = dataBaseTool.SelectFunc(sql);
+            if (dt == null)
+            {
+                return null;
+            }
+            listData.Add(dt.Rows[0][0].ToString()); //上线子单数目
+            return listData;
         }
     }
 }
