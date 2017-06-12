@@ -41,18 +41,22 @@ namespace WindowLib.Pages
                     cbTop.Visibility = Visibility.Collapsed;
                     break;
             }
-            RefreshNotice();
+            if (RefreshNotice())
+            {
+                GlobalFuns.OpenFlag = true;
+            }
         }
 
-        private void RefreshNotice()
+        private bool RefreshNotice()
         {
             DataTable dtNotice = CommunicationHelper.QueryNoticeInfo(tbStartDate.Text, tbEndDate.Text);
             if (dtNotice == null)
             {
                 MessageBox.Show("获取公告失败");
-                return;
+                return false;
             }
             dgNoticeInfo.DataContext = dtNotice;
+            return true;
         }
 
         private void btnQuery_Click(object sender, RoutedEventArgs e)
@@ -73,24 +77,12 @@ namespace WindowLib.Pages
 
         private void tbStartDate_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            Window window = Window.GetWindow(this);
-            Point point = tbStartDate.TransformToAncestor(window).Transform(new Point(0, 0));
-            CalendarPop calendar = new CalendarPop();
-            calendar.Left = point.X + window.Left;
-            calendar.Top = point.Y + window.Top;
-            calendar.ShowDialog();
-            tbStartDate.Text = calendar.date;
+            CalendarPop.ShowCalendarWind(tbStartDate);
         }
 
         private void tbEndDate_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            Window window = Window.GetWindow(this);
-            Point point = tbEndDate.TransformToAncestor(window).Transform(new Point(0, 0));
-            CalendarPop calendar = new CalendarPop();
-            calendar.Left = point.X + window.Left;
-            calendar.Top = point.Y + window.Top;
-            calendar.ShowDialog();
-            tbEndDate.Text = calendar.date;
+            CalendarPop.ShowCalendarWind(tbEndDate);
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)

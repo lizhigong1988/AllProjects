@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Interop;
 using System.Data;
+using System.Management;
 
 namespace WindowLib.Tools
 {
@@ -56,5 +57,31 @@ namespace WindowLib.Tools
         /// <returns></returns>
         //public delegate bool PageRefresh();
         //public static event PageRefresh PageRefreshFunc;
+
+        /// <summary>
+        /// 页面打开标志
+        /// </summary>
+        public static bool OpenFlag = false;
+
+
+        /// <summary>
+        /// 获取硬盘ID代码  
+        /// </summary>
+        /// <returns></returns>
+        public static string GetHardDiskID()
+        {
+            try
+            {
+                string hdInfo = "";//硬盘序列号  
+                ManagementObject disk = new ManagementObject("win32_logicaldisk.deviceid=\"c:\"");
+                hdInfo = disk.Properties["VolumeSerialNumber"].Value.ToString();
+                disk = null;
+                return hdInfo.Trim();
+            }
+            catch
+            {
+                return "";
+            }
+        }
     }
 }

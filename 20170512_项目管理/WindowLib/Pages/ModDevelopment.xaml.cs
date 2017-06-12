@@ -27,7 +27,10 @@ namespace WindowLib.Pages
         public ModDevelopment()
         {
             InitializeComponent();
-            Refresh();
+            if (Refresh())
+            {
+                GlobalFuns.OpenFlag = true;
+            }
             if (GlobalFuns.LoginSysId == "")
             {
                 btnAddTrade.IsEnabled = false;
@@ -36,23 +39,24 @@ namespace WindowLib.Pages
             }
         }
 
-        private void Refresh()
+        private bool Refresh()
         {
             Dictionary<string, string> proNames = CommunicationHelper.GetCurProNames(GlobalFuns.LoginSysId, false);
             if (proNames == null)
             {
                 MessageBox.Show("获取项目信息失败！");
-                return;
+                return false;
             } 
             cbDemandName.ItemsSource = proNames;
             if (proNames.Count == 0)
             {
                 MessageBox.Show("当前无项目！");
-                return;
+                return false;
             }
             cbDemandName.SelectedValuePath = "Key";
             cbDemandName.DisplayMemberPath = "Value";
             cbDemandName.SelectedIndex = 0;
+            return true;
         }
 
         private void btnAddTrade_Click(object sender, RoutedEventArgs e)

@@ -27,17 +27,20 @@ namespace WindowLib.Pages
         {
             InitializeComponent();
             tbEntryDate.Text = DateTime.Now.ToString("yyyyMMdd");
-            Refresh();
+            if (Refresh())
+            {
+                GlobalFuns.OpenFlag = true;
+            }
         }
 
-        private void Refresh()
+        private bool Refresh()
         {
             DataTable dt = CommunicationHelper.QueryProInfo("全部", "全部未完成", "",
                 GlobalFuns.LoginSysId);
             if (dt == null)
             {
                 MessageBox.Show("获取项目信息失败");
-                return;
+                return false;
             }
             dgProInfo.DataContext = dt;
 
@@ -45,7 +48,7 @@ namespace WindowLib.Pages
             if (cbSystem.ItemsSource == null)
             {
                 MessageBox.Show("获取系统信息失败");
-                return;
+                return false;
             }
             cbSystem.SelectedValuePath = "Key";
             cbSystem.DisplayMemberPath = "Value";
@@ -61,6 +64,7 @@ namespace WindowLib.Pages
                 cbSystem.IsEnabled = false;
             }
             tbEntryDate.Text = DateTime.Now.ToString("yyyyMMdd");
+            return true;
         }
         DataTable selectProRateDt;
         private void dgProInfo_SelectionChanged(object sender, SelectionChangedEventArgs e)

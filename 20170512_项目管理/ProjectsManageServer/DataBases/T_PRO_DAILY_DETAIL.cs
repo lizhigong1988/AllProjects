@@ -5,13 +5,13 @@ using System.Text;
 
 namespace ProjectsManageServer.DataBases
 {
-    class T_PRO_SYS_INFO
+    class T_PRO_DAILY_DETAIL
     { 
         /// <summary>
         /// 定义表名
-        /// 项目关联开发系统表
+        /// 项目日报明细表
         /// </summary>
-        internal static string TABLE_NAME = "T_PRO_SYS_INFO";
+        internal static string TABLE_NAME = "T_PRO_DAILY_DETAIL";
 
 
         /// <summary>
@@ -19,11 +19,13 @@ namespace ProjectsManageServer.DataBases
         /// </summary>
         internal static Dictionary<string, string> DIC_TABLE_COLUMS = new Dictionary<string, string>()
         {
-            {"DEMAND_ID", "VARCHAR(36)"},
-            {"SYS_ID", "VARCHAR(36)"},
-            {"IS_MAIN", "VARCHAR(2)"},
-            {"ESTIMATE_DAYS", "DECIMAL"},
-            {"REMARK", "VARCHAR(64)"},
+            {"DAILY_ID", "VARCHAR(36)"},        //外键签到表ID
+            {"DEMAND_ID", "VARCHAR(36)"},       //工作项目ID
+            {"SYS_ID", "VARCHAR(36)"},          //子单系统ID
+            {"WORK_TYPE", "VARCHAR(1)"},        //工作内容类型 1、开发、2、会议 3、文档整理 4、协助运维 Z、其他
+            {"TRADE_CODE", "VARCHAR(32)"},      //开发交易信息（工作类型为1时使用）
+            {"USER_HOURS", "DECIMAL"},          //用时（小时，可以为小数）
+            {"REMARK", "VARCHAR(64)"},          //描述
         };
 
         static DataBaseTool_SQLite3 dataBaseTool;

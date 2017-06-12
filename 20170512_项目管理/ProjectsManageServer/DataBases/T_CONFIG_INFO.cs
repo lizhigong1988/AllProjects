@@ -11,6 +11,7 @@ namespace ProjectsManageServer.DataBases
     {
         /// <summary>
         /// 定义表名
+        /// 系统配置表、设置系统公用的一些参数配置项
         /// </summary>
         internal static string TABLE_NAME = "T_CONFIG_INFO";
 

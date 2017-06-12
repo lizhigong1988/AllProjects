@@ -4,8 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         AllowsTransparency="True"
+        ContentRendered="Window_ContentRendered"
         d:DesignHeight="245"
         d:DesignWidth="204"
+        Deactivated="Window_Deactivated"
         SizeToContent="WidthAndHeight"
         WindowStyle="None"
         mc:Ignorable="d">
@@ -21,11 +23,21 @@
                       HorizontalAlignment="Left"
                       VerticalAlignment="Top"
                       PreviewMouseUp="calendar_PreviewMouseUp" />
-            <Button Name="btnClear"
-                    Grid.Row="1"
-                    Margin="5"
-                    Click="btnClear_Click"
-                    Content="取消" />
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Name="btnClear"
+                        Margin="5"
+                        Click="btnClear_Click"
+                        Content="清空" />
+                <Button Name="btnCancelMod"
+                        Grid.Column="1"
+                        Margin="5"
+                        Click="btnCancelMod_Click"
+                        Content="取消" />
+            </Grid>
         </Grid>
     </Border>
 </Window>

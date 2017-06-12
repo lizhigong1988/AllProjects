@@ -9,6 +9,7 @@ namespace ProjectsManageServer.DataBases
     { 
         /// <summary>
         /// 定义表名
+        /// 交易信息表
         /// </summary>
         internal static string TABLE_NAME = "T_TRADE_INFO";
 

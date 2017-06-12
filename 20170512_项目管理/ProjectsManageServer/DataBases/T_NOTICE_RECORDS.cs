@@ -9,6 +9,7 @@ namespace ProjectsManageServer.DataBases
     { 
         /// <summary>
         /// 定义表名
+        /// 公告记录表
         /// </summary>
         internal static string TABLE_NAME = "T_NOTICE_RECORDS";
 

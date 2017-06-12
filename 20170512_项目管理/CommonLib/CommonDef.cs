@@ -80,6 +80,12 @@ namespace CommonLib
             GET_NOTICE_INFO,
             ADD_NEW_NOTICE,
             DEL_NOTICE,
+            QUERY_DAILY_INFO,
+
+            QUERY_DAILY_DETAIL, //40
+            GET_CUR_DAILY_INFO,
+            DAILY_SIGN_IN,
+            DAILY_SIGN_OUT,
         };
 
 

@@ -32,6 +32,8 @@ namespace ProjectsManageServer.DataBases
             if (ret) ret = T_SYS_INFO.InitTable(dataBaseTool);
             if (ret) ret = T_TRADE_INFO.InitTable(dataBaseTool);
             if (ret) ret = T_NOTICE_RECORDS.InitTable(dataBaseTool);
+            if (ret) ret = T_PRO_DAILY.InitTable(dataBaseTool);
+            if (ret) ret = T_PRO_DAILY_DETAIL.InitTable(dataBaseTool);
             return ret;
         }
 
@@ -963,6 +965,150 @@ namespace ProjectsManageServer.DataBases
         {
             string sql = "delete from T_NOTICE_RECORDS where NOTICE_ID = '{0}'";
             sql = string.Format(sql, id);
+            return dataBaseTool.ActionFunc(sql);
+        }
+
+        internal static DataTable QueryDailyInfo(string name, string start, string end)
+        {
+            string sql = string.Format("select * from T_PRO_DAILY where USER_NAME = '{0}'", name);
+            if (start != "")
+            {
+                sql += string.Format(" and DAILY_DATE >= '{0}'", start);
+            }
+            if (end != "")
+            {
+                sql += string.Format(" and DAILY_DATE <= '{0}'", end);
+            }
+            sql += " order by DAILY_DATE asc";
+            return dataBaseTool.SelectFunc(sql);
+        }
+
+        internal static DataTable QueryDailyDetail(string dailyId)
+        {
+            string sql = string.Format("select * from T_PRO_DAILY_DETAIL where DAILY_ID = '{0}'", dailyId);
+            return dataBaseTool.SelectFunc(sql);
+        }
+
+        internal static DataTable GetCurDailyInfo(string userName, ref string date, out string signIn, out string signOut)
+        {
+            if (date == "")
+            {
+                date = DateTime.Now.ToString("yyyyMMdd");
+            }
+            string sql = string.Format("select * from T_PRO_DAILY where USER_NAME = '{0}' and DAILY_DATE = '{1}'", userName, date);
+            DataTable dtDaily = dataBaseTool.SelectFunc(sql);
+            if (dtDaily == null)
+            {
+                signIn = "";
+                signOut = "";
+                return null;
+            }
+            string dailyId = "";
+            if (dtDaily.Rows.Count == 0)
+            {
+                signIn = "";
+                signOut = "";
+            }
+            else
+            {
+                DataRow drDaily = dtDaily.Rows[0];
+                signIn = drDaily["LOGIN_TIME"].ToString();
+                signOut = drDaily["LOGOUT_TIME"].ToString();
+                dailyId = drDaily["DAILY_ID"].ToString();
+            }
+            return QueryDailyDetail(dailyId);
+        }
+
+        internal static bool DailySignIn(string name, string signDate, string signInTime, string harddeskId)
+        {
+            if (signDate == "")
+            {
+                signDate = DateTime.Now.ToString("yyyyMMdd");
+                signInTime = DateTime.Now.ToString("HHmmss");
+            }
+            string selectSql = string.Format("select * from T_PRO_DAILY where DAILY_DATE = '{0}'", signDate);
+            DataTable dt = dataBaseTool.SelectFunc(selectSql);
+            if (dt == null)
+            {
+                return false;
+            }
+            string sql = "";
+            bool has = false;
+            if (harddeskId == "")//项目经理补签
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    if (dr["USER_NAME"].ToString() == name)
+                    {
+                        sql = string.Format("update T_PRO_DAILY set LOGIN_TIME = '{0}' where DAILY_ID = '{1}';",
+                            signInTime, dr["DAILY_ID"].ToString());
+                        has = true;
+                        break;
+                    }
+                }
+            }
+            else//普通签到
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    if (dr["USER_NAME"].ToString() == name)
+                    {//已签到
+                        has = true;
+                        continue;
+                    }
+                    if (dr["HARD_ID"].ToString() == harddeskId)
+                    {
+                        return false;
+                    }
+                }
+            }
+            if (!has)
+            {
+                List<string> values = new List<string>() { Guid.NewGuid().ToString(), name, signDate, signInTime, "", harddeskId };
+                if (!dataBaseTool.AddInfo(T_PRO_DAILY.TABLE_NAME, T_PRO_DAILY.DIC_TABLE_COLUMS.Keys.ToList(),
+                    values, ref sql))
+                {
+                    return false;
+                }
+            }
+            return dataBaseTool.ActionFunc(sql);
+        }
+
+        internal static bool DailySignOut(string name, string signDate, string signOutTime, string harddeskId)
+        {
+            if (signDate == "")
+            {
+                signDate = DateTime.Now.ToString("yyyyMMdd");
+                signOutTime = DateTime.Now.ToString("HHmmss");
+            }
+            string selectSql = string.Format("select * from T_PRO_DAILY where DAILY_DATE = '{0}' and USER_NAME = '{1}'", signDate, name);
+            DataTable dt = dataBaseTool.SelectFunc(selectSql);
+            if (dt == null)
+            {
+                return false;
+            }
+            string sql = "";
+            if (dt.Rows.Count == 0)
+            {
+                List<string> values = new List<string>() { Guid.NewGuid().ToString(), name, signDate, "", signOutTime, harddeskId };
+                if (!dataBaseTool.AddInfo(T_PRO_DAILY.TABLE_NAME, T_PRO_DAILY.DIC_TABLE_COLUMS.Keys.ToList(),
+                    values, ref sql))
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (harddeskId != "" && dt.Rows[0]["HARD_ID"].ToString() != "")
+                {
+                    if (harddeskId != dt.Rows[0]["HARD_ID"].ToString())
+                    {
+                        return false;
+                    }
+                }
+                sql = string.Format("update T_PRO_DAILY set LOGOUT_TIME = '{0}' where DAILY_ID = '{1}';",
+                    signOutTime, dt.Rows[0]["DAILY_ID"].ToString());
+            }
             return dataBaseTool.ActionFunc(sql);
         }
     }

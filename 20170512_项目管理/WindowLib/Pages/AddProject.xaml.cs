@@ -27,20 +27,23 @@ namespace WindowLib.Pages
         public AddProject()
         {
             InitializeComponent();
-            Refresh();
+            if (Refresh())
+            {
+                GlobalFuns.OpenFlag = true;
+            }
             if (GlobalFuns.LoginSysId != "")
             {
                 cbIsMain.Visibility = Visibility.Collapsed;
             }
         }
 
-        private void Refresh()
+        private bool Refresh()
         {
             cbDemandDepart.ItemsSource = CommunicationHelper.GetHisDeparts();
             if (cbDemandDepart.ItemsSource == null)
             {
                 MessageBox.Show("获取部门信息失败");
-                return;
+                return false;
             }
             tbDemandDate.Text = DateTime.Now.ToString("yyyyMMdd");
 
@@ -61,7 +64,7 @@ namespace WindowLib.Pages
             if (cbSystem.ItemsSource == null)
             {
                 MessageBox.Show("获取系统信息失败");
-                return;
+                return false;
             }
             cbSystem.SelectedValuePath = "Key";
             cbSystem.DisplayMemberPath = "Value";
@@ -70,6 +73,7 @@ namespace WindowLib.Pages
             {
                 cbSystem.SelectedValue = GlobalFuns.LoginSysId;
             }
+            return true;
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -317,35 +321,17 @@ namespace WindowLib.Pages
 
         private void tbDemandDate_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            Window window = Window.GetWindow(this);
-            Point point = tbDemandDate.TransformToAncestor(window).Transform(new Point(0, 0));
-            CalendarPop calendar = new CalendarPop();
-            calendar.Left = point.X + window.Left;
-            calendar.Top = point.Y + window.Top;
-            calendar.ShowDialog();
-            tbDemandDate.Text = calendar.date;
+            CalendarPop.ShowCalendarWind(tbDemandDate);
         }
 
         private void tbExpectDate_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            Window window = Window.GetWindow(this);
-            Point point = tbExpectDate.TransformToAncestor(window).Transform(new Point(0, 0));
-            CalendarPop calendar = new CalendarPop();
-            calendar.Left = point.X + window.Left;
-            calendar.Top = point.Y + window.Top;
-            calendar.ShowDialog();
-            tbExpectDate.Text = calendar.date;
+            CalendarPop.ShowCalendarWind(tbExpectDate);
         }
 
         private void tbFinishDate_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            Window window = Window.GetWindow(this);
-            Point point = tbFinishDate.TransformToAncestor(window).Transform(new Point(0, 0));
-            CalendarPop calendar = new CalendarPop();
-            calendar.Left = point.X + window.Left;
-            calendar.Top = point.Y + window.Top;
-            calendar.ShowDialog();
-            tbFinishDate.Text = calendar.date;
+            CalendarPop.ShowCalendarWind(tbFinishDate);
         }
 
         private void cbProState_SelectionChanged(object sender, SelectionChangedEventArgs e)

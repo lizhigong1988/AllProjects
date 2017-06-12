@@ -815,5 +815,85 @@ namespace WindowLib.Connect
             }
             return revMsg == "0";
         }
+
+        internal static DataTable QueryDailyInfo(string name, string start, string end)
+        {
+            string Msg = ((int)CommonDef.FUN_NO.QUERY_DAILY_INFO).ToString() + "\n";
+            Msg += name + "\n";
+            Msg += start + "\n";
+            Msg += end + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
+            if (!ret)
+            {
+                return null;
+            }
+            return CommonDef.GetDataTable(revMsg.Split('\n')[1]);
+        }
+
+        internal static DataTable QueryDailyDetail(string dailyId)
+        {
+            string Msg = ((int)CommonDef.FUN_NO.QUERY_DAILY_DETAIL).ToString() + "\n";
+            Msg += dailyId + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
+            if (!ret)
+            {
+                return null;
+            }
+            return CommonDef.GetDataTable(revMsg.Split('\n')[1]);
+        }
+
+        internal static DataTable GetCurDailyInfo(string userName, ref string date, out string signIn, out string signOut)
+        {
+            string Msg = ((int)CommonDef.FUN_NO.GET_CUR_DAILY_INFO).ToString() + "\n";
+            Msg += userName + "\n";
+            Msg += date + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
+            if (!ret)
+            {
+                signIn = "";
+                signOut = "";
+                return null;
+            }
+            string[] items = revMsg.Split('\n');
+            date = items[2];
+            signIn = items[3];
+            signOut = items[4];
+            return CommonDef.GetDataTable(items[1]);
+        }
+
+        internal static bool DailySignIn(string name, string signDate, string signInTime, string harddeskId)
+        {
+            string Msg = ((int)CommonDef.FUN_NO.DAILY_SIGN_IN).ToString() + "\n";
+            Msg += name + "\n";
+            Msg += signDate + "\n";
+            Msg += signInTime + "\n";
+            Msg += harddeskId + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
+            if (!ret)
+            {
+                return false;
+            }
+            return revMsg == "0";
+        }
+
+        internal static bool DailySignOut(string name, string signDate, string signOutTime, string harddeskId)
+        {
+            string Msg = ((int)CommonDef.FUN_NO.DAILY_SIGN_OUT).ToString() + "\n";
+            Msg += name + "\n";
+            Msg += signDate + "\n";
+            Msg += signOutTime + "\n";
+            Msg += harddeskId + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
+            if (!ret)
+            {
+                return false;
+            }
+            return revMsg == "0";
+        }
     }
 }

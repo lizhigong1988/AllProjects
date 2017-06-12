@@ -27,16 +27,19 @@ namespace WindowLib.Pages
         public SysConfig()
         {
             InitializeComponent();
-            Refresh();
+            if (Refresh())
+            {
+                GlobalFuns.OpenFlag = true;
+            }
         }
 
-        private void Refresh()
+        private bool Refresh()
         {
             DataTable dt = CommunicationHelper.GetSysConfig();
             if (dt == null)
             {
                 MessageBox.Show("获取配置信息失败");
-                return;
+                return false;
             }
             tbSenderName.Text = GetConfig(dt, CommonDef.CONFIG_KEYS.SEND_EMAIL_NAME) ;
             tbSenderEmail.Text = GetConfig(dt, CommonDef.CONFIG_KEYS.SEND_EMAIL_ADDR);
@@ -47,6 +50,7 @@ namespace WindowLib.Pages
             tbLastSendPMDate.Text = GetConfig(dt, CommonDef.CONFIG_KEYS.LAST_SEND_PM);
             tbLastSendAllDate.Text = GetConfig(dt, CommonDef.CONFIG_KEYS.LAST_SEND_ALL);
             cbAutoSend.IsChecked = GetConfig(dt, CommonDef.CONFIG_KEYS.SEND_FLAG) == "1";
+            return true;
         }
 
         private string GetConfig(DataTable dt, CommonDef.CONFIG_KEYS key)

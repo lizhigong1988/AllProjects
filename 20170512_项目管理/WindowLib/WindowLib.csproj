@@ -41,6 +41,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -82,6 +83,10 @@
     <Page Include="Pages\ModProject.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\ProDailyInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ProRateEntry.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -146,6 +151,9 @@
     </Compile>
     <Compile Include="Pages\ModProject.xaml.cs">
       <DependentUpon>ModProject.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ProDailyInput.xaml.cs">
+      <DependentUpon>ProDailyInput.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ProRateEntry.xaml.cs">
       <DependentUpon>ProRateEntry.xaml</DependentUpon>

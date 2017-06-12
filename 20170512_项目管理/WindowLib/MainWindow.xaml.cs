@@ -86,6 +86,7 @@ namespace WindowLib
                     listMenu.Items.Add(new ListBoxItem() { Content = "新增项目" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "项目维护" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "开发信息维护" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "开发人员日报" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "进度录入" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "项目统计" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "工作量统计" });
@@ -100,6 +101,7 @@ namespace WindowLib
                     listMenu.Items.Add(new ListBoxItem() { Content = "新增项目" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "项目维护" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "开发信息维护" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "开发人员日报" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "进度录入" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "项目统计" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "工作量统计" });
@@ -113,6 +115,7 @@ namespace WindowLib
                     listMenu.Items.Add(new ListBoxItem() { Content = "新增项目" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "项目维护" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "开发信息维护" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "开发人员日报" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "进度录入" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "项目统计" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "工作量统计" });
@@ -123,7 +126,7 @@ namespace WindowLib
                     listMenu.Items.Add(new ListBoxItem() { Content = "公告管理" });
                     break;
                 case "开发人员":
-                    listMenu.Items.Add(new ListBoxItem() { Content = "开发信息维护" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "开发人员日报" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "修改密码" });
                     break;
             }
@@ -173,6 +176,7 @@ namespace WindowLib
             }
 
             //新增页面
+            GlobalFuns.OpenFlag = false;
             TabItem newItem = new TabItem();
             newItem.Header = item.Content.ToString();
             ScrollViewer scrl = new ScrollViewer();
@@ -187,6 +191,9 @@ namespace WindowLib
                     break;
                 case "开发信息维护":
                     scrl.Content = new ModDevelopment();
+                    break;
+                case "开发人员日报":
+                    scrl.Content = new ProDailyInput();
                     break;
                 case "进度录入":
                     scrl.Content = new ProRateEntry();
@@ -214,6 +221,10 @@ namespace WindowLib
                     break;
                 default:
                     return;
+            }
+            if (!GlobalFuns.OpenFlag)
+            {
+                return;
             }
             tabPageBox.Items.Add(newItem);
             tabPageBox.SelectedItem = newItem;

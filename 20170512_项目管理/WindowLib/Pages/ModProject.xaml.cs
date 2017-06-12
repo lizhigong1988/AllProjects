@@ -27,20 +27,23 @@ namespace WindowLib.Pages
         public ModProject()
         {
             InitializeComponent();
-            Refresh();
+            if (Refresh())
+            {
+                GlobalFuns.OpenFlag = true;
+            }
             if (GlobalFuns.LoginSysId != "")//项目经理
             {
                 cbIsMain.Visibility = Visibility.Collapsed;
             }
         }
 
-        private void Refresh()
+        private bool Refresh()
         {
             cbDemandDepart.ItemsSource = CommunicationHelper.GetHisDeparts();
             if (cbDemandDepart.ItemsSource == null)
             {
                 MessageBox.Show("获取部门信息失败");
-                return;
+                return false;
             }
             cbProKinds.ItemsSource = new List<string>() { "新项目", "功能优化" };
 
@@ -57,7 +60,7 @@ namespace WindowLib.Pages
             if (cbSystem.ItemsSource == null)
             {
                 MessageBox.Show("获取系统信息失败");
-                return;
+                return false;
             }
             cbSystem.SelectedValuePath = "Key";
             cbSystem.DisplayMemberPath = "Value";
@@ -67,17 +70,18 @@ namespace WindowLib.Pages
             if (proNames == null)
             {
                 MessageBox.Show("获取项目信息失败！");
-                return;
+                return false;
             }
             cbDemandName.ItemsSource = proNames;
             if (proNames.Count == 0)
             {
                 MessageBox.Show("当前无项目！");
-                return;
+                return true;
             }
             cbDemandName.SelectedValuePath = "Key";
             cbDemandName.DisplayMemberPath = "Value";
             cbDemandName.SelectedIndex = 0;
+            return true;
         }
 
         private void btnAddFile_Click(object sender, RoutedEventArgs e)
@@ -557,24 +561,12 @@ namespace WindowLib.Pages
 
         private void tbExpectDate_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            Window window = Window.GetWindow(this);
-            Point point = tbExpectDate.TransformToAncestor(window).Transform(new Point(0, 0));
-            CalendarPop calendar = new CalendarPop();
-            calendar.Left = point.X + window.Left;
-            calendar.Top = point.Y + window.Top;
-            calendar.ShowDialog();
-            tbExpectDate.Text = calendar.date;
+            CalendarPop.ShowCalendarWind(tbExpectDate);
         }
 
         private void tbFinishDate_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            Window window = Window.GetWindow(this);
-            Point point = tbFinishDate.TransformToAncestor(window).Transform(new Point(0, 0));
-            CalendarPop calendar = new CalendarPop();
-            calendar.Left = point.X + window.Left;
-            calendar.Top = point.Y + window.Top;
-            calendar.ShowDialog();
-            tbFinishDate.Text = calendar.date;
+            CalendarPop.ShowCalendarWind(tbFinishDate);
         }
 
         private void cbProState_SelectionChanged(object sender, SelectionChangedEventArgs e)

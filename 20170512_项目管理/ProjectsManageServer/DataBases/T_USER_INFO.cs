@@ -9,6 +9,7 @@ namespace ProjectsManageServer.DataBases
     { 
         /// <summary>
         /// 定义表名
+        /// 用户信息表
         /// </summary>
         internal static string TABLE_NAME = "T_USER_INFO";
 

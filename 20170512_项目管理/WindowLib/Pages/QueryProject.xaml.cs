@@ -57,6 +57,7 @@ namespace WindowLib.Pages
             {
                 btnDelete.Visibility = Visibility.Visible;
             }
+            GlobalFuns.OpenFlag = true;
         }
 
         private void btnQuery_Click(object sender, RoutedEventArgs e)

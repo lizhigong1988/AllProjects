@@ -46,6 +46,7 @@ namespace WindowLib.Pages
             {
                 cbSystem.SelectedIndex = 0;
             }
+            GlobalFuns.OpenFlag = true;
         }
 
         private string curQuerySys = "";

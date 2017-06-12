@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data;
 using WindowLib.Connect;
+using WindowLib.Tools;
 
 namespace WindowLib.Pages
 {
@@ -24,17 +25,22 @@ namespace WindowLib.Pages
         public SystemManage()
         {
             InitializeComponent();
-            RefreshTable();
+            if (RefreshTable())
+            {
+                GlobalFuns.OpenFlag = true;
+            }
         }
 
-        private void RefreshTable()
+        private bool RefreshTable()
         {
             DataTable dt = CommunicationHelper.GetSystemInfo();
             if (dt == null)
             {
                 MessageBox.Show("查询系统信息失败");
+                return false;
             }
             dgSystemsInfo.DataContext = dt;
+            return true;
         }
 
         private void dgSystemsInfo_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -155,6 +155,21 @@ namespace ProjectsManageServer.Connect
                 case CommonDef.FUN_NO.DEL_NOTICE:
                     ret = DelNotice(elem);
                     break;
+                case CommonDef.FUN_NO.QUERY_DAILY_INFO:
+                    ret = QueryDailyInfo(elem);
+                    break;
+                case CommonDef.FUN_NO.QUERY_DAILY_DETAIL:
+                    ret = QueryDailyDetail(elem);
+                    break;
+                case CommonDef.FUN_NO.GET_CUR_DAILY_INFO:
+                    ret = GetCurDailyInfo(elem);
+                    break;
+                case CommonDef.FUN_NO.DAILY_SIGN_IN:
+                    ret = DailySignIn(elem);
+                    break;
+                case CommonDef.FUN_NO.DAILY_SIGN_OUT:
+                    ret = DailySignOut(elem);
+                    break;
             }
             if (ret.Length > LOG_LENGH)
             {
@@ -166,6 +181,39 @@ namespace ProjectsManageServer.Connect
             }
             File.AppendAllText(logPath, log);
             return Encoding.Default.GetBytes(ret);
+        }
+
+        private static string DailySignOut(string[] elem)
+        {
+            bool sec = DataBaseManager.DailySignOut(elem[1], elem[2], elem[3], elem[4]);
+            return sec ? "0" : "-1";
+        }
+
+        private static string DailySignIn(string[] elem)
+        {
+            bool sec = DataBaseManager.DailySignIn(elem[1], elem[2], elem[3], elem[4]);
+            return sec ? "0" : "-1";
+        }
+
+        private static string GetCurDailyInfo(string[] elem)
+        {
+            string date = elem[2];
+            string signIn = "";
+            string signOut = "";
+            DataTable dt = DataBaseManager.GetCurDailyInfo(elem[1], ref date, out signIn, out signOut);
+            return "0\n" + CommonDef.GetDataTableStr(dt) + "\n" + date + "\n" + signIn + "\n" + signOut + "\n";
+        }
+
+        private static string QueryDailyDetail(string[] elem)
+        {
+            DataTable dt = DataBaseManager.QueryDailyDetail(elem[1]);
+            return "0\n" + CommonDef.GetDataTableStr(dt);
+        }
+
+        private static string QueryDailyInfo(string[] elem)
+        {
+            DataTable dt = DataBaseManager.QueryDailyInfo(elem[1], elem[2], elem[3]);
+            return "0\n" + CommonDef.GetDataTableStr(dt);
         }
 
         private static string DelNotice(string[] elem)

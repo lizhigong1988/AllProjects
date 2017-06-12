@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Interop;
+using WindowLib.Tools;
 
 namespace WindowLib.PopWindows
 {
@@ -19,12 +21,32 @@ namespace WindowLib.PopWindows
     /// </summary>
     public partial class CalendarPop
     {
-        public string date = "";
+        public TextBox TbDate;
         public CalendarPop()
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.Manual;
         }
+
+        public static void ShowCalendarWind(TextBox tbDate)
+        {
+            Window wind = GlobalFuns.MainWind;
+            CalendarPop calendar = new CalendarPop();
+            //HwndSource winformWindow = (HwndSource.FromDependencyObject(wind) as HwndSource);
+            //if (winformWindow != null)
+            //{
+            //    new WindowInteropHelper(calendar)
+            //    {
+            //        Owner = winformWindow.Handle
+            //    };
+            //}
+            Point point = tbDate.TransformToAncestor(wind).Transform(new Point(0, 0));
+            calendar.Left = point.X + wind.Left;
+            calendar.Top = point.Y + wind.Top;
+            calendar.TbDate = tbDate;
+            calendar.Show();
+        }
+
         /// <summary>
         /// 选择日期事件
         /// </summary>
@@ -34,15 +56,39 @@ namespace WindowLib.PopWindows
         {
             if (null != calendar.SelectedDate)
             {
-                date = calendar.SelectedDate.Value.ToString("yyyyMMdd");
+                TbDate.Text = calendar.SelectedDate.Value.ToString("yyyyMMdd");
+                isClosed = true;
                 this.Close();
             }
         }
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
-            date = "";
+            TbDate.Text = "";
+            isClosed = true;
             this.Close();
+        }
+
+        bool isClosed = true;
+
+        private void btnCancelMod_Click(object sender, RoutedEventArgs e)
+        {
+            isClosed = true;
+            this.Close();
+        }
+
+        private void Window_Deactivated(object sender, EventArgs e)
+        {
+            if (!isClosed)
+            {
+                this.Close();
+            }
+        }
+
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+            this.Activate();
+            isClosed = false;
         }
     }
 }

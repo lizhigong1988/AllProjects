@@ -80,24 +80,12 @@ namespace WindowLib.MainPage
 
         private void tbStartDate_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            Window window = Window.GetWindow(this);
-            Point point = tbStartDate.TransformToAncestor(window).Transform(new Point(0, 0));
-            CalendarPop calendar = new CalendarPop();
-            calendar.Left = point.X + window.Left;
-            calendar.Top = point.Y + window.Top;
-            calendar.ShowDialog();
-            tbStartDate.Text = calendar.date;
+            CalendarPop.ShowCalendarWind(tbStartDate);
         }
 
         private void tbEndDate_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            Window window = Window.GetWindow(this);
-            Point point = tbEndDate.TransformToAncestor(window).Transform(new Point(0, 0));
-            CalendarPop calendar = new CalendarPop();
-            calendar.Left = point.X + window.Left;
-            calendar.Top = point.Y + window.Top;
-            calendar.ShowDialog();
-            tbEndDate.Text = calendar.date;
+            CalendarPop.ShowCalendarWind(tbEndDate);
         }
     }
 }

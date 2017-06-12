@@ -59,6 +59,7 @@ namespace WindowLib.Pages
             {
                 cbQuerySystem.SelectedIndex = 0;
             }
+            GlobalFuns.OpenFlag = true;
         }
 
         private void dgUserInfo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -121,11 +122,16 @@ namespace WindowLib.Pages
 
         private void RefreshTable()
         {
+            string SysId = "";
             if (cbQuerySystem.SelectedValue == null)
             {
-                return;
+                SysId = GlobalFuns.LoginSysId;
             }
-            allDt = CommunicationHelper.GetUserInfo("", cbQuerySystem.SelectedValue.ToString());
+            else
+            {
+                SysId = cbQuerySystem.SelectedValue.ToString();
+            }
+            allDt = CommunicationHelper.GetUserInfo("", SysId);
             if (allDt == null)
             {
                 MessageBox.Show("数据查询错误");

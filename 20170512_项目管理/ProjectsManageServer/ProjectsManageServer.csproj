@@ -61,6 +61,8 @@
     <Compile Include="DataBases\T_PRO_RATE.cs" />
     <Compile Include="DataBases\T_CONFIG_INFO.cs" />
     <Compile Include="DataBases\T_NOTICE_RECORDS.cs" />
+    <Compile Include="DataBases\T_PRO_DAILY.cs" />
+    <Compile Include="DataBases\T_PRO_DAILY_DETAIL.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Connect\TimerThread.cs" />
