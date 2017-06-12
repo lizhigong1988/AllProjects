@@ -63,6 +63,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MainPage\DefaultView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -107,6 +111,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Pages\NoticeMange.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="PopWindows\CalendarPop.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -123,6 +131,9 @@
     <Compile Include="ExcelOperation2010.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainPage\DefaultView.xaml.cs">
+      <DependentUpon>DefaultView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -156,6 +167,9 @@
     </Compile>
     <Compile Include="Pages\ModDevelopment.xaml.cs">
       <DependentUpon>ModDevelopment.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\NoticeMange.xaml.cs">
+      <DependentUpon>NoticeMange.xaml</DependentUpon>
     </Compile>
     <Compile Include="PopWindows\CalendarPop.xaml.cs">
       <DependentUpon>CalendarPop.xaml</DependentUpon>

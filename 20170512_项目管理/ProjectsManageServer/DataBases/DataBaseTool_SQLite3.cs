@@ -179,7 +179,7 @@ namespace ProjectsManageServer.DataBases
             sql += ") VALUES (";
             for (int i = 0; i < values.Count; i++)
             {
-                sql += "'" + values[i] + "', ";
+                sql += "'" + values[i].Replace('\'', '\"') + "', ";
             }
             sql = sql.Remove(sql.Length - 2);
             sql += ");";

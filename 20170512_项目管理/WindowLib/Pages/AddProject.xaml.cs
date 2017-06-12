@@ -66,6 +66,10 @@ namespace WindowLib.Pages
             cbSystem.SelectedValuePath = "Key";
             cbSystem.DisplayMemberPath = "Value";
             cbSystem.SelectedIndex = 0;
+            if (GlobalFuns.LoginSysId != "")
+            {
+                cbSystem.SelectedValue = GlobalFuns.LoginSysId;
+            }
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -363,6 +367,18 @@ namespace WindowLib.Pages
                 tbFinishDate.Text = "";
                 tbFinishDate.IsEnabled = false;
             }
+        }
+
+        private void dgProSysInfo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataRowView drv = dgProSysInfo.SelectedItem as DataRowView;
+            if (drv == null)
+            {
+                return;
+            }
+            cbSystem.SelectedValue = drv.Row["SYS_ID"].ToString();
+            tbSysEstimatedDays.Text = drv.Row["ESTIMATE_DAYS"].ToString();
+            tbSysRemark.Text = drv.Row["REMARK"].ToString();
         }
 
     }

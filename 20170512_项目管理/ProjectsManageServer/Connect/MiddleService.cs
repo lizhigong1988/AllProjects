@@ -146,6 +146,15 @@ namespace ProjectsManageServer.Connect
                 case CommonDef.FUN_NO.MOD_DEVELOPMENT:
                     ret = ModDevelopment(elem);
                     break;
+                case CommonDef.FUN_NO.GET_NOTICE_INFO:
+                    ret = QueryNoticeInfo(elem);
+                    break;
+                case CommonDef.FUN_NO.ADD_NEW_NOTICE:
+                    ret = AddNewNotice(elem);
+                    break;
+                case CommonDef.FUN_NO.DEL_NOTICE:
+                    ret = DelNotice(elem);
+                    break;
             }
             if (ret.Length > LOG_LENGH)
             {
@@ -157,6 +166,24 @@ namespace ProjectsManageServer.Connect
             }
             File.AppendAllText(logPath, log);
             return Encoding.Default.GetBytes(ret);
+        }
+
+        private static string DelNotice(string[] elem)
+        {
+            bool sec = DataBaseManager.DelNotice(elem[1]);
+            return sec ? "0" : "-1";
+        }
+
+        private static string AddNewNotice(string[] elem)
+        {
+            bool sec = DataBaseManager.AddNewNotice(elem[1], elem[2], elem[3], int.Parse(elem[4]));
+            return sec ? "0" : "-1";
+        }
+
+        private static string QueryNoticeInfo(string[] elem)
+        {
+            DataTable dt = DataBaseManager.QueryNoticeInfo(elem[1], elem[2]);
+            return "0\n" + CommonDef.GetDataTableStr(dt);
         }
 
         private static string ModDevelopment(string[] elem)

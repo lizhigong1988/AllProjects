@@ -72,6 +72,7 @@
             <StackPanel Name="spProSysInfo">
                 <DataGrid Name="dgProSysInfo"
                           Height="250"
+                          SelectionChanged="dgProSysInfo_SelectionChanged"
                           IsReadOnly="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding SYS_NAME}" Header="系统名称" />
@@ -114,7 +115,8 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding FILE_NAME}" Header="文件名" />
                         <DataGridTextColumn Binding="{Binding IS_DOWNLOAD}" Header="是否已下载" />
-                        <DataGridTextColumn Binding="{Binding IS_RENEW}" Header="是否更新" />
+                        <DataGridTextColumn Binding="{Binding IS_RENEW}" Header="本地是否最新" />
+                        <DataGridTextColumn Binding="{Binding NEW_TIME}" Header="最新版本时间" />
                     </DataGrid.Columns>
                 </DataGrid>
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">

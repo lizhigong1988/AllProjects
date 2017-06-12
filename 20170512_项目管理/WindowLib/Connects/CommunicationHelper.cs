@@ -772,5 +772,48 @@ namespace WindowLib.Connect
             }
             return revMsg == "0";
         }
+
+        internal static DataTable QueryNoticeInfo(string startDate, string endDate)
+        {
+            string Msg = ((int)CommonDef.FUN_NO.GET_NOTICE_INFO).ToString() + "\n";
+            Msg += startDate + "\n";
+            Msg += endDate + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
+            if (!ret)
+            {
+                return null;
+            }
+            return CommonDef.GetDataTable(revMsg.Split('\n')[1]);
+        }
+
+        internal static bool AddNewNotice(string name, string title, string content, int lvl)
+        {
+            string Msg = ((int)CommonDef.FUN_NO.ADD_NEW_NOTICE).ToString() + "\n";
+            Msg += name + "\n";
+            Msg += title + "\n";
+            Msg += content + "\n";
+            Msg += lvl.ToString() + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
+            if (!ret)
+            {
+                return false;
+            }
+            return revMsg == "0";
+        }
+
+        internal static bool DelNotice(string id)
+        {
+            string Msg = ((int)CommonDef.FUN_NO.DEL_NOTICE).ToString() + "\n";
+            Msg += id + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
+            if (!ret)
+            {
+                return false;
+            }
+            return revMsg == "0";
+        }
     }
 }

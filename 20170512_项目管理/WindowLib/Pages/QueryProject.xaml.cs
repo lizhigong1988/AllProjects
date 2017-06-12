@@ -107,6 +107,7 @@ namespace WindowLib.Pages
             dtFile.Columns.Add("FILE_NAME");
             dtFile.Columns.Add("IS_DOWNLOAD");
             dtFile.Columns.Add("IS_RENEW");
+            dtFile.Columns.Add("NEW_TIME");
             if (Directory.Exists(curFilePath))
             {
                 foreach (DataRow drFile in dtFiles.Rows)
@@ -118,16 +119,16 @@ namespace WindowLib.Pages
                         string time = File.GetLastWriteTime(fileAllName).ToString("yyyyMMddHHmmss");
                         if (time.CompareTo(drFile["FILE_TIME"].ToString()) >= 0) // 本地的日期大 本地较新
                         {
-                            dtFile.Rows.Add(new string[] { fileAllName, drFile["FILE_NAME"].ToString(), "是", "是" });
+                            dtFile.Rows.Add(new string[] { fileAllName, drFile["FILE_NAME"].ToString(), "是", "是", drFile["FILE_TIME"].ToString() });
                         }
                         else
                         {
-                            dtFile.Rows.Add(new string[] { fileAllName, drFile["FILE_NAME"].ToString(), "是", "否" });
+                            dtFile.Rows.Add(new string[] { fileAllName, drFile["FILE_NAME"].ToString(), "是", "否", drFile["FILE_TIME"].ToString() });
                         }
                     }
                     else
                     {
-                        dtFile.Rows.Add(new string[] { fileAllName, drFile["FILE_NAME"].ToString(), "否", "否" });
+                        dtFile.Rows.Add(new string[] { fileAllName, drFile["FILE_NAME"].ToString(), "否", "否", drFile["FILE_TIME"].ToString() });
                     }
                 }
             }
@@ -137,7 +138,7 @@ namespace WindowLib.Pages
                 foreach (DataRow drFile in dtFiles.Rows)
                 {
                     string fileAllName = curFilePath + "/" + drFile["FILE_NAME"].ToString();
-                    dtFile.Rows.Add(new string[] { fileAllName, drFile["FILE_NAME"].ToString(), "否", "否" });
+                    dtFile.Rows.Add(new string[] { fileAllName, drFile["FILE_NAME"].ToString(), "否", "否", drFile["FILE_TIME"].ToString() });
                 }
             }
             dgFiles.DataContext = dtFile;

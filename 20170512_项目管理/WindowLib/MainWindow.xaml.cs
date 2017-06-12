@@ -93,6 +93,7 @@ namespace WindowLib
                     listMenu.Items.Add(new ListBoxItem() { Content = "人员管理" });
                     //listMenu.Items.Add(new ListBoxItem() { Content = "修改密码" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "系统设置" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "公告管理" });
                     break;
                 case "部门领导":
                 case "PMO":
@@ -106,6 +107,7 @@ namespace WindowLib
                     listMenu.Items.Add(new ListBoxItem() { Content = "人员管理" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "修改密码" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "系统设置" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "公告管理" });
                     break;
                 case "项目经理":
                     listMenu.Items.Add(new ListBoxItem() { Content = "新增项目" });
@@ -118,11 +120,18 @@ namespace WindowLib
                     listMenu.Items.Add(new ListBoxItem() { Content = "人员管理" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "修改密码" });
                     //listMenu.Items.Add(new ListBoxItem() { Content = "系统设置" });
+                    listMenu.Items.Add(new ListBoxItem() { Content = "公告管理" });
                     break;
                 case "开发人员":
                     listMenu.Items.Add(new ListBoxItem() { Content = "开发信息维护" });
                     listMenu.Items.Add(new ListBoxItem() { Content = "修改密码" });
                     break;
+            }
+            if (tabPageBox.Items.Count == 0)
+            {
+                tabPageBox.Visibility = Visibility.Collapsed;
+                dvNotice.Visibility = Visibility.Visible;
+                dvNotice.RefreshNotice();
             }
         }
 
@@ -137,6 +146,12 @@ namespace WindowLib
                     tabPageBox.Items.Remove(item);
                     break;
                 }
+            }
+            if (tabPageBox.Items.Count == 0)
+            {
+                tabPageBox.Visibility = Visibility.Collapsed;
+                dvNotice.Visibility = Visibility.Visible;
+                dvNotice.RefreshNotice();
             }
         }
         
@@ -194,11 +209,16 @@ namespace WindowLib
                 case "系统设置":
                     scrl.Content = new SysConfig();
                     break;
+                case "公告管理":
+                    scrl.Content = new NoticeMange();
+                    break;
                 default:
                     return;
             }
             tabPageBox.Items.Add(newItem);
             tabPageBox.SelectedItem = newItem;
+            dvNotice.Visibility = Visibility.Collapsed;
+            tabPageBox.Visibility = Visibility.Visible;
         }
 
         public void CloseThisPage(string header)
@@ -208,8 +228,14 @@ namespace WindowLib
                 if (item.Header.ToString() == header)
                 {
                     tabPageBox.Items.Remove(item);
-                    return;
+                    break;
                 }
+            }
+            if (tabPageBox.Items.Count == 0)
+            {
+                tabPageBox.Visibility = Visibility.Collapsed;
+                dvNotice.Visibility = Visibility.Visible;
+                dvNotice.RefreshNotice();
             }
         }
 
@@ -230,6 +256,16 @@ namespace WindowLib
             GlobalFuns.LoginSysId = cbSelectSys.SelectedValue.ToString();
             GlobalFuns.LoginSysName = (cbSelectSys.ItemsSource as Dictionary<string, string>)[GlobalFuns.LoginSysId];
             RefreshMenu();
+        }
+
+        private void tbOpenCalculator_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            System.Diagnostics.Process.Start("calc.exe");
+        }
+
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+            dvNotice.RefreshNotice();
         }
     }
 }

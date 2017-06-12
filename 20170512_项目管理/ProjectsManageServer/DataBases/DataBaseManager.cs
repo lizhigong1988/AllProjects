@@ -31,6 +31,7 @@ namespace ProjectsManageServer.DataBases
             if (ret) ret = T_PRO_SYS_INFO.InitTable(dataBaseTool);
             if (ret) ret = T_SYS_INFO.InitTable(dataBaseTool);
             if (ret) ret = T_TRADE_INFO.InitTable(dataBaseTool);
+            if (ret) ret = T_NOTICE_RECORDS.InitTable(dataBaseTool);
             return ret;
         }
 
@@ -322,7 +323,7 @@ namespace ProjectsManageServer.DataBases
                 }
                 if (dt.Rows[0][0].ToString() == "0")
                 {
-                    values = new List<string>() { manage1, "111111", "", "焦作中旅银行股份有限公司", "项目经理", "" };
+                    values = new List<string>() { manage1, CommonDef.MD5("111111"), "", "焦作中旅银行股份有限公司", "项目经理", "" };
                     if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
                         values, ref sql))
                     {
@@ -347,7 +348,7 @@ namespace ProjectsManageServer.DataBases
                 }
                 if (dt.Rows[0][0].ToString() == "0")
                 {
-                    values = new List<string>() { manage2, "111111", "", "焦作中旅银行股份有限公司", "项目经理", "" };
+                    values = new List<string>() { manage2, CommonDef.MD5("111111"), "", "焦作中旅银行股份有限公司", "项目经理", "" };
                     if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
                         values, ref sql))
                     {
@@ -394,7 +395,7 @@ namespace ProjectsManageServer.DataBases
                 }
                 if (dt.Rows[0][0].ToString() == "0")
                 {
-                    values = new List<string>() { manage1, "111111", "", "焦作中旅银行股份有限公司", "项目经理", "" };
+                    values = new List<string>() { manage1, CommonDef.MD5("111111"), "", "焦作中旅银行股份有限公司", "项目经理", "" };
                     if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
                         values, ref sql))
                     {
@@ -419,7 +420,7 @@ namespace ProjectsManageServer.DataBases
                 }
                 if (dt.Rows[0][0].ToString() == "0")
                 {
-                    values = new List<string>() { manage2, "111111", "", "焦作中旅银行股份有限公司", "项目经理", "" };
+                    values = new List<string>() { manage2, CommonDef.MD5("111111"), "", "焦作中旅银行股份有限公司", "项目经理", "" };
                     if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
                         values, ref sql))
                     {
@@ -503,7 +504,7 @@ namespace ProjectsManageServer.DataBases
             {
                 return false;
             }
-            List<string> values = new List<string>() { userName, "111111", email, company, role, remark };
+            List<string> values = new List<string>() { userName, CommonDef.MD5("111111"), email, company, role, remark };
             string sql = "";
             if (!dataBaseTool.AddInfo(T_USER_INFO.TABLE_NAME, T_USER_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
                 values, ref sql))
@@ -767,7 +768,7 @@ namespace ProjectsManageServer.DataBases
             }
             return dataBaseTool.ActionFunc(sql);
         }
-
+#if false
         /// <summary>
         /// 统计今年：新增数目、子单数目、上线、子单数目
         /// </summary>
@@ -808,6 +809,161 @@ namespace ProjectsManageServer.DataBases
             }
             listData.Add(dt.Rows[0][0].ToString()); //上线子单数目
             return listData;
+        }
+#endif
+        /// <summary>
+        /// 统计今年：系统名称、负责人、新增主单数、新增子单数目、上线主单数、上线子单数、在建主单数、在建子单数
+        /// </summary>
+        /// <returns></returns>
+        internal static DataTable ProInfoCount(int year)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("SYS_ID");
+            dt.Columns.Add("SYS_NAME");
+            dt.Columns.Add("MANAGERS");
+            dt.Columns.Add("NEW_DEMAND", typeof(int));
+            dt.Columns.Add("NEW_DEMAND_SYS", typeof(int));
+            dt.Columns.Add("FINISH_DEMAND", typeof(int));
+            dt.Columns.Add("FINISH_DEMAND_SYS", typeof(int));
+            dt.Columns.Add("UNFINISH_DEMAND", typeof(int));
+            dt.Columns.Add("UNFINISH_DEMAND_SYS", typeof(int));
+
+            string sql = "select t1.*, SUM(case when t2.IS_MAIN = '是' then 1 else 0 end) as NEW_DEMAND, count(t2.DEMAND_ID) as NEW_DEMAND_SYS ";
+            sql += "from T_SYS_INFO t1, T_PRO_SYS_INFO t2 ";
+            sql += "where t1.SYS_ID = t2.SYS_ID and t2.DEMAND_ID in ";
+            sql += "(select DEMAND_ID from T_PRO_INFO where DEMAND_DATE like '2017%') group by t1.SYS_ID";
+            DataTable dtNew = dataBaseTool.SelectFunc(sql);
+            if (dtNew == null)
+            {
+                return null;
+            }
+            sql = "select t1.*, SUM(case when t2.IS_MAIN = '是' then 1 else 0 end) as FINISH_DEMAND, count(t2.DEMAND_ID) as FINISH_DEMAND_SYS ";
+            sql += "from T_SYS_INFO t1, T_PRO_SYS_INFO t2 ";
+            sql += "where t1.SYS_ID = t2.SYS_ID and t2.DEMAND_ID in ";
+            sql += "(select DEMAND_ID from T_PRO_INFO where FINISH_DATE like '2017%') group by t1.SYS_ID";
+            DataTable dtFinish = dataBaseTool.SelectFunc(sql);
+            if (dtFinish == null)
+            {
+                return null;
+            }
+            sql = "select t1.*, SUM(case when t2.IS_MAIN = '是' then 1 else 0 end) as UNFINISH_DEMAND, count(t2.DEMAND_ID) as UNFINISH_DEMAND_SYS ";
+            sql += "from T_SYS_INFO t1, T_PRO_SYS_INFO t2 ";
+            sql += "where t1.SYS_ID = t2.SYS_ID and t2.DEMAND_ID in ";
+            sql += "(select DEMAND_ID from T_PRO_INFO where PRO_STATE != '完成') group by t1.SYS_ID";
+            DataTable dtUnfinish = dataBaseTool.SelectFunc(sql);
+            if (dtUnfinish == null)
+            {
+                return null;
+            }
+            List<string> addedSysId = new List<string>();
+            foreach (DataRow dr in dtNew.Rows)
+            {
+                if (addedSysId.Contains(dr["SYS_ID"].ToString()))
+                {
+                    foreach (DataRow drAdded in dt.Rows)
+                    {
+                        if (dr["SYS_ID"].ToString() == drAdded["SYS_ID"].ToString())
+                        {
+                            drAdded["NEW_DEMAND"] = dr["NEW_DEMAND"].ToString();
+                            drAdded["NEW_DEMAND_SYS"] = dr["NEW_DEMAND_SYS"].ToString();
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    dt.Rows.Add(new string[] {
+                        dr["SYS_ID"].ToString(), dr["SYS_NAME"].ToString(),
+                        dr["USER_NAME1"].ToString() + "\r" + dr["USER_NAME2"].ToString(),
+                        dr["NEW_DEMAND"].ToString(), dr["NEW_DEMAND_SYS"].ToString(),
+                        "0","0","0","0"
+                    });
+                    addedSysId.Add(dr["SYS_ID"].ToString());
+                }
+            }
+            foreach (DataRow dr in dtFinish.Rows)
+            {
+                if (addedSysId.Contains(dr["SYS_ID"].ToString()))
+                {
+                    foreach (DataRow drAdded in dt.Rows)
+                    {
+                        if (dr["SYS_ID"].ToString() == drAdded["SYS_ID"].ToString())
+                        {
+                            drAdded["FINISH_DEMAND"] = dr["FINISH_DEMAND"].ToString();
+                            drAdded["FINISH_DEMAND_SYS"] = dr["FINISH_DEMAND_SYS"].ToString();
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    dt.Rows.Add(new string[] {
+                        dr["SYS_ID"].ToString(), dr["SYS_NAME"].ToString(),
+                        dr["USER_NAME1"].ToString() + "\r" + dr["USER_NAME2"].ToString(), "0","0",
+                        dr["FINISH_DEMAND"].ToString(), dr["FINISH_DEMAND_SYS"].ToString(),
+                        "0","0"
+                    });
+                    addedSysId.Add(dr["SYS_ID"].ToString());
+                }
+            }
+            foreach (DataRow dr in dtUnfinish.Rows)
+            {
+                if (addedSysId.Contains(dr["SYS_ID"].ToString()))
+                {
+                    foreach (DataRow drAdded in dt.Rows)
+                    {
+                        if (dr["SYS_ID"].ToString() == drAdded["SYS_ID"].ToString())
+                        {
+                            drAdded["UNFINISH_DEMAND"] = dr["UNFINISH_DEMAND"].ToString();
+                            drAdded["UNFINISH_DEMAND_SYS"] = dr["UNFINISH_DEMAND_SYS"].ToString();
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    dt.Rows.Add(new string[] {
+                        dr["SYS_ID"].ToString(), dr["SYS_NAME"].ToString(),
+                        dr["USER_NAME1"].ToString() + "\r" + dr["USER_NAME2"].ToString(),
+                        "0","0","0","0",
+                        dr["UNFINISH_DEMAND"].ToString(), dr["UNFINISH_DEMAND_SYS"].ToString()
+                    });
+                    addedSysId.Add(dr["SYS_ID"].ToString());
+                }
+            } 
+            DataView dataView = dt.DefaultView;
+            dataView.Sort = "FINISH_DEMAND_SYS desc";
+            return dataView.ToTable();  
+        }
+
+        internal static DataTable QueryNoticeInfo(string startDate, string endDate)
+        {
+            string sql = "select * from T_NOTICE_RECORDS where NOTICE_DATE >= '{0}' and NOTICE_DATE <= '{1}'";
+            sql += " order by LVL asc, NOTICE_DATE desc, NOTICE_TIME desc";
+            sql = string.Format(sql, startDate, endDate);
+            return dataBaseTool.SelectFunc(sql);
+        }
+
+        internal static bool AddNewNotice(string name, string title, string content, int lvl)
+        {
+            string date = DateTime.Now.ToString("yyyyMMdd");
+            string time = DateTime.Now.ToString("HH:mm:ss");
+            List<string> values = new List<string>() { Guid.NewGuid().ToString(), date,
+                time, name, title, content, lvl.ToString()};
+            string sql = "";
+            if (!dataBaseTool.AddInfo(T_NOTICE_RECORDS.TABLE_NAME, T_NOTICE_RECORDS.DIC_TABLE_COLUMS.Keys.ToList(),
+                values, ref sql))
+            {
+                return false;
+            }
+            return dataBaseTool.ActionFunc(sql);
+        }
+
+        internal static bool DelNotice(string id)
+        {
+            string sql = "delete from T_NOTICE_RECORDS where NOTICE_ID = '{0}'";
+            sql = string.Format(sql, id);
+            return dataBaseTool.ActionFunc(sql);
         }
     }
 }

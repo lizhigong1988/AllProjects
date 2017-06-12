@@ -60,6 +60,7 @@
     <Compile Include="DataBases\T_USER_SYS_INFO.cs" />
     <Compile Include="DataBases\T_PRO_RATE.cs" />
     <Compile Include="DataBases\T_CONFIG_INFO.cs" />
+    <Compile Include="DataBases\T_NOTICE_RECORDS.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Connect\TimerThread.cs" />

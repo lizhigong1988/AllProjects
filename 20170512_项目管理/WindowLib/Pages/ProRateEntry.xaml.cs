@@ -168,6 +168,10 @@ namespace WindowLib.Pages
                 tbProgressNote.IsEnabled = true;
             }
             btnRefreshRate_Click(null, null);
+
+            tbRate.Text = "";
+            tbExplain.Text = "";
+            tbProblem.Text = "";
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -213,7 +217,7 @@ namespace WindowLib.Pages
                         return;
                     }
                     int rowRate = int.Parse(dr["RATE"].ToString());
-                    if (rowRate > rate)
+                    if ((rowRate > rate) && (rowDate != date))
                     {
                         MessageBox.Show("进度不能降");
                         return;

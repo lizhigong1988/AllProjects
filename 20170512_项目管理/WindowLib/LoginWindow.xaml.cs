@@ -14,6 +14,7 @@ using System.Data;
 using WindowLib.Tools;
 using WindowLib.Connect;
 using System.IO;
+using CommonLib;
 
 namespace WindowLib
 {
@@ -66,7 +67,7 @@ namespace WindowLib
                 return;
             }
             DataRow dr = dt.Rows[0];
-            if (dr["USER_PSW"].ToString() != InputCheck.MD5(tbUserPsw.Password))
+            if (dr["USER_PSW"].ToString() != CommonDef.MD5(tbUserPsw.Password))
             {
                 MessageBox.Show("密码错误");
                 return;

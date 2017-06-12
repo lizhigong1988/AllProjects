@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="WindowLib.MainPage.DefaultView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="300"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary Source="/WindowLib;component/StyleSource/CommonSource.xaml" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <GroupBox Header="公告列表">
+            <DataGrid Name="dgNoticeInfo"
+                      IsReadOnly="True"
+                      SelectionChanged="dgNoticeInfo_SelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding NOTICE_DATE}" Header="公告日期" />
+                    <DataGridTextColumn Binding="{Binding NOTICE_TIME}" Header="公告时间" />
+                    <DataGridTextColumn Binding="{Binding NOTICE_MAN}" Header="发布人" />
+                    <DataGridTextColumn Binding="{Binding NOTICE_TITLE}" Header="公告标题" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <TextBlock Text="开始日期" />
+            <TextBox Name="tbStartDate"
+                     IsReadOnly="True"
+                     PreviewMouseDown="tbStartDate_PreviewMouseDown" />
+            <TextBlock Text="结束日期" />
+            <TextBox Name="tbEndDate"
+                     IsReadOnly="True"
+                     PreviewMouseDown="tbEndDate_PreviewMouseDown" />
+            <Button Name="btnQuery"
+                    Click="btnQuery_Click"
+                    Content="查询" />
+        </StackPanel>
+        <GroupBox Grid.Row="2" Header="公告内容">
+            <TextBox Name="tbNoticeContent"
+                     Margin="3"
+                     AcceptsReturn="True"
+                     IsReadOnly="True"
+                     TextWrapping="Wrap" />
+        </GroupBox>
+        <GroupBox Grid.Row="3" Header="工作便签">
+            <TextBox Name="tbWorkNote"
+                     Margin="3"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     LostFocus="tbWorkNote_LostFocus" />
+        </GroupBox>
+    </Grid>
+</UserControl>

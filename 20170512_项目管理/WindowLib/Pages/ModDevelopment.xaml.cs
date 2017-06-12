@@ -85,14 +85,7 @@ namespace WindowLib.Pages
             {
                 string fileName = System.IO.Path.GetFileName(imageFileDialog.FileName);
                 DataTable dtFiles = dgFiles.DataContext as DataTable;
-                foreach (DataRow dr in dtFiles.Rows)
-                {
-                    if (dr["FILE_NAME"].ToString() == fileName)
-                    {
-                        MessageBox.Show("文件名重复！");
-                        return;
-                    }
-                }
+
                 if (!Directory.Exists(curFilePath))
                 {
                     Directory.CreateDirectory(curFilePath);
@@ -107,7 +100,22 @@ namespace WindowLib.Pages
                 File.SetLastWriteTime(fileAllName, DateTime.Now.AddMinutes(5));
                 if (CommunicationHelper.UploadFile(fileAllName))
                 {
-                    dtFiles.Rows.Add(new string[] { fileAllName, fileName, "是", "是" });
+                    bool has = false;
+                    foreach (DataRow dr in dtFiles.Rows)
+                    {
+                        if (dr["FILE_NAME"].ToString() == fileName)
+                        {
+                            dr["IS_DOWNLOAD"] = "是";
+                            dr["IS_RENEW"] = "是";
+                            dr["NEW_TIME"] = DateTime.Now.ToString("yyyyMMddHHmmss");
+                            has = true;
+                            break;
+                        }
+                    }
+                    if (!has)
+                    {
+                        dtFiles.Rows.Add(new string[] { fileAllName, fileName, "是", "是", DateTime.Now.ToString("yyyyMMddHHmmss") });
+                    }
                 }
                 else
                 {
@@ -198,6 +206,7 @@ namespace WindowLib.Pages
             dtFile.Columns.Add("FILE_NAME");
             dtFile.Columns.Add("IS_DOWNLOAD");
             dtFile.Columns.Add("IS_RENEW");
+            dtFile.Columns.Add("NEW_TIME");
             if (Directory.Exists(curFilePath))
             {
                 foreach (DataRow drFile in dtFiles.Rows)
@@ -209,16 +218,16 @@ namespace WindowLib.Pages
                         string time = File.GetLastWriteTime(fileAllName).ToString("yyyyMMddHHmmss");
                         if (time.CompareTo(drFile["FILE_TIME"].ToString()) >= 0) // 本地的日期大 本地较新
                         {
-                            dtFile.Rows.Add(new string[] {fileAllName, drFile["FILE_NAME"].ToString(), "是", "是" });
+                            dtFile.Rows.Add(new string[] { fileAllName, drFile["FILE_NAME"].ToString(), "是", "是", drFile["FILE_TIME"].ToString() });
                         }
                         else
                         {
-                            dtFile.Rows.Add(new string[] {fileAllName, drFile["FILE_NAME"].ToString(), "是", "否" });
+                            dtFile.Rows.Add(new string[] { fileAllName, drFile["FILE_NAME"].ToString(), "是", "否", drFile["FILE_TIME"].ToString() });
                         }
                     }
                     else
                     {
-                        dtFile.Rows.Add(new string[] {fileAllName, drFile["FILE_NAME"].ToString(), "否", "否" });
+                        dtFile.Rows.Add(new string[] { fileAllName, drFile["FILE_NAME"].ToString(), "否", "否", drFile["FILE_TIME"].ToString() });
                     }
                 }
             }
@@ -228,7 +237,7 @@ namespace WindowLib.Pages
                 foreach (DataRow drFile in dtFiles.Rows)
                 {
                     string fileAllName = curFilePath + "/" + drFile["FILE_NAME"].ToString();
-                    dtFile.Rows.Add(new string[] {fileAllName, drFile["FILE_NAME"].ToString(), "否", "否" });
+                    dtFile.Rows.Add(new string[] { fileAllName, drFile["FILE_NAME"].ToString(), "否", "否", drFile["FILE_TIME"].ToString() });
                 }
             }
             dgFiles.DataContext = dtFile;

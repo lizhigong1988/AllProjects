@@ -248,14 +248,45 @@ namespace ProjectsManageServer.Connect
                 File.AppendAllText(ERRORLOG, "SEND_ALL_EMAIL:读取项目信息失败\r\n");
                 return;
             }
-            //新增数目、子单数目、上线、子单数目
-            List<string> listProCount = DataBaseManager.ProInfoCount(DateTime.Now.Year);
-            if (listProCount == null)
+            //系统ID,系统名称、负责人、新增主单数、新增子单数目、上线主单数、上线子单数、在建主单数、在建子单数
+            DataTable dtProCount = DataBaseManager.ProInfoCount(DateTime.Now.Year);
+            if (dtProCount == null)
             {
                 //获取系统信息失败，终止任务
                 File.AppendAllText(ERRORLOG, "SEND_ALL_EMAIL:读取项目统计数信息失败\r\n");
                 return;
             }
+            int totalNewMain = 0;
+            int totalNewSub = 0;
+            int totalFinishMain = 0;
+            int totalFinishSub = 0;
+            int totalUnfinishMain = 0;
+            int totalUnfinishSub = 0;
+            //            dt.Rows.Add("SYS_ID");          
+            //dt.Rows.Add("SYS_NAME");              
+            //dt.Rows.Add("MANAGERS");
+            //dt.Rows.Add("NEW_DEMAND");
+            //dt.Rows.Add("NEW_DEMAND_SYS");
+            //dt.Rows.Add("FINISH_DEMAND");
+            //dt.Rows.Add("FINISH_DEMAND_SYS");
+            //dt.Rows.Add("UNFINISH_DEMAND");
+            //dt.Rows.Add("UNFINISH_DEMAND_SYS");
+            foreach (DataRow dr in dtProCount.Rows)
+            {
+                totalNewMain += int.Parse(dr["NEW_DEMAND"].ToString());
+                totalNewSub += int.Parse(dr["NEW_DEMAND_SYS"].ToString());
+                totalFinishMain += int.Parse(dr["FINISH_DEMAND"].ToString());
+                totalFinishSub += int.Parse(dr["FINISH_DEMAND_SYS"].ToString());
+                totalUnfinishMain += int.Parse(dr["UNFINISH_DEMAND"].ToString());
+                totalUnfinishSub += int.Parse(dr["UNFINISH_DEMAND_SYS"].ToString());
+            }
+            dtProCount.Rows.Add(new string[]{
+                "","合计", "", 
+                totalNewMain.ToString(), totalNewSub.ToString(),
+                totalFinishMain.ToString(), totalFinishSub.ToString(),
+                totalUnfinishMain.ToString(), totalFinishSub.ToString(),
+            });
+
             int totalCount = dtProInfo.Rows.Count;
             int newCount = 0;
             int updateCount = 0;
@@ -308,9 +339,19 @@ namespace ProjectsManageServer.Connect
             }
             string msg = "";
             msg += HtmAddRow("一、信息技术部项目汇总：");
-            msg += HtmAddRow("    今年新增需求" + listProCount[0] + "个，涉及子单" + listProCount[1] + "个。");
-            msg += HtmAddRow("    今年上线需求" + listProCount[2] + "个，涉及子单" + listProCount[3] + "个。");
-            msg += HtmAddRow("    全部在建需求" + totalCount.ToString() + "个，其中新建项目需求" +
+;
+            msg += HtmAddTable(dtProCount, new Dictionary<string, string>() 
+                                    {
+                                        {"SYS_NAME","系统名称"},
+                                        {"MANAGERS", "负责人"},
+                                        {"NEW_DEMAND","今年新增需求数"},
+                                        {"NEW_DEMAND_SYS","今年新增子单数"},
+                                        {"FINISH_DEMAND","今年完成需求数"},
+                                        {"FINISH_DEMAND_SYS","今年完成子单数"},
+                                        {"UNFINISH_DEMAND","在建需求数"},
+                                        {"UNFINISH_DEMAND_SYS","在建子单数"},
+                                    });
+            msg += HtmAddRow("    全部在建需求" + totalCount.ToString() + "个中，其中新建项目需求" +
                 newCount.ToString() + "个，系统升级类需求" + updateCount.ToString() + "个。");
             msg += HtmAddRow("");
             //2、按照部门汇总需求总数、新需求数目、维护升级数目
@@ -583,7 +624,21 @@ namespace ProjectsManageServer.Connect
             tableInfo += "<tr>";
             foreach (var dic in dictionary)
             {
-                tableInfo += "<td>" + ChangeHtmStr(dic.Value) + "</td>";
+                switch(dic.Value)
+                {
+                    case "录入系统":
+                        tableInfo += "<td width = \"100\">" + ChangeHtmStr(dic.Value) + "</td>";
+                        break;
+                    case "负责人":
+                        tableInfo += "<td width = \"60\">" + ChangeHtmStr(dic.Value) + "</td>";
+                        break;
+                    case "业务经理":
+                        tableInfo += "<td width = \"60\">" + ChangeHtmStr(dic.Value) + "</td>";
+                        break;
+                    default:
+                        tableInfo += "<td>" + ChangeHtmStr(dic.Value) + "</td>";
+                        break;
+                }
             }
             tableInfo += "</tr>";
             foreach(DataRow dr in dtRateInfo.Rows)

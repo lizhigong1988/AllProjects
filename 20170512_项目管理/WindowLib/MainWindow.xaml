@@ -1,9 +1,11 @@
 ﻿<Window x:Class="WindowLib.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:my="clr-namespace:WindowLib.MainPage"
         Title="项目管理窗口"
         Width="1000"
         Height="600"
+        ContentRendered="Window_ContentRendered"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized">
     <Grid>
@@ -36,6 +38,13 @@
                        Canvas.Left="40"
                        Canvas.Top="40"
                        Text="焦作中旅银行-&gt;信息技术部" />
+            <TextBlock Name="tbOpenCalculator"
+                       Canvas.Top="10"
+                       Canvas.Right="50"
+                       Foreground="White"
+                       PreviewMouseDown="tbOpenCalculator_PreviewMouseDown"
+                       Text="打开计算器"
+                       TextDecorations="Underline" />
             <StackPanel Name="spSelectSys"
                         Canvas.Top="34"
                         Canvas.Right="50"
@@ -76,6 +85,7 @@
                 <ListBoxItem Content="人员管理" />
                 <ListBoxItem Content="修改密码" />
                 <ListBoxItem Content="系统设置" />
+                <ListBoxItem Content="公告管理" />
             </ListBox>
             <Border Grid.Column="1"
                     Margin="3"
@@ -84,7 +94,8 @@
             <TabControl Name="tabPageBox"
                         Grid.Column="1"
                         Margin="10"
-                        BorderThickness="0">
+                        BorderThickness="0"
+                        Visibility="Collapsed">
                 <TabControl.Resources>
                     <Style TargetType="{x:Type TabItem}">
                         <Setter Property="Template">
@@ -161,8 +172,10 @@
                         <GradientStop Offset="1" Color="#FFB4D0FF" />
                     </LinearGradientBrush>
                 </TabControl.Background>
-
             </TabControl>
+            <my:DefaultView x:Name="dvNotice"
+                            Grid.Column="1"
+                            Margin="10" />
         </Grid>
     </Grid>
 </Window>

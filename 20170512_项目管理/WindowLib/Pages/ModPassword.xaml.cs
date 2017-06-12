@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using WindowLib.Tools;
 using System.Data;
 using WindowLib.Connect;
+using CommonLib;
 
 namespace WindowLib.Pages
 {
@@ -47,12 +48,12 @@ namespace WindowLib.Pages
                 return;
             }
             DataRow dr = dt.Rows[0];
-            if (dr["USER_PSW"].ToString() != InputCheck.MD5(pbCurPsw.Password))
+            if (dr["USER_PSW"].ToString() != CommonDef.MD5(pbCurPsw.Password))
             {
                 MessageBox.Show("密码不正确");
                 return;
             }
-            if (!CommunicationHelper.ModPassword(GlobalFuns.LoginUser, InputCheck.MD5(pbNewPsw.Password)))
+            if (!CommunicationHelper.ModPassword(GlobalFuns.LoginUser, CommonDef.MD5(pbNewPsw.Password)))
             {
                 MessageBox.Show("修改密码失败！");
                 return;

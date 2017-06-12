@@ -60,7 +60,8 @@
             <StackPanel>
                 <DataGrid Name="dgProSysInfo"
                           Height="250"
-                          IsReadOnly="True">
+                          IsReadOnly="True"
+                          SelectionChanged="dgProSysInfo_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding SYS_NAME}" Header="系统名称" />
                         <DataGridTextColumn Binding="{Binding USER_NAME1}" Header="第一负责人" />

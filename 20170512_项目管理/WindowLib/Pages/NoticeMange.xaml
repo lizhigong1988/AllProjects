@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="WindowLib.Pages.NoticeMange"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignWidth="850"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary Source="/WindowLib;component/StyleSource/CommonSource.xaml" />
+    </UserControl.Resources>
+    <StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <TextBlock Text="开始日期" />
+            <TextBox Name="tbStartDate"
+                     IsReadOnly="True"
+                     PreviewMouseDown="tbStartDate_PreviewMouseDown" />
+            <TextBlock Text="结束日期" />
+            <TextBox Name="tbEndDate"
+                     IsReadOnly="True"
+                     PreviewMouseDown="tbEndDate_PreviewMouseDown" />
+            <Button Name="btnQuery"
+                    Click="btnQuery_Click"
+                    Content="查询" />
+        </StackPanel>
+        <GroupBox Header="公告列表">
+            <DataGrid Name="dgNoticeInfo"
+                      Height="250"
+                      IsReadOnly="True"
+                      SelectionChanged="dgNoticeInfo_SelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding NOTICE_DATE}" Header="公告日期" />
+                    <DataGridTextColumn Binding="{Binding NOTICE_TIME}" Header="公告时间" />
+                    <DataGridTextColumn Binding="{Binding NOTICE_MAN}" Header="发布人" />
+                    <DataGridTextColumn Binding="{Binding NOTICE_TITLE}" Header="公告标题" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="公告标题" />
+            <TextBox Name="tbNoticeTitle" Width="400" />
+            <CheckBox Name="cbNoName"
+                      Margin="5"
+                      Content="匿名" />
+            <CheckBox Name="cbTop"
+                      Margin="5"
+                      Content="置顶" />
+        </StackPanel>
+        <GroupBox Header="公告内容">
+            <TextBox Name="tbNoticeContent"
+                     Height="160"
+                     Margin="3"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap" />
+        </GroupBox>
+        <StackPanel Grid.Row="1"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+            <Button Name="btnAdd"
+                    Click="btnAdd_Click"
+                    Content="新增" />
+            <Button Name="btnDel"
+                    Click="btnDel_Click"
+                    Content="删除" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>
