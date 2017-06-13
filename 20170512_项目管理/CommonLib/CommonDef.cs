@@ -86,6 +86,7 @@ namespace CommonLib
             GET_CUR_DAILY_INFO,
             DAILY_SIGN_IN,
             DAILY_SIGN_OUT,
+            SAVE_DAILY_DETAIL,
         };
 
 

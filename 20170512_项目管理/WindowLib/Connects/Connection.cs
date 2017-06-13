@@ -65,24 +65,15 @@ namespace WindowLib.Connect
             {
                 if (!socket.Connected)
                 {
-                    AppConnectInit(lastConnectIp);
+                    if (!AppConnectInit(lastConnectIp))
+                    {
+                        return false;
+                    }
                 }
                 socket.BeginSend(listSendData.ToArray(), 0, listSendData.Count, SocketFlags.None, null, socket); //发送数据  
             }
             catch
             {
-                //if (AppConnectInit(lastConnectIp))
-                //{
-                //    try
-                //    {
-                //        socket.BeginSend(listSendData.ToArray(), 0, listSendData.Count, SocketFlags.None, null, socket); //发送数据  
-                //        return true;
-                //    }
-                //    catch
-                //    {
-                //        return false;
-                //    }
-                //}
                 return false;
             }
             return true;

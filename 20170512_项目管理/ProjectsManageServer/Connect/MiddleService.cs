@@ -170,6 +170,9 @@ namespace ProjectsManageServer.Connect
                 case CommonDef.FUN_NO.DAILY_SIGN_OUT:
                     ret = DailySignOut(elem);
                     break;
+                case CommonDef.FUN_NO.SAVE_DAILY_DETAIL:
+                    ret = SaveDailyDetal(elem);
+                    break;
             }
             if (ret.Length > LOG_LENGH)
             {
@@ -181,6 +184,13 @@ namespace ProjectsManageServer.Connect
             }
             File.AppendAllText(logPath, log);
             return Encoding.Default.GetBytes(ret);
+        }
+
+        private static string SaveDailyDetal(string[] elem)
+        {
+            DataTable dt = CommonDef.GetDataTable(elem[2]);
+            bool sec = DataBaseManager.SaveDailyDetal(elem[1], dt);
+            return sec ? "0" : "-1";
         }
 
         private static string DailySignOut(string[] elem)
@@ -200,8 +210,9 @@ namespace ProjectsManageServer.Connect
             string date = elem[2];
             string signIn = "";
             string signOut = "";
-            DataTable dt = DataBaseManager.GetCurDailyInfo(elem[1], ref date, out signIn, out signOut);
-            return "0\n" + CommonDef.GetDataTableStr(dt) + "\n" + date + "\n" + signIn + "\n" + signOut + "\n";
+            string dailyId = "";
+            DataTable dt = DataBaseManager.GetCurDailyInfo(elem[1], ref date, out signIn, out signOut, out dailyId);
+            return "0\n" + CommonDef.GetDataTableStr(dt) + "\n" + date + "\n" + signIn + "\n" + signOut + "\n" + dailyId + "\n";
         }
 
         private static string QueryDailyDetail(string[] elem)

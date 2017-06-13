@@ -844,7 +844,8 @@ namespace WindowLib.Connect
             return CommonDef.GetDataTable(revMsg.Split('\n')[1]);
         }
 
-        internal static DataTable GetCurDailyInfo(string userName, ref string date, out string signIn, out string signOut)
+        internal static DataTable GetCurDailyInfo(string userName, ref string date, out string signIn, out string signOut,
+            out string dailyId)
         {
             string Msg = ((int)CommonDef.FUN_NO.GET_CUR_DAILY_INFO).ToString() + "\n";
             Msg += userName + "\n";
@@ -855,12 +856,14 @@ namespace WindowLib.Connect
             {
                 signIn = "";
                 signOut = "";
+                dailyId = "";
                 return null;
             }
             string[] items = revMsg.Split('\n');
             date = items[2];
             signIn = items[3];
             signOut = items[4];
+            dailyId = items[5];
             return CommonDef.GetDataTable(items[1]);
         }
 
@@ -887,6 +890,20 @@ namespace WindowLib.Connect
             Msg += signDate + "\n";
             Msg += signOutTime + "\n";
             Msg += harddeskId + "\n";
+            string revMsg = "";
+            bool ret = SendAndRcvWorker(Msg, out revMsg);
+            if (!ret)
+            {
+                return false;
+            }
+            return revMsg == "0";
+        }
+
+        internal static bool SaveDailyDetail(string curDailyId, DataTable dt)
+        {
+            string Msg = ((int)CommonDef.FUN_NO.SAVE_DAILY_DETAIL).ToString() + "\n";
+            Msg += curDailyId + "\n";
+            Msg += CommonDef.GetDataTableStr(dt) + "\n";
             string revMsg = "";
             bool ret = SendAndRcvWorker(Msg, out revMsg);
             if (!ret)

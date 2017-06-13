@@ -21,13 +21,14 @@ namespace ProjectsManageServer.DataBases
         {
             {"DEMAND_ID", "VARCHAR(36)"},
             {"SYS_ID", "VARCHAR(36)"},
-            {"TRADE_CODE", "VARCHAR(32)"},
+            {"TRADE_CODE", "VARCHAR(32)"}, 
             {"TRADE_NAME", "VARCHAR(32)"},
             {"IS_NEW", "VARCHAR(8)"},
             {"FILE_NAME", "VARCHAR(32)"},
             {"WORKER", "VARCHAR(32)"},
             {"WORKLOAD", "DECIMAL"},
             {"REMARK", "VARCHAR(64)"},
+            {"WORK_TYPE", "VARCHAR(1)"},        //工作内容类型 1、开发、2、会议 3、文档整理
         };
 
         static DataBaseTool_SQLite3 dataBaseTool;

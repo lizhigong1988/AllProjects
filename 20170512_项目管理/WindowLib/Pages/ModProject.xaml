@@ -14,7 +14,7 @@
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="需求名称" />
                 <ComboBox Name="cbDemandName"
-                          Width="332"
+                          Width="414"
                           SelectionChanged="cbDemandName_SelectionChanged" />
                 <Button Name="btnShowAll"
                         Click="btnShowAll_Click"
@@ -41,10 +41,10 @@
                     <ComboBox Name="cbProKinds" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="项目阶段" />
-                    <ComboBox Name="cbProStage" />
                     <TextBlock Text="项目状态" />
                     <ComboBox Name="cbProState" SelectionChanged="cbProState_SelectionChanged" />
+                    <TextBlock Text="项目阶段" />
+                    <ComboBox Name="cbProStage" />
                     <TextBlock Text="实际完成日期" />
                     <TextBox Name="tbFinishDate"
                              IsReadOnly="True"
@@ -72,8 +72,8 @@
             <StackPanel Name="spProSysInfo">
                 <DataGrid Name="dgProSysInfo"
                           Height="250"
-                          SelectionChanged="dgProSysInfo_SelectionChanged"
-                          IsReadOnly="True">
+                          IsReadOnly="True"
+                          SelectionChanged="dgProSysInfo_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding SYS_NAME}" Header="系统名称" />
                         <DataGridTextColumn Binding="{Binding USER_NAME1}" Header="第一负责人" />
@@ -109,6 +109,11 @@
                 </StackPanel>
             </StackPanel>
         </GroupBox>
+        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button Name="btnSave"
+                    Click="btnSave_Click"
+                    Content="保存" />
+        </StackPanel>
         <GroupBox Header="相关文件">
             <StackPanel>
                 <DataGrid Name="dgFiles" Height="150">
@@ -135,10 +140,5 @@
                 </StackPanel>
             </StackPanel>
         </GroupBox>
-        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-            <Button Name="btnSave"
-                    Click="btnSave_Click"
-                    Content="保存" />
-        </StackPanel>
     </StackPanel>
 </UserControl>

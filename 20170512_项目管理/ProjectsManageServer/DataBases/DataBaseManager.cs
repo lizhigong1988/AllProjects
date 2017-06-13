@@ -985,11 +985,15 @@ namespace ProjectsManageServer.DataBases
 
         internal static DataTable QueryDailyDetail(string dailyId)
         {
-            string sql = string.Format("select * from T_PRO_DAILY_DETAIL where DAILY_ID = '{0}'", dailyId);
+            string sql = "select t1.*, t2.* from T_PRO_DAILY_DETAIL t1 LEFT JOIN T_TRADE_INFO t2 on ";
+            sql += "t1.DEMAND_ID = t2.DEMAND_ID and t1.SYS_ID = t2.SYS_ID and t1.TRADE_CODE = t2.TRADE_CODE ";
+            sql += "where t1.DAILY_ID = '{0}'";
+            sql = string.Format(sql, dailyId);
             return dataBaseTool.SelectFunc(sql);
         }
 
-        internal static DataTable GetCurDailyInfo(string userName, ref string date, out string signIn, out string signOut)
+        internal static DataTable GetCurDailyInfo(string userName, ref string date, out string signIn, out string signOut,
+            out string dailyId)
         {
             if (date == "")
             {
@@ -1001,21 +1005,20 @@ namespace ProjectsManageServer.DataBases
             {
                 signIn = "";
                 signOut = "";
+                dailyId = "";
                 return null;
             }
-            string dailyId = "";
             if (dtDaily.Rows.Count == 0)
             {
                 signIn = "";
                 signOut = "";
+                dailyId = "";
+                return null;
             }
-            else
-            {
-                DataRow drDaily = dtDaily.Rows[0];
-                signIn = drDaily["LOGIN_TIME"].ToString();
-                signOut = drDaily["LOGOUT_TIME"].ToString();
-                dailyId = drDaily["DAILY_ID"].ToString();
-            }
+            DataRow drDaily = dtDaily.Rows[0];
+            signIn = drDaily["LOGIN_TIME"].ToString();
+            signOut = drDaily["LOGOUT_TIME"].ToString();
+            dailyId = drDaily["DAILY_ID"].ToString();
             return QueryDailyDetail(dailyId);
         }
 
@@ -1108,6 +1111,207 @@ namespace ProjectsManageServer.DataBases
                 }
                 sql = string.Format("update T_PRO_DAILY set LOGOUT_TIME = '{0}' where DAILY_ID = '{1}';",
                     signOutTime, dt.Rows[0]["DAILY_ID"].ToString());
+            }
+            return dataBaseTool.ActionFunc(sql);
+        }
+
+        internal static bool SaveDailyDetal(string dailyId, DataTable dt)
+        {
+            //保存三个表T_PRO_DAILY_DETAIL T_TRADE_INFO T_DAYS_INFO
+            string selectSql = string.Format("select * from T_PRO_DAILY where DAILY_ID = '{0}'", dailyId);
+            DataTable dtDaily = dataBaseTool.SelectFunc(selectSql);
+            if (dtDaily == null)
+            {
+                return false;
+            }
+            if (dtDaily.Rows.Count == 0)
+            {
+                return false;
+            }
+            string userName = dtDaily.Rows[0]["USER_NAME"].ToString();
+            string dailyDate = dtDaily.Rows[0]["DAILY_DATE"].ToString();
+            selectSql = string.Format("select * from T_PRO_DAILY_DETAIL where DAILY_ID = '{0}'", dailyId);
+            DataTable dtOrgDaily = dataBaseTool.SelectFunc(selectSql);
+            if (dtOrgDaily == null)
+            {
+                return false;
+            }
+            string sql = string.Format("delete from T_PRO_DAILY_DETAIL where DAILY_ID = '{0}';", dailyId);
+            Dictionary<string, double> dicNewWorkLoad = new Dictionary<string, double>();
+            Dictionary<string, double> dicMonthWorkdays = new Dictionary<string, double>();
+            foreach (DataRow dr in dtOrgDaily.Rows)//删掉老数据
+            {
+                string demandId = dr["DEMAND_ID"].ToString();
+                string sysId = dr["SYS_ID"].ToString();
+                if (!dicMonthWorkdays.ContainsKey(demandId + "\n" + sysId))
+                {
+                    dicMonthWorkdays.Add(demandId + "\n" + sysId, -1 * double.Parse(dr["USER_HOURS"].ToString()) / 8);
+                }
+                else
+                { 
+                    dicMonthWorkdays[demandId + "\n" + sysId] -= double.Parse(dr["USER_HOURS"].ToString()) / 8;
+                }
+                string tradeCode = dr["TRADE_CODE"].ToString();
+                string workType = dr["WORK_TYPE"].ToString();
+                switch (workType)
+                {
+                    case "1"://开发
+                        break;
+                    case "2"://会议
+                        tradeCode = "";
+                        break;
+                    case "3"://文档整理
+                        tradeCode = "";
+                        break;
+                    default://其他
+                        tradeCode = "";
+                        demandId = "";
+                        sysId = "";
+                        break;
+                }
+                if (demandId == "")//运维和其他的工作量不计入项目
+                {
+                    continue;
+                }
+                
+                string key = demandId + "\n" + sysId + "\n" + tradeCode + "\n" + workType;
+                if (dicNewWorkLoad.ContainsKey(key))
+                {
+                    dicNewWorkLoad[key] -= double.Parse(dr["USER_HOURS"].ToString()) / 8;
+                }
+                else
+                {
+                    selectSql = "select WORKLOAD from T_TRADE_INFO where DEMAND_ID = '{0}' and SYS_ID = '{1}' and TRADE_CODE = '{2}'";
+                    selectSql += " and WORK_TYPE = '{3}'";
+                    selectSql = string.Format(selectSql, demandId, sysId, tradeCode, workType);
+                    DataTable dtOrgWorkLoad = dataBaseTool.SelectFunc(selectSql);
+                    if (dtOrgWorkLoad == null)
+                    {
+                        return false;
+                    }
+                    if (dt.Rows.Count == 0)
+                    {
+                        continue;
+                    }
+                    dicNewWorkLoad[key] = double.Parse(dtOrgWorkLoad.Rows[0][0].ToString()) -
+                        double.Parse(dr["USER_HOURS"].ToString()) / 8;
+                }
+            }
+            //添加新数据
+            foreach (DataRow dr in dt.Rows)
+            {
+                string demandId = dr["DEMAND_ID"].ToString();
+                string sysId = dr["SYS_ID"].ToString();
+                if (!dicMonthWorkdays.ContainsKey(demandId + "\n" + sysId))
+                {
+                    dicMonthWorkdays.Add(demandId + "\n" + sysId, double.Parse(dr["USER_HOURS"].ToString()) / 8);
+                }
+                else
+                { 
+                    dicMonthWorkdays[demandId + "\n" + sysId] += double.Parse(dr["USER_HOURS"].ToString()) / 8;
+                }
+                string tradeCode = dr["TRADE_CODE"].ToString();
+                string tradeName = dr["TRADE_NAME"].ToString();
+                string isNew = dr["IS_NEW"].ToString();
+                string fileName = dr["FILE_NAME"].ToString();
+                string workType = dr["WORK_TYPE"].ToString();
+                switch (workType)
+                {
+                    case "1"://开发
+                        break;
+                    case "2"://会议
+                        tradeCode = "";
+                        break;
+                    case "3"://文档整理
+                        tradeCode = "";
+                        break;
+                    default://其他
+                        tradeCode = "";
+                        demandId = "";
+                        sysId = "";
+                        break;
+                }
+                if (demandId == "")//运维和其他的工作量不计入项目
+                {
+                    continue;
+                }
+                List<string> values;
+                string key = demandId + "\n" + sysId + "\n" + tradeCode + "\n" + workType;
+                if (dicNewWorkLoad.ContainsKey(key))
+                {
+                    dicNewWorkLoad[key] += double.Parse(dr["USER_HOURS"].ToString()) / 8;
+                }
+                else
+                {
+                    selectSql = "select WORKLOAD from T_TRADE_INFO where DEMAND_ID = '{0}' and SYS_ID = '{1}' and TRADE_CODE = '{2}'";
+                    selectSql += " and WORK_TYPE = '{3}'";
+                    selectSql = string.Format(selectSql, demandId, sysId, tradeCode, workType);
+                    DataTable dtOrgWorkLoad = dataBaseTool.SelectFunc(selectSql);
+                    if (dtOrgWorkLoad == null)
+                    {
+                        return false;
+                    }
+                    if (dt.Rows.Count == 0)
+                    {
+                         values = new List<string>() { demandId, sysId, tradeCode, tradeName, isNew, fileName, userName,
+                            (double.Parse(dr["USER_HOURS"].ToString()) / 8).ToString(), dr["REMARK"].ToString(), workType};
+                        if (!dataBaseTool.AddInfo(T_TRADE_INFO.TABLE_NAME, T_TRADE_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                            values, ref sql))
+                        {
+                            return false;
+                        }
+                        continue;
+                    }
+                    dicNewWorkLoad[key] = double.Parse(dtOrgWorkLoad.Rows[0][0].ToString()) +
+                        double.Parse(dr["USER_HOURS"].ToString()) / 8;
+
+                    values = new List<string>() { demandId, sysId, tradeCode, tradeName, isNew, fileName, userName,
+                            dicNewWorkLoad[key].ToString(), dr["REMARK"].ToString(), workType};
+                    if (!dataBaseTool.ModInfo(T_TRADE_INFO.TABLE_NAME, T_TRADE_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                        values, ref sql, new Dictionary<string, string>()
+                        { 
+                        { "DEMAND_ID", demandId }, { "SYS_ID", sysId },
+                        { "TRADE_CODE", tradeCode }, { "WORK_TYPE", workType },
+                        }))
+                    {
+                        return false;
+                    }
+                    continue;
+                }
+            }
+            foreach (var dic in dicMonthWorkdays)
+            {
+                if (dic.Value != 0)
+                {
+                    string[] items = dic.Key.Split('\n');
+                    selectSql = "select WORKLOAD from T_DAYS_INFO where DEMAND_ID = '{0}' and SYS_ID = '{1}' and WORKER = '{2}' and ";
+                    selectSql += "MONTH = '{3}'";
+                    selectSql = string.Format(selectSql, items[0], items[1]);
+                    DataTable dtWorkDays = dataBaseTool.SelectFunc(selectSql);
+                    if (dtWorkDays == null)
+                    {
+                        return false;
+                    }
+                    if (dtWorkDays.Rows.Count == 0)
+                    {
+                        List<string> values = new List<string>() { items[0], items[1], userName, dailyDate.Substring(0, 6), dic.Value.ToString() };
+                        if (!dataBaseTool.AddInfo(T_DAYS_INFO.TABLE_NAME, T_DAYS_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                            values, ref sql))
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        List<string> values = new List<string>() { items[0], items[1], userName, dailyDate.Substring(0, 6), 
+                            (dic.Value + double.Parse(dtWorkDays.Rows[0]["WORKLOAD"].ToString())).ToString() };
+                        if (!dataBaseTool.AddInfo(T_DAYS_INFO.TABLE_NAME, T_DAYS_INFO.DIC_TABLE_COLUMS.Keys.ToList(),
+                            values, ref sql))
+                        {
+                            return false;
+                        }
+                    }
+                }
             }
             return dataBaseTool.ActionFunc(sql);
         }

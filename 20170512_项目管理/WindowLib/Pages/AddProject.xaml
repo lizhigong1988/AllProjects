@@ -29,10 +29,10 @@
                              PreviewMouseDown="tbExpectDate_PreviewMouseDown" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="项目阶段" />
-                    <ComboBox Name="cbProStage" />
                     <TextBlock Text="项目状态" />
                     <ComboBox Name="cbProState" SelectionChanged="cbProState_SelectionChanged" />
+                    <TextBlock Text="项目阶段" />
+                    <ComboBox Name="cbProStage" />
                     <TextBlock Text="项目类型" />
                     <ComboBox Name="cbProKinds" />
                 </StackPanel>

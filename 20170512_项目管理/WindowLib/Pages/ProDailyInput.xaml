@@ -46,7 +46,7 @@
                               Height="150"
                               IsReadOnly="True">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding WORK_TYPE}" Header="工作类型" />
+                            <DataGridTextColumn Binding="{Binding WORK_TYPE_NAME}" Header="工作类型" />
                             <DataGridTextColumn Binding="{Binding DEMAND_NAME}" Header="项目名称" />
                             <DataGridTextColumn Binding="{Binding SYS_NAME}" Header="系统名称" />
                             <DataGridTextColumn Binding="{Binding TRADE_CODE}" Header="交易代码" />
@@ -91,40 +91,42 @@
                                   IsReadOnly="True"
                                   SelectionChanged="dgCurDailyDetail_SelectionChanged">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding WORK_TYPE}" Header="工作类型" />
+                                <DataGridTextColumn Binding="{Binding WORK_TYPE_NAME}" Header="工作类型" />
                                 <DataGridTextColumn Binding="{Binding DEMAND_NAME}" Header="项目名称" />
                                 <DataGridTextColumn Binding="{Binding SYS_NAME}" Header="系统名称" />
                                 <DataGridTextColumn Binding="{Binding TRADE_CODE}" Header="交易代码" />
                                 <DataGridTextColumn Binding="{Binding TRADE_NAME}" Header="交易名称" />
-                                <DataGridTextColumn Binding="{Binding TRADE_NAME}" Header="新增修改" />
+                                <DataGridTextColumn Binding="{Binding IS_NEW}" Header="新增修改" />
                                 <DataGridTextColumn Binding="{Binding USER_HOURS}" Header="用时（小时）" />
                                 <DataGridTextColumn Binding="{Binding REMARK}" Header="备注" />
                             </DataGrid.Columns>
                         </DataGrid>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="工作类型" />
-                            <ComboBox Name="cbWorkType" />
+                            <ComboBox Name="cbWorkType" SelectionChanged="cbWorkType_SelectionChanged" />
+                            <TextBlock Text="用时(小时)" />
+                            <TextBox Name="tbUseHours" />
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Name="spProInfo1" Orientation="Horizontal">
                             <TextBlock Text="项目名称" />
-                            <ComboBox Name="cbDemandName" Width="332" />
+                            <ComboBox Name="cbDemandName"
+                                      Width="414"
+                                      SelectionChanged="cbDemandName_SelectionChanged" />
                             <TextBlock Text="子单系统" />
-                            <ComboBox Name="cbSystem" />
+                            <ComboBox Name="cbSystem" SelectionChanged="cbSystem_SelectionChanged" />
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Name="spProInfo2" Orientation="Horizontal">
                             <TextBlock Text="预计工作量（天）" />
                             <TextBox Name="tbSysEstimatedDays" IsEnabled="False" />
                             <TextBlock Text="已用工作量（天）" />
                             <TextBox Name="tbUseedDays" IsEnabled="False" />
-                            <TextBlock Text="用时(小时)" />
-                            <TextBox Name="tbUseHours" />
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Name="spTradesInfo1" Orientation="Horizontal">
                             <TextBlock Text="交易代码" />
-                            <TextBox Name="tbTradeCode" />
+                            <TextBox Name="tbTradeCode" LostFocus="tbTradeCode_LostFocus" />
                             <TextBlock Text="注:此代码为开发内容的以为标识,上线时查冲突以此标识为准" />
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Name="spTradesInfo2" Orientation="Horizontal">
                             <TextBlock Text="新增修改" />
                             <ComboBox Name="cbIsNew" />
                             <TextBlock Text="交易名称" />
@@ -137,12 +139,17 @@
                             <TextBox Name="tbRemark" Width="600" />
                         </StackPanel>
                         <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                            <Button Name="btnAddDetail" Content="增加" />
-                            <Button Name="btnModDetail" Content="修改" />
-                            <Button Name="btnDelDetail" Content="删除" />
+                            <Button Name="btnAddDetail"
+                                    Click="btnAddDetail_Click"
+                                    Content="增加" />
+                            <Button Name="btnDelDetail"
+                                    Click="btnDelDetail_Click"
+                                    Content="删除" />
                         </StackPanel>
                         <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                            <Button Name="btnSave" Content="保存" />
+                            <Button Name="btnSave"
+                                    Click="btnSave_Click"
+                                    Content="保存" />
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
