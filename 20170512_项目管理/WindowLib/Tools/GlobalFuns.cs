@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Data;
 using System.Management;
+using System.Windows.Threading;
 
 namespace WindowLib.Tools
 {
@@ -83,5 +84,19 @@ namespace WindowLib.Tools
                 return "";
             }
         }
+
+        public static void DoEvents()
+        {
+            DispatcherFrame frame = new DispatcherFrame();
+            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Background,
+                new DispatcherOperationCallback(delegate(object f)
+                {
+                    ((DispatcherFrame)f).Continue = false;
+
+                    return null;
+                }
+                    ), frame);
+            Dispatcher.PushFrame(frame);
+        } 
     }
 }

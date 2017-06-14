@@ -117,7 +117,7 @@ namespace WindowLib.Pages
                         {
                             dr["IS_DOWNLOAD"] = "是";
                             dr["IS_RENEW"] = "是";
-                            dr["FILE_TIME"] = DateTime.Now.ToString("yyyyMMddHHmmss");
+                            dr["NEW_TIME"] = DateTime.Now.ToString("yyyyMMddHHmmss");
                             has = true;
                             break;
                         }

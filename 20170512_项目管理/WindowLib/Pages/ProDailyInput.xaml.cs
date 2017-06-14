@@ -38,10 +38,10 @@ namespace WindowLib.Pages
             tbStartDate.Text = DateTime.Now.AddMonths(-1).ToString("yyyyMMdd");
             tbEndDate.Text = DateTime.Now.ToString("yyyyMMdd");
 
-            tbUserName.Text = GlobalFuns.LoginUser;
             switch (GlobalFuns.LoginRole)
             {
                 case "开发人员":
+                    tbUserName.Text = GlobalFuns.LoginUser;
                     tbUserName.IsEnabled = false;
                     tbDate.IsEnabled = false;//日期不能改且为服务端查询日期
                     tbSignInTime.IsEnabled = false;
@@ -57,7 +57,7 @@ namespace WindowLib.Pages
                     tbDate.IsEnabled = true;
                     tbSignInTime.IsEnabled = true;
                     tbSignOutTime.IsEnabled = true;
-                    tbDate.Text = DateTime.Now.ToString("yyyyMMdd");
+                    //tbDate.Text = DateTime.Now.ToString("yyyyMMdd");
                     break;
             
             }
@@ -168,7 +168,7 @@ namespace WindowLib.Pages
 
         private void tbDate_LostFocus(object sender, RoutedEventArgs e)
         {
-
+            RefreshCurDayInfo(tbUserName.Text, tbDate.Text);
         }
 
         private void dgCurDailyDetail_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -222,7 +222,7 @@ namespace WindowLib.Pages
                 return;
             }
             btnQuery_Click(null, null);
-            RefreshCurDayInfo();
+            RefreshCurDayInfo(tbUserName.Text, tbDate.Text);
         }
 
         private void btnSignOut_Click(object sender, RoutedEventArgs e)
@@ -256,7 +256,7 @@ namespace WindowLib.Pages
                 return;
             }
             btnQuery_Click(null, null);
-            RefreshCurDayInfo();
+            RefreshCurDayInfo(tbUserName.Text, tbDate.Text);
         }
 
         private void btnAddDetail_Click(object sender, RoutedEventArgs e)
@@ -346,9 +346,12 @@ namespace WindowLib.Pages
                 }
             }
             double todayHours = 0;
+            string demandId = cbDemandName.SelectedValue as string;
+            string sysId = cbSystem.SelectedValue.ToString();
+            string workType = cbWorkType.SelectedValue.ToString();
             foreach(DataRow dr in dt.Rows)
             {
-                if (tbTradeCode.Text == dr["TRADE_CODE"].ToString())
+                if (tbTradeCode.Text == dr["TRADE_CODE"].ToString() && demandId == dr["DEMAND_ID"].ToString())
                 {
                     MessageBox.Show("不能重复添加交易");
                     return;
@@ -363,12 +366,12 @@ namespace WindowLib.Pages
                     return;
                 }
             }
-            string demandId = cbDemandName.SelectedValue as string;
-            string sysId = cbSystem.SelectedValue.ToString();
-            string workType = cbWorkType.SelectedValue.ToString();
             dt.Rows.Add(new string[] { curDailyId, demandId, sysId, workType, tbTradeCode.Text, tbUseHours.Text, 
             tbRemark.Text, demandId, sysId, tbTradeCode.Text, tbTradeName.Text, cbIsNew.Text, tbFileName.Text, 
-            tbUserName.Text, "", "", dicWorkType[workType]});
+            tbUserName.Text, "", "", workType,
+            (cbDemandName.ItemsSource as Dictionary<string, string>)[demandId], 
+            (cbSystem.ItemsSource as Dictionary<string, string>)[sysId], 
+            dicWorkType[workType]});
         }
 
         private void cbWorkType_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -422,7 +425,6 @@ namespace WindowLib.Pages
             cbSystem.ItemsSource = dicSysInfo;
             cbSystem.DisplayMemberPath = "Value";
             cbSystem.SelectedValuePath = "Key";
-           
             if (GlobalFuns.LoginSysId != "")
             {
                 cbSystem.IsEnabled = false;
@@ -442,7 +444,18 @@ namespace WindowLib.Pages
             {
                 return;
             }
-            string select = cbSystem.SelectedValue.ToString();
+            string select = "";
+            if (cbSystem.SelectedValue == null)
+            {
+                if(GlobalFuns.LoginSysId == "")
+                {
+                    select = (cbSystem.ItemsSource as Dictionary<string, string>).ElementAt(0).Key;
+                }
+                else
+                {
+                    select = GlobalFuns.LoginSysId; 
+                }
+            }
             foreach (DataRow dr in dtChildrenSysInfo.Rows)
             {
                 if (dr["SYS_ID"].ToString() == select)

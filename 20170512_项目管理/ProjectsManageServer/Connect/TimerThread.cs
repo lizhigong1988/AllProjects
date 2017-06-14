@@ -608,6 +608,7 @@ namespace ProjectsManageServer.Connect
                 sendLog += "抄送：" + cc + "\r\n";
                 sendLog += "内容：\r\n" + content + "\r\n";
                 File.AppendAllText("SendLog" + DateTime.Now.ToString("yyyyMMdd") + ".txt", sendLog);
+                System.Threading.Thread.Sleep(500);//停止0.5秒 避免因一次性发送邮件过多造成发送失败。 451 Requested action aborded:local error in procession.
                 return true;
             }
             catch (System.Net.Mail.SmtpException ex)
