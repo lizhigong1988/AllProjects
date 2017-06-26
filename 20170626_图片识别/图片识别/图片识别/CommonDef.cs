@@ -15,10 +15,10 @@ namespace 图片识别
         /// <summary>
         /// 图片大小
         /// </summary>
-        public static int IMAGE_DEFAULT_SIZE = 40;
+        public static int IMAGE_DEFAULT_SIZE = 35;
         /// <summary>
         /// 容差
         /// </summary>
-        public static int COLOR_TOLERANCE = 20;
+        public static int COLOR_TOLERANCE = 80;
     }
 }

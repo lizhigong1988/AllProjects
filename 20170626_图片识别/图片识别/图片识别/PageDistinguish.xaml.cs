@@ -144,6 +144,10 @@ namespace 图片识别
                         {
                             if (ColorCompare(b, c.R))
                             {
+                                if (!running)
+                                {
+                                    return;
+                                }
                                 if (ImageCompare(bp, i, j, dicSource, ref message, filePath))
                                 {
                                     listIgnore.Add(new Rect()
@@ -151,6 +155,7 @@ namespace 图片识别
                                         Y = j,
                                         Width = CommonDef.IMAGE_DEFAULT_SIZE,
                                         Height = CommonDef.IMAGE_DEFAULT_SIZE });
+                                    break;
                                 }
                             }
                         }
@@ -180,6 +185,10 @@ namespace 图片识别
                 {
                     for (int j = 0; j < CommonDef.IMAGE_TAG_LENGTH; j++)
                     {
+                        if (!running)
+                        {
+                            return false;
+                        }
                         System.Drawing.Color col = bp.GetPixel(x + i * middle, y + j * middle);
                         if (!ColorCompare(col.R, dic.Value[(i * CommonDef.IMAGE_TAG_LENGTH + j) * 3]))
                         {
