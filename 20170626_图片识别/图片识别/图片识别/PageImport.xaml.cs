@@ -81,7 +81,7 @@ namespace 图片识别
                     List<byte> imageTag = new List<byte>();
                     if (bp.Width < CommonDef.IMAGE_DEFAULT_SIZE || bp.Height < CommonDef.IMAGE_DEFAULT_SIZE )
                     {
-                        System.Windows.MessageBox.Show(string.Format("（{0}）图片太小，请选择大于60个像素的图片", imageName));
+                        System.Windows.MessageBox.Show(string.Format("（{0}）图片太小，请选择大于{1}个像素的图片", imageName, CommonDef.IMAGE_DEFAULT_SIZE.ToString()));
                         return;
                     }
                     string remark = "";
