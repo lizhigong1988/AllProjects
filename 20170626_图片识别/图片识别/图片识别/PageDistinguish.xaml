@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="图片识别.PageDistinguish"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary Source="/图片识别;component/CommonSource.xaml" />
+    </UserControl.Resources>
+    <StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+                <GroupBox Header="识别图组列表">
+                    <ListBox Name="lbBigImages"
+                             Height="250"
+                             SelectionChanged="lbBigImages_SelectionChanged" />
+                </GroupBox>
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                    <Button Name="btnSelectPath"
+                            Click="btnSelectPath_Click"
+                            Content="选择目录" />
+                    <Button Name="btnDelImage"
+                            Click="btnDelImage_Click"
+                            Content="删除" />
+                    <Button Name="btnDistinguish"
+                            Click="btnDistinguish_Click"
+                            Content="识别" />
+                    <Button Name="btnStop"
+                            Click="btnStop_Click"
+                            Content="停止" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+                <GroupBox Header="图片展示">
+                    <Image Name="image" Height="250" />
+                </GroupBox>
+            </StackPanel>
+        </Grid>
+
+        <GroupBox Header="识别结果">
+            <TextBox Name="tbResault"
+                     Height="250"
+                     Margin="3"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     VerticalScrollBarVisibility="Visible" />
+        </GroupBox>
+        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button Name="btnExport" Content="导出" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

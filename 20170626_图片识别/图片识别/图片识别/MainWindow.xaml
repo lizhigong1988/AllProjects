@@ -1,0 +1,19 @@
+﻿<Window x:Class="图片识别.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:my="clr-namespace:图片识别"
+        Title="图像识别"
+        Width="800"
+        Height="600"
+        WindowState="Maximized">
+    <Grid>
+        <TabControl Name="tbMenu">
+            <TabItem Header="批量识别">
+                <my:PageDistinguish />
+            </TabItem>
+            <TabItem Header="特征导入">
+                <my:PageImport />
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
