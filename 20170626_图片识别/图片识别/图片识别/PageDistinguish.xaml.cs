@@ -90,7 +90,8 @@ namespace 图片识别
         }
 
         bool running = false;
-        int middle = 0;
+        int middle_X = 0;
+        int middle_Y = 0;
         private void DisTinguishThread()
         {
             running = true;
@@ -109,7 +110,8 @@ namespace 图片识别
             }
             string message = "";
             List<Rect> listIgnore = new List<Rect>();
-            middle = CommonDef.IMAGE_DEFAULT_SIZE / CommonDef.IMAGE_TAG_LENGTH;
+            middle_X = CommonDef.IMAGE_DEFAULT_SIZE / CommonDef.IMAGE_TAG_X_LENGTH;
+            middle_Y = CommonDef.IMAGE_DEFAULT_SIZE / CommonDef.IMAGE_TAG_Y_LENGTH;
             foreach (var item in lbBigImages.Items)
             {
                 listIgnore.Clear();
@@ -131,7 +133,7 @@ namespace 图片识别
                                 if (i >= width - CommonDef.IMAGE_DEFAULT_SIZE)
                                 {
                                     i = 0;
-                                    j = (int)rect.Y + (int)rect.Height;
+                                    j = (int)rect.Y + (int)rect.Height + 1;
                                 }
                             }
                         }
@@ -144,6 +146,10 @@ namespace 图片识别
                         {
                             if (ColorCompare(b, c.R))
                             {
+                                if (!running)
+                                {
+                                    return;
+                                }
                                 if (ImageCompare(bp, i, j, dicSource, ref message, filePath))
                                 {
                                     listIgnore.Add(new Rect()
@@ -151,6 +157,7 @@ namespace 图片识别
                                         Y = j,
                                         Width = CommonDef.IMAGE_DEFAULT_SIZE,
                                         Height = CommonDef.IMAGE_DEFAULT_SIZE });
+                                    break;
                                 }
                             }
                         }
@@ -166,6 +173,11 @@ namespace 图片识别
                         tbResault.Text = message;
                     }));
             }
+            //tbResault.Dispatcher.BeginInvoke(
+            //    new Action(() =>
+            //    {
+            //        tbResault.Text = message;
+            //    }));
             running = false;
         }
 
@@ -176,22 +188,26 @@ namespace 图片识别
             foreach (var dic in dicSource)
             {
                 has = true;
-                for (int i = 0; i < CommonDef.IMAGE_TAG_LENGTH; i++)
+                for (int i = 0; i < CommonDef.IMAGE_TAG_X_LENGTH; i++)
                 {
-                    for (int j = 0; j < CommonDef.IMAGE_TAG_LENGTH; j++)
+                    for (int j = 0; j < CommonDef.IMAGE_TAG_Y_LENGTH; j++)
                     {
-                        System.Drawing.Color col = bp.GetPixel(x + i * middle, y + j * middle);
-                        if (!ColorCompare(col.R, dic.Value[(i * CommonDef.IMAGE_TAG_LENGTH + j) * 3]))
+                        if (!running)
+                        {
+                            return false;
+                        }
+                        System.Drawing.Color col = bp.GetPixel(x + i * middle_X, y + j * middle_Y);
+                        if (!ColorCompare(col.R, dic.Value[(i * CommonDef.IMAGE_TAG_Y_LENGTH + j) * 3]))
                         {
                             has = false;
                             break;
                         }
-                        if (!ColorCompare(col.G, dic.Value[(i * CommonDef.IMAGE_TAG_LENGTH + j) * 3 + 1]))
+                        if (!ColorCompare(col.G, dic.Value[(i * CommonDef.IMAGE_TAG_Y_LENGTH + j) * 3 + 1]))
                         {
                             has = false;
                             break;
                         }
-                        if (!ColorCompare(col.B, dic.Value[(i * CommonDef.IMAGE_TAG_LENGTH + j) * 3 + 2]))
+                        if (!ColorCompare(col.B, dic.Value[(i * CommonDef.IMAGE_TAG_Y_LENGTH + j) * 3 + 2]))
                         {
                             has = false;
                             break;

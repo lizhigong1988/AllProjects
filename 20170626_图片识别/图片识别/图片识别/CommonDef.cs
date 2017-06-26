@@ -8,9 +8,14 @@ namespace 图片识别
     class CommonDef
     {
         /// <summary>
-        /// 从图片中抓取像素值层数4层 3x3=9个
+        /// 
         /// </summary>
-        public static int IMAGE_TAG_LENGTH = 5;
+        public static int IMAGE_TAG_X_LENGTH = 3;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static int IMAGE_TAG_Y_LENGTH = 2;
 
         /// <summary>
         /// 图片大小
@@ -19,6 +24,6 @@ namespace 图片识别
         /// <summary>
         /// 容差
         /// </summary>
-        public static int COLOR_TOLERANCE = 20;
+        public static int COLOR_TOLERANCE = 0;
     }
 }

@@ -69,5 +69,11 @@ namespace 图片识别.DataBases
             string selectSql = "select * from T_IMAGE_TAG";
             return dataBaseTool.SelectFunc(selectSql);
         }
+
+        internal static bool DelImages(string name)
+        {
+            string sql = string.Format("delete from T_IMAGE_TAG where IMAGE_NAME = '{0}'", name);
+            return dataBaseTool.ActionFunc(sql);
+        }
     }
 }

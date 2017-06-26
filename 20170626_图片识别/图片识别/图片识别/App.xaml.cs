@@ -14,15 +14,16 @@ namespace 图片识别
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            if (!CommonInit(20170626, 1))
-            {
-                return;
-            }
+            //if (!CommonInit(20170626, 3))
+            //{
+            //    return;
+            //}
             if (!DataBases.DataBaseManager.InitDataBases())
             {
                 MessageBox.Show("数据库初始化失败");
                 Environment.Exit(0);
             }
+            Application.Current.DispatcherUnhandledException += DispatcherUnhandledException;
             base.OnStartup(e);
         }
         /// <summary>
@@ -47,7 +48,6 @@ namespace 图片识别
                 }
             }
             #endregion
-            Application.Current.DispatcherUnhandledException += DispatcherUnhandledException;
             return true;
         }
         #region 不提供源码

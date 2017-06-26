@@ -85,12 +85,13 @@ namespace 图片识别
                         return;
                     }
                     string remark = "";
-                    int mid = CommonDef.IMAGE_DEFAULT_SIZE / CommonDef.IMAGE_TAG_LENGTH;
-                    for (int i = 0; i < CommonDef.IMAGE_TAG_LENGTH; i++)
+                    int mid_X = CommonDef.IMAGE_DEFAULT_SIZE / CommonDef.IMAGE_TAG_X_LENGTH;
+                    int mid_Y = CommonDef.IMAGE_DEFAULT_SIZE / CommonDef.IMAGE_TAG_Y_LENGTH;
+                    for (int i = 0; i < CommonDef.IMAGE_TAG_X_LENGTH; i++)
                     {
-                        for (int j = 0; j < CommonDef.IMAGE_TAG_LENGTH; j++)
+                        for (int j = 0; j < CommonDef.IMAGE_TAG_Y_LENGTH; j++)
                         {
-                            System.Drawing.Color col = bp.GetPixel(i * mid, j * mid);
+                            System.Drawing.Color col = bp.GetPixel(i * mid_X, j * mid_Y);
                             /*
                              * 1 ~ 4 ~ 7 ~
                              * 2 ~ 5 ~ 8 ~
@@ -194,6 +195,22 @@ namespace 图片识别
                 }
             }
             dgImportList.DataContext = null;
+        }
+
+        private void btnDelImage_Click(object sender, RoutedEventArgs e)
+        {
+            DataRowView drv = dgCurList.SelectedItem as DataRowView;
+            if (drv == null)
+            {
+                System.Windows.MessageBox.Show("选择所要删除的行");
+                return;
+            }
+            if (!DataBaseManager.DelImages(drv.Row["IMAGE_NAME"].ToString()))
+            {
+                System.Windows.MessageBox.Show("删除失败");
+                return;
+            }
+            drv.Row.Table.Rows.Remove(drv.Row);
         }
     }
 }
