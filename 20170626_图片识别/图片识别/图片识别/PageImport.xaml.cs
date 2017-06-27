@@ -60,7 +60,7 @@ namespace 图片识别
                 }
                 string imageName = System.IO.Path.GetFileName(file);
                 imageName = imageName.Substring(0, imageName.IndexOf('.'));
-                imageName = imageName.Replace(",", "");
+                imageName = imageName.Replace(",", "-");
                 imageName = imageName.Replace("\'", "");
                 try
                 {
@@ -81,28 +81,26 @@ namespace 图片识别
                     List<byte> imageTag = new List<byte>();
                     if (bp.Width < CommonDef.IMAGE_DEFAULT_SIZE || bp.Height < CommonDef.IMAGE_DEFAULT_SIZE )
                     {
-                        System.Windows.MessageBox.Show(string.Format("（{0}）图片太小，请选择大于60个像素的图片", imageName));
+                        System.Windows.MessageBox.Show(string.Format("（{0}）图片太小，请选择大于{1}个像素的图片", imageName, CommonDef.IMAGE_DEFAULT_SIZE.ToString()));
                         return;
                     }
                     string remark = "";
-                    int mid = CommonDef.IMAGE_DEFAULT_SIZE / CommonDef.IMAGE_TAG_LENGTH;
-                    for (int i = 0; i < CommonDef.IMAGE_TAG_LENGTH; i++)
+                    int mid_X = CommonDef.IMAGE_DEFAULT_SIZE / 2;
+                    int mid_Y = CommonDef.IMAGE_DEFAULT_SIZE / 2;
+
+                    for (int i = 0; i < CommonDef.IMAGE_TAG_X_LENGTH; i++)
                     {
-                        for (int j = 0; j < CommonDef.IMAGE_TAG_LENGTH; j++)
-                        {
-                            System.Drawing.Color col = bp.GetPixel(i * mid, j * mid);
-                            /*
-                             * 1 ~ 4 ~ 7 ~
-                             * 2 ~ 5 ~ 8 ~
-                             * 3 ~ 6 ~ 9 ~
-                             * ~ ~ ~ ~ ~ ~
-                             */
-                            imageTag.Add(col.R);
-                            imageTag.Add(col.G);
-                            imageTag.Add(col.B);
-                            remark += string.Format("[{0}_{1}_{2}])", col.R.ToString(), col.G.ToString(), col.B.ToString());
-                        }
+                        System.Drawing.Color col = bp.GetPixel(mid_X + i, mid_Y);
+                        imageTag.Add(col.R);
+                        imageTag.Add(col.G);
+                        imageTag.Add(col.B);
+                        remark += string.Format("[{0}_{1}_{2}])", col.R.ToString(), col.G.ToString(), col.B.ToString());
                     }
+                    System.Drawing.Color colend = bp.GetPixel(CommonDef.IMAGE_DEFAULT_SIZE, CommonDef.IMAGE_DEFAULT_SIZE);
+                    imageTag.Add(colend.R);
+                    imageTag.Add(colend.G);
+                    imageTag.Add(colend.B);
+                    remark += string.Format("[{0}_{1}_{2}])", colend.R.ToString(), colend.G.ToString(), colend.B.ToString());
                     string strImgTag = Convert.ToBase64String(imageTag.ToArray());
                     object[] newRow = new object[] 
                     {
@@ -193,6 +191,37 @@ namespace 图片识别
                     dr["ImageSource"] = bmp;
                 }
             }
+            dgImportList.DataContext = null;
+        }
+
+        private void btnDelImage_Click(object sender, RoutedEventArgs e)
+        {
+            DataRowView drv = dgCurList.SelectedItem as DataRowView;
+            if (drv == null)
+            {
+                System.Windows.MessageBox.Show("选择所要删除的行");
+                return;
+            }
+            if (!DataBaseManager.DelImages(drv.Row["IMAGE_NAME"].ToString()))
+            {
+                System.Windows.MessageBox.Show("删除失败");
+                return;
+            }
+            drv.Row.Table.Rows.Remove(drv.Row);
+        }
+
+        private void btnClearImage_Click(object sender, RoutedEventArgs e)
+        {
+            if (!DataBaseManager.DelImages())
+            {
+                System.Windows.MessageBox.Show("删除失败");
+                return;
+            }
+            dgCurList.DataContext = null;
+        }
+
+        private void btnClearAddImage_Click(object sender, RoutedEventArgs e)
+        {
             dgImportList.DataContext = null;
         }
     }

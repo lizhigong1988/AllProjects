@@ -85,12 +85,13 @@ namespace 图片识别
                 return;
             }
             new Thread(DisTinguishThread).Start();
-
+            tbAlert.Text = "识别中。。。";
             //DisTinguishThreadDebug();
         }
 
         bool running = false;
-        int middle = 0;
+        int middle_X = 0;
+        int middle_Y = 0;
         private void DisTinguishThread()
         {
             running = true;
@@ -101,15 +102,17 @@ namespace 图片识别
                 return;
             }
             Dictionary<string, byte[]> dicSource = new Dictionary<string, byte[]>();
-            List<byte> listFirstByte = new List<byte>();
+            List<int> listFirstByte = new List<int>();
             foreach (DataRow dr in dtSource.Rows)
             {
                 dicSource.Add(dr["IMAGE_NAME"].ToString(), Convert.FromBase64String(dr["IMAGE_TAG"].ToString()));
-                listFirstByte.Add(dicSource[dr["IMAGE_NAME"].ToString()][0]);
+                listFirstByte.Add(dicSource[dr["IMAGE_NAME"].ToString()][0] * 
+                    dicSource[dr["IMAGE_NAME"].ToString()][1] * dicSource[dr["IMAGE_NAME"].ToString()][2]);
             }
             string message = "";
             List<Rect> listIgnore = new List<Rect>();
-            middle = CommonDef.IMAGE_DEFAULT_SIZE / CommonDef.IMAGE_TAG_LENGTH;
+            middle_X = CommonDef.IMAGE_DEFAULT_SIZE / 2;
+            middle_Y = CommonDef.IMAGE_DEFAULT_SIZE / 2;
             foreach (var item in lbBigImages.Items)
             {
                 listIgnore.Clear();
@@ -118,43 +121,63 @@ namespace 图片识别
                 Bitmap bp = new Bitmap(selectPath + "\\" + filePath);
                 int width = bp.Width;
                 int height = bp.Height;
-                for (int j = 0; j < height - CommonDef.IMAGE_DEFAULT_SIZE; j++)
+                for (int j = middle_Y; j < height - middle_Y; j++)
                 {
-                    for (int i = 0; i < width - CommonDef.IMAGE_DEFAULT_SIZE; i++)
+                    if (!running)
+                    {
+                        tbAlert.Dispatcher.BeginInvoke(
+                            new Action(() =>
+                            {
+                                tbResault.Text = message;
+                                tbAlert.Text = "";
+                            }));
+                        return;
+                    }
+                    tbAlert.Dispatcher.BeginInvoke(
+                        new Action(() =>
+                        {
+                            tbAlert.Text = string.Format("({0})识别中。{1}/{2}", filePath,
+                                (j - middle_Y).ToString(), (height - CommonDef.IMAGE_DEFAULT_SIZE).ToString());
+                        }));
+                    for (int i = middle_X; i < width - middle_X; i++)
                     {//遍历大图的每一个像素点
                         foreach (Rect rect in listIgnore)
                         {//跳过已识别的区域
                             if (i >= rect.X && i <= rect.X + rect.Width &&
                                 j >= rect.Y && j <= rect.Y + rect.Height)
                             {
-                                i = (int)rect.X + (int)rect.Width;
+                                i = (int)rect.X + (int)rect.Width + 1;
                                 if (i >= width - CommonDef.IMAGE_DEFAULT_SIZE)
                                 {
                                     i = 0;
-                                    j = (int)rect.Y + (int)rect.Height;
+                                    j += 1;
                                 }
+                                break;
                             }
                         }
-                        if (j >= height - CommonDef.IMAGE_DEFAULT_SIZE)
+                        if (j >= height - middle_Y)
                         {
                             break;
                         }
                         System.Drawing.Color c = bp.GetPixel(i, j);
-                        foreach(byte b in listFirstByte)
+                        foreach(int b in listFirstByte)
                         {
-                            if (ColorCompare(b, c.R))
+                            if (b == c.R * c.G * c.B)
                             {
-                                if (!running)
-                                {
-                                    return;
-                                }
                                 if (ImageCompare(bp, i, j, dicSource, ref message, filePath))
                                 {
                                     listIgnore.Add(new Rect()
-                                    {   X = i,
-                                        Y = j,
+                                    {
+                                        X = i - middle_X,
+                                        Y = j - middle_Y,
                                         Width = CommonDef.IMAGE_DEFAULT_SIZE,
-                                        Height = CommonDef.IMAGE_DEFAULT_SIZE });
+                                        Height = CommonDef.IMAGE_DEFAULT_SIZE
+                                    });
+                                    tbResault.Dispatcher.BeginInvoke(
+                                        new Action(() =>
+                                        {
+                                            tbResault.Text = message;
+                                        }));
                                     break;
                                 }
                             }
@@ -164,7 +187,6 @@ namespace 图片识别
                 }
 
                 message += "\r\n";
-
                 tbResault.Dispatcher.BeginInvoke(
                     new Action(() =>
                     {
@@ -172,6 +194,12 @@ namespace 图片识别
                     }));
             }
             running = false;
+            tbAlert.Dispatcher.BeginInvoke(
+                new Action(() =>
+                {
+                    tbResault.Text = message;
+                    tbAlert.Text = "";
+                }));
         }
 
         private bool ImageCompare(Bitmap bp, int x, int y, Dictionary<string, byte[]> dicSource,
@@ -181,70 +209,59 @@ namespace 图片识别
             foreach (var dic in dicSource)
             {
                 has = true;
-                for (int i = 0; i < CommonDef.IMAGE_TAG_LENGTH; i++)
+                for (int i = 0; i < CommonDef.IMAGE_TAG_X_LENGTH; i++)
                 {
-                    for (int j = 0; j < CommonDef.IMAGE_TAG_LENGTH; j++)
+                    if (!running)
                     {
-                        if (!running)
-                        {
-                            return false;
-                        }
-                        System.Drawing.Color col = bp.GetPixel(x + i * middle, y + j * middle);
-                        if (!ColorCompare(col.R, dic.Value[(i * CommonDef.IMAGE_TAG_LENGTH + j) * 3]))
-                        {
-                            has = false;
-                            break;
-                        }
-                        if (!ColorCompare(col.G, dic.Value[(i * CommonDef.IMAGE_TAG_LENGTH + j) * 3 + 1]))
-                        {
-                            has = false;
-                            break;
-                        }
-                        if (!ColorCompare(col.B, dic.Value[(i * CommonDef.IMAGE_TAG_LENGTH + j) * 3 + 2]))
-                        {
-                            has = false;
-                            break;
-                        }
+                        return false;
                     }
-                    if (!has)
-                    {//不是此图
+                    System.Drawing.Color col = bp.GetPixel(x + i, y);
+                    if (col.R != dic.Value[i * 3])
+                    {
+                        has = false;
+                        break;
+                    }
+                    if (col.G != dic.Value[i * 3 + 1])
+                    {
+                        has = false;
+                        break;
+                    }
+                    if (col.B != dic.Value[i * 3 + 2])
+                    {
+                        has = false;
                         break;
                     }
                 }
                 if (has)
                 { //匹配成功
-                    for (int k = 0; k < 5; k++)
+                    //校验结果
+                    System.Drawing.Color col = bp.GetPixel(x + middle_X, y + middle_Y);
+                    if (col.R == dic.Value[CommonDef.IMAGE_TAG_X_LENGTH * 3] &&
+                        col.G == dic.Value[CommonDef.IMAGE_TAG_X_LENGTH * 3 + 1] &&
+                        col.B == dic.Value[CommonDef.IMAGE_TAG_X_LENGTH * 3 + 2]
+                        )
                     {
-                        for (int l = 0; l < 5; l++)
-                        {
-                            bp.SetPixel(x + k, y + l, System.Drawing.Color.White);
-                        }
+                        //测试用
+                        //for (int k = 0; k < 5; k++)
+                        //{
+                        //    for (int l = 0; l < 5; l++)
+                        //    {
+                        //        bp.SetPixel(x + k, y + l, System.Drawing.Color.White);
+                        //    }
+                        //}
+                        //bp.Save(filePath + "_" + x.ToString() + "_" + y.ToString() + ".jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+                        message += dic.Key.Substring(0, dic.Key.LastIndexOf('-')) + ",";
+                        return true;
                     }
-                    bp.Save(filePath +  "_" + x.ToString() + "_" + y.ToString() + ".jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
-                    message += dic.Key + ",";
-                    return true; ;
                 }
             }
             return false;
         }
 
-        private bool ColorCompare(byte a, byte b)
-        {
-            int ab = a - b;
-            if (ab < 0)
-            {
-                ab = ab * -1;
-            }
-            if (ab > CommonDef.COLOR_TOLERANCE)
-            {
-                return false;
-            }
-            return true;
-        }
-
         private void btnStop_Click(object sender, RoutedEventArgs e)
         {
             running = false;
+            tbAlert.Text = "停止中。。。";
         }
     }
 }
