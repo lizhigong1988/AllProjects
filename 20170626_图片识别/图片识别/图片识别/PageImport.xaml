@@ -3,12 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             d:DesignWidth="600"
+             d:DesignWidth="800"
              mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary Source="/图片识别;component/CommonSource.xaml" />
     </UserControl.Resources>
-    <Grid>
+    <StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="导入图片尺寸"/>
+            <TextBox Name="tbImageSize" Text="90*90"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="特征点设置"/>
+            <TextBox Name="tbImageTagSet" Width="650" Height="60" TextWrapping="Wrap"/>
+        </StackPanel>
+            <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
@@ -71,5 +80,6 @@
                         Content="保存" />
             </StackPanel>
         </StackPanel>
-    </Grid>
+        </Grid>
+    </StackPanel>
 </UserControl>

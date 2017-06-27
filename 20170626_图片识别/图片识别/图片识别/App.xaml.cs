@@ -14,10 +14,10 @@ namespace 图片识别
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            if (!CommonInit(20170626, 3))
-            {
-                return;
-            }
+            //if (!CommonInit(20170626, 3))
+            //{
+            //    return;
+            //}
             if (!DataBases.DataBaseManager.InitDataBases())
             {
                 MessageBox.Show("数据库初始化失败");

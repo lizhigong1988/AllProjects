@@ -21,7 +21,6 @@ namespace 图片识别.DataBases
         {
             {"IMAGE_NAME", "VARCHAR(16)"},
             {"IMAGE_TAG", "VARCHAR(32)"},
-            {"REMARK", "VARCHAR(32)"},
         };
 
         static DataBaseTool_SQLite3 dataBaseTool;

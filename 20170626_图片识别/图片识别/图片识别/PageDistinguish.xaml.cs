@@ -89,12 +89,43 @@ namespace 图片识别
             //DisTinguishThreadDebug();
         }
 
+        struct SetPoint
+        {
+            public int x;
+            public int y;
+            public SetPoint(int X, int Y)
+            {
+                x = X;
+                y = Y;
+            }
+        };
+
         bool running = false;
-        int middle_X = 0;
-        int middle_Y = 0;
+        List<SetPoint> listPoint = new List<SetPoint>();
         private void DisTinguishThread()
         {
             running = true;
+            if (!File.Exists("Config"))
+            {
+                System.Windows.MessageBox.Show("请先导入小图");
+                return;
+            }
+            string config = File.ReadAllText("Config");
+            string[] configs = config.Split('\n');
+            int imageWidth = int.Parse(configs[0].Split('*')[0]);
+            int imageHeight = int.Parse(configs[0].Split('*')[1]);
+            string[] points = configs[1].Split(';');
+            listPoint.Clear();
+            listPoint.Add(new SetPoint(0, 0));
+            foreach (string point in points)
+            {
+                if (point == "1,1")
+                {
+                    continue;
+                }
+                listPoint.Add(new SetPoint(int.Parse(point.Split(',')[0]) - 1, int.Parse(point.Split(',')[1]) - 1));
+            }
+
             DataTable dtSource = DataBases.DataBaseManager.GetImages();
             if (dtSource == null)
             {
@@ -102,17 +133,15 @@ namespace 图片识别
                 return;
             }
             Dictionary<string, byte[]> dicSource = new Dictionary<string, byte[]>();
-            List<int> listFirstByte = new List<int>();
+            List<byte[]> listFirstByte = new List<byte[]>();
             foreach (DataRow dr in dtSource.Rows)
             {
                 dicSource.Add(dr["IMAGE_NAME"].ToString(), Convert.FromBase64String(dr["IMAGE_TAG"].ToString()));
-                listFirstByte.Add(dicSource[dr["IMAGE_NAME"].ToString()][0] * 
-                    dicSource[dr["IMAGE_NAME"].ToString()][1] * dicSource[dr["IMAGE_NAME"].ToString()][2]);
+                listFirstByte.Add(new byte[]{ dicSource[dr["IMAGE_NAME"].ToString()][0] ,
+                    dicSource[dr["IMAGE_NAME"].ToString()][1] , dicSource[dr["IMAGE_NAME"].ToString()][2]});
             }
             string message = "";
             List<Rect> listIgnore = new List<Rect>();
-            middle_X = CommonDef.IMAGE_DEFAULT_SIZE / 2;
-            middle_Y = CommonDef.IMAGE_DEFAULT_SIZE / 2;
             foreach (var item in lbBigImages.Items)
             {
                 listIgnore.Clear();
@@ -121,7 +150,7 @@ namespace 图片识别
                 Bitmap bp = new Bitmap(selectPath + "\\" + filePath);
                 int width = bp.Width;
                 int height = bp.Height;
-                for (int j = middle_Y; j < height - middle_Y; j++)
+                for (int j = 0; j <= height - imageHeight; j++)
                 {
                     if (!running)
                     {
@@ -137,9 +166,9 @@ namespace 图片识别
                         new Action(() =>
                         {
                             tbAlert.Text = string.Format("({0})识别中。{1}/{2}", filePath,
-                                (j - middle_Y).ToString(), (height - CommonDef.IMAGE_DEFAULT_SIZE).ToString());
+                                j.ToString(), (height - imageHeight).ToString());
                         }));
-                    for (int i = middle_X; i < width - middle_X; i++)
+                    for (int i = 0; i <= width - imageWidth; i++)
                     {//遍历大图的每一个像素点
                         foreach (Rect rect in listIgnore)
                         {//跳过已识别的区域
@@ -147,7 +176,7 @@ namespace 图片识别
                                 j >= rect.Y && j <= rect.Y + rect.Height)
                             {
                                 i = (int)rect.X + (int)rect.Width + 1;
-                                if (i >= width - CommonDef.IMAGE_DEFAULT_SIZE)
+                                if (i > width - imageWidth)
                                 {
                                     i = 0;
                                     j += 1;
@@ -155,23 +184,23 @@ namespace 图片识别
                                 break;
                             }
                         }
-                        if (j >= height - middle_Y)
+                        if (j > height - imageHeight)
                         {
                             break;
                         }
                         System.Drawing.Color c = bp.GetPixel(i, j);
-                        foreach(int b in listFirstByte)
+                        foreach(byte[] b in listFirstByte)
                         {
-                            if (b == c.R * c.G * c.B)
+                            if (b[0] == c.R && b[1] == c.G && b[2] == c.B)
                             {
                                 if (ImageCompare(bp, i, j, dicSource, ref message, filePath))
                                 {
                                     listIgnore.Add(new Rect()
                                     {
-                                        X = i - middle_X,
-                                        Y = j - middle_Y,
-                                        Width = CommonDef.IMAGE_DEFAULT_SIZE,
-                                        Height = CommonDef.IMAGE_DEFAULT_SIZE
+                                        X = i - imageWidth,
+                                        Y = j,
+                                        Width = imageWidth * 2,
+                                        Height = imageHeight
                                     });
                                     tbResault.Dispatcher.BeginInvoke(
                                         new Action(() =>
@@ -209,13 +238,14 @@ namespace 图片识别
             foreach (var dic in dicSource)
             {
                 has = true;
-                for (int i = 0; i < CommonDef.IMAGE_TAG_X_LENGTH; i++)
+                int i = 0;
+                foreach(SetPoint point in listPoint)
                 {
                     if (!running)
                     {
                         return false;
                     }
-                    System.Drawing.Color col = bp.GetPixel(x + i, y);
+                    System.Drawing.Color col = bp.GetPixel(x + point.x, y + point.y);
                     if (col.R != dic.Value[i * 3])
                     {
                         has = false;
@@ -231,28 +261,12 @@ namespace 图片识别
                         has = false;
                         break;
                     }
+                    i++;
                 }
                 if (has)
                 { //匹配成功
-                    //校验结果
-                    System.Drawing.Color col = bp.GetPixel(x + middle_X, y + middle_Y);
-                    if (col.R == dic.Value[CommonDef.IMAGE_TAG_X_LENGTH * 3] &&
-                        col.G == dic.Value[CommonDef.IMAGE_TAG_X_LENGTH * 3 + 1] &&
-                        col.B == dic.Value[CommonDef.IMAGE_TAG_X_LENGTH * 3 + 2]
-                        )
-                    {
-                        //测试用
-                        //for (int k = 0; k < 5; k++)
-                        //{
-                        //    for (int l = 0; l < 5; l++)
-                        //    {
-                        //        bp.SetPixel(x + k, y + l, System.Drawing.Color.White);
-                        //    }
-                        //}
-                        //bp.Save(filePath + "_" + x.ToString() + "_" + y.ToString() + ".jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
-                        message += dic.Key.Substring(0, dic.Key.LastIndexOf('-')) + ",";
-                        return true;
-                    }
+                    message += dic.Key.Substring(0, dic.Key.LastIndexOf('-')) + ",";
+                    return true;
                 }
             }
             return false;

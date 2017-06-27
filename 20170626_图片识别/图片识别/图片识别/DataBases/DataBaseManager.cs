@@ -38,7 +38,7 @@ namespace 图片识别.DataBases
             foreach (DataRow dr in dtImport.Rows)
             {
                 List<string> values = new List<string>() { dr["IMAGE_NAME"].ToString(), 
-                    dr["IMAGE_TAG"].ToString(), dr["REMARK"].ToString() };
+                    dr["IMAGE_TAG"].ToString()};
                 bool has = false;
                 foreach (DataRow drSelect in dtSelect.Rows)
                 {
