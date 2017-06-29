@@ -20,6 +20,12 @@
                              Height="250"
                              SelectionChanged="lbBigImages_SelectionChanged" />
                 </GroupBox>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="识别精度(0~100)" />
+                    <TextBox Name="tbDistingRate"
+                             Width="140"
+                             Text="90" />
+                </StackPanel>
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                     <TextBlock Name="tbAlert" />
                     <Button Name="btnSelectPath"

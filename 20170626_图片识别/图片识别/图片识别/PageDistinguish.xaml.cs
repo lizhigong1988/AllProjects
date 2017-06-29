@@ -77,11 +77,23 @@ namespace 图片识别
             lbBigImages.Items.Remove(lbBigImages.SelectedItem);
         }
 
+        int distingRate = 0;
         private void btnDistinguish_Click(object sender, RoutedEventArgs e)
         {
             if (running)
             {
                 System.Windows.MessageBox.Show("正在识别，请稍等");
+                return;
+            }
+            if (!int.TryParse(tbDistingRate.Text, out distingRate))
+            {
+                System.Windows.MessageBox.Show("请输入正确的精度");
+                return;
+            }
+            distingRate = 100 - distingRate;
+            if (distingRate < 0 || distingRate > 100)
+            {
+                System.Windows.MessageBox.Show("请输入正确的精度");
                 return;
             }
             new Thread(DisTinguishThread).Start();
@@ -142,10 +154,20 @@ namespace 图片识别
             }
             string message = "";
             List<Rect> listIgnore = new List<Rect>();
+            Dictionary<string, string> dicNameResault = new Dictionary<string, string>();
             foreach (var item in lbBigImages.Items)
             {
                 listIgnore.Clear();
                 string filePath = item.ToString();
+                string lable = filePath.Substring(0, filePath.LastIndexOf('.'));
+                if (lable.Contains('.'))
+                {
+                    lable = lable.Substring(0, lable.IndexOf('.'));
+                }
+                if (!dicNameResault.ContainsKey(lable))
+                {
+                    dicNameResault.Add(lable, "");
+                }
                 message += filePath + ":";
                 Bitmap bp = new Bitmap(selectPath + "\\" + filePath);
                 int width = bp.Width;
@@ -189,12 +211,47 @@ namespace 图片识别
                             break;
                         }
                         System.Drawing.Color c = bp.GetPixel(i, j);
+                        int listIndex = 0;
                         foreach(byte[] b in listFirstByte)
                         {
-                            if (b[0] == c.R && b[1] == c.G && b[2] == c.B)
-                            {
-                                if (ImageCompare(bp, i, j, dicSource, ref message, filePath))
+                            if (c.R - b[0] <= distingRate && b[0] - c.R <= distingRate &&
+                                c.G - b[1] <= distingRate && b[1] - c.G <= distingRate &&
+                                c.B - b[2] <= distingRate && b[2] - c.B <= distingRate)
+                                //if (b[0] == c.R && b[1] == c.G && b[2] == c.B)
+                            {//第一个像素点
+                                var dic = dicSource.ElementAt(listIndex);
+                                    //foreach (SetPoint point in listPoint)
+                                bool has = true;
+                                for (int index = 1; index < listPoint.Count; index++)
                                 {
+                                    SetPoint point = listPoint[index];
+                                    System.Drawing.Color col = bp.GetPixel(i + point.x, j + point.y);
+                                    if (col.R - dic.Value[index * 3] > distingRate ||
+                                        dic.Value[index * 3] - col.R > distingRate)
+                                    //if (col.R != dic.Value[index * 3])
+                                    {
+                                        has = false;
+                                        break;
+                                    }
+                                    if (col.G - dic.Value[index * 3 + 1] > distingRate ||
+                                        dic.Value[index * 3 + 1] - col.G > distingRate)
+                                    //if (col.G != dic.Value[index * 3 + 1])
+                                    {
+                                        has = false;
+                                        break;
+                                    }
+                                    if (col.B - dic.Value[index * 3 + 2] > distingRate ||
+                                        dic.Value[index * 3 + 2] - col.B > distingRate)
+                                    //if (col.B != dic.Value[index * 3 + 2])
+                                    {
+                                        has = false;
+                                        break;
+                                    }
+                                }
+                                if (has)
+                                { //匹配成功
+                                    message += dic.Key.Substring(0, dic.Key.LastIndexOf('-')) + ",";
+                                    dicNameResault[lable] += dic.Key.Substring(0, dic.Key.LastIndexOf('-')) + ",";
                                     listIgnore.Add(new Rect()
                                     {
                                         X = i - imageWidth,
@@ -210,6 +267,7 @@ namespace 图片识别
                                     break;
                                 }
                             }
+                            listIndex++;
                         }
 
                     }
@@ -226,51 +284,16 @@ namespace 图片识别
             tbAlert.Dispatcher.BeginInvoke(
                 new Action(() =>
                 {
+                    message = "";
+                    foreach (var dic in dicNameResault)
+                    {
+                        message += dic.Key + ":" + dic.Value + "\r\n";
+                    }
                     tbResault.Text = message;
                     tbAlert.Text = "";
                 }));
         }
 
-        private bool ImageCompare(Bitmap bp, int x, int y, Dictionary<string, byte[]> dicSource,
-            ref string message, string filePath)
-        {
-            bool has = false;
-            foreach (var dic in dicSource)
-            {
-                has = true;
-                int i = 0;
-                foreach(SetPoint point in listPoint)
-                {
-                    if (!running)
-                    {
-                        return false;
-                    }
-                    System.Drawing.Color col = bp.GetPixel(x + point.x, y + point.y);
-                    if (col.R != dic.Value[i * 3])
-                    {
-                        has = false;
-                        break;
-                    }
-                    if (col.G != dic.Value[i * 3 + 1])
-                    {
-                        has = false;
-                        break;
-                    }
-                    if (col.B != dic.Value[i * 3 + 2])
-                    {
-                        has = false;
-                        break;
-                    }
-                    i++;
-                }
-                if (has)
-                { //匹配成功
-                    message += dic.Key.Substring(0, dic.Key.LastIndexOf('-')) + ",";
-                    return true;
-                }
-            }
-            return false;
-        }
 
         private void btnStop_Click(object sender, RoutedEventArgs e)
         {

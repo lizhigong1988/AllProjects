@@ -14,7 +14,7 @@ namespace 图片识别
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            if (!CommonInit(20170626, 3))
+            if (!CommonInit(20170629, 3))
             {
                 return;
             }
